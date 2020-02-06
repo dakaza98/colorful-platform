@@ -14,4 +14,5 @@ title = open('title.txt', 'r')
 print(bcolors.WARNING + title.read())
 print(bcolors.OKGREEN + starttext.read())
 print(bcolors.FAIL + quittext.read())
+print(bcolors.ENDC)
 
