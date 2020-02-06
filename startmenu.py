@@ -19,8 +19,8 @@ def print_title_screen():
         BOLD = '\033[1m'
         UNDERLINE = '\033[4m'
 
-    starttext = open("s.txt", 'r')
-    quittext = open('q.txt', 'r')
+    starttext = open("start.txt", 'r')
+    quittext = open('quit.txt', 'r')
     title = open('title.txt', 'r')
 
     print(bcolors.YELLOW + title.read())
