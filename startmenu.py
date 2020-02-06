@@ -10,12 +10,12 @@ class choices:
 
 def print_title_screen():
     class bcolors:
-        HEADER = '\033[95m'
-        OKBLUE = '\033[94m'
-        OKGREEN = '\033[92m'
-        WARNING = '\033[93m'
-        FAIL = '\033[91m'
-        ENDC = '\033[0m'
+        PURPLE = '\033[95m'
+        BLUE = '\033[94m'
+        GREEN = '\033[92m'
+        YELLOW = '\033[93m'
+        RED = '\033[91m'
+        ENDCOLOR = '\033[0m'
         BOLD = '\033[1m'
         UNDERLINE = '\033[4m'
 
@@ -23,10 +23,10 @@ def print_title_screen():
     quittext = open('q.txt', 'r')
     title = open('title.txt', 'r')
 
-    print(bcolors.WARNING + title.read())
-    print(bcolors.OKGREEN + starttext.read())
-    print(bcolors.FAIL + quittext.read())
-    print(bcolors.ENDC)
+    print(bcolors.YELLOW + title.read())
+    print(bcolors.GREEN + starttext.read())
+    print(bcolors.RED + quittext.read())
+    print(bcolors.ENDCOLOR)
 
 print_title_screen()
 
