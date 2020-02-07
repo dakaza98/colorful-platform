@@ -7,15 +7,27 @@ title = open('title.txt', 'r')
 titletext = title.read()
 title.close()
 
+def print_menu_title(screen):
+    splitted_title = titletext.split("\n")
+    first_line = splitted_title[0]
+
+    _, num_cols = screen.getmaxyx()
+
+    # Add some top margin on the title to get some space between the top and the title
+    top_margin = 2
+
+    # All lines start at the same x position so that the ascii art looks like intended
+    x = int(num_cols / 2) - int(len(first_line) / 2)
+    
+    for index, line in enumerate(splitted_title):
+        screen.addstr(index + top_margin, x, splitted_title[index])
+
 def print_menu(screen, selected_row_index):
     screen.clear()
 
     num_rows, num_cols = screen.getmaxyx()
 
-    splitted_title = titletext.split("\n")
-    x = int(num_cols / 2) - int(len(splitted_title[0]) / 2)
-    for index, line in enumerate(splitted_title):
-        screen.addstr(index + 2, x, splitted_title[index])
+    print_menu_title(screen)
 
     for index, row in enumerate(menu):
         x = int(num_cols / 2) - int(len(row) / 2)
