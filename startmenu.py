@@ -1,7 +1,10 @@
 import curses
 import time
 
-menu = ["start", "quit"]
+CHOICE_START = "start"
+CHOICE_QUIT = "quit"
+
+menu = [CHOICE_START, CHOICE_QUIT]
 
 title = open('title.txt', 'r')
 titletext = title.read()
@@ -18,7 +21,7 @@ def print_menu_title(screen):
 
     # All lines start at the same x position so that the ascii art looks like intended
     x = int(num_cols / 2) - int(len(first_line) / 2)
-    
+
     for index, line in enumerate(splitted_title):
         screen.addstr(index + top_margin, x, splitted_title[index])
 
@@ -32,6 +35,7 @@ def print_menu(screen, selected_row_index):
     for index, row in enumerate(menu):
         x = int(num_cols / 2) - int(len(row) / 2)
         y = int(num_rows / 2) - len(menu) + index
+        
         if index == selected_row_index:
             screen.attron(curses.color_pair(1))
             screen.addstr(y, x, row.capitalize())
@@ -54,6 +58,9 @@ def main(screen):
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
     print_menu(screen, current_row)
 
+    # KEY_ENTER might not always work because some computers sends the value 10 or 13 instead
+    enter_keys = [curses.KEY_ENTER, 10, 13]
+
     while True:
         pressed_key = screen.getch()
 
@@ -61,13 +68,12 @@ def main(screen):
             current_row -= 1
         elif pressed_key == curses.KEY_DOWN and current_row < len(menu) - 1:
             current_row += 1
-        # KEY_ENTER might not always work because some computers sends the value 10 or 13 instead
-        elif pressed_key == curses.KEY_ENTER or pressed_key in [10, 13]:
-            if current_row == 0:
+        elif pressed_key in enter_keys:
+            if menu[current_row] == CHOICE_START:
                 screen.clear()
                 start_game(screen)
                 break
-            elif current_row == 1:
+            elif menu[current_row] == CHOICE_QUIT:
                 break
 
         print_menu(screen, current_row)
