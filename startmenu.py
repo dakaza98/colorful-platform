@@ -41,6 +41,11 @@ def print_menu(screen, selected_row_index):
 
     screen.refresh()
 
+def start_game(screen):
+    screen.addstr(0, 0, "Game will now start")
+    screen.refresh()
+    time.sleep(3)
+
 def main(screen):
     # Disable blinking cursor
     curses.curs_set(0)  
@@ -60,9 +65,7 @@ def main(screen):
         elif pressed_key == curses.KEY_ENTER or pressed_key in [10, 13]:
             if current_row == 0:
                 screen.clear()
-                screen.addstr(0, 0, "Game will now start")
-                screen.refresh()
-                time.sleep(3)
+                start_game(screen)
                 break
             elif current_row == 1:
                 break
