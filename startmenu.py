@@ -11,6 +11,13 @@ titletext = title.read()
 title.close()
 
 def print_menu_title(screen):
+    """Reads the menu title from a text file and prints it to
+    the top of the menu.
+
+    Keyword arguments:
+    screen -- the curses screen
+    """
+
     splitted_title = titletext.split("\n")
     first_line = splitted_title[0]
 
@@ -26,6 +33,12 @@ def print_menu_title(screen):
         screen.addstr(index + top_margin, x, splitted_title[index])
 
 def print_menu(screen, selected_row_index):
+    """Prints the menu to the screen.
+
+    Keyword arguments:
+    screen             -- the curses screen
+    selected_row_index -- the currently selected row in the menu
+    """
     screen.clear()
 
     num_rows, num_cols = screen.getmaxyx()
@@ -46,11 +59,21 @@ def print_menu(screen, selected_row_index):
     screen.refresh()
 
 def start_game(screen):
+    """Temporary functions that 'starts' the game.
+
+    Keyword arguments:
+    screen -- the curses screen
+    """
     screen.addstr(0, 0, "Game will now start")
     screen.refresh()
     time.sleep(3)
 
 def main(screen):
+    """The menu loop used by curses.
+    
+    Keyword arguments:
+    screen -- the curses screen
+    """
     # Disable blinking cursor
     curses.curs_set(0)  
 
