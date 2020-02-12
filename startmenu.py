@@ -66,7 +66,7 @@ def print_menu(screen, selected_row_index):
 def validate_key_input(key_input):
     """
     Callback function used by curses when a user types input.
-    The function checks if the pressed key is one of the enter keys and 
+    The function checks if the pressed key is one of the enter keys and
     signals curses to stop asking for input. Otherwise it lets the character through
     """
     if key_input in enter_keys:
@@ -79,16 +79,16 @@ def validate_key_input(key_input):
 def get_player_name(screen, text):
     """
     Prints and centers text on screen.
-    Creates a new text input where the user enters the player name and returns it. 
+    Creates a new text input where the user enters the player name and returns it.
 
     Keyword arguments:
     screen             -- the curses screen.
     text               -- Text that appears before the input.
-    
-    Example:
-    text = "Insert player 1's name" => Insert player 1's name: (user types here) 
 
-    Returns: 
+    Example:
+    text = "Insert player 1's name" => Insert player 1's name: (user types here)
+
+    Returns:
     The name of the player that the user entered.
     """
 
@@ -101,7 +101,7 @@ def get_player_name(screen, text):
     screen.addstr(y, x, text)
     screen.refresh()
 
-    # We must create a new window becuase the edit function will return 
+    # We must create a new window becuase the edit function will return
     # everything that has been printed on the screen and not just the entered name
     win = curses.newwin(5, 10, y, x + len(text))
     textbox = Textbox(win)
@@ -109,7 +109,15 @@ def get_player_name(screen, text):
 
     return player_name
 
-def start_game(screen):
+def startgame(screen, player1_name, player2_name):
+    screen.clear()
+    screen.addstr(0, 0, "Player1: " + player1_name)
+    screen.addstr(1, 0, "Player2: " + player2_name)
+    screen.refresh()
+
+    time.sleep(1)
+
+def ask_for_player_names(screen):
     """Temporary functions that 'starts' the game.
 
     Keyword arguments:
@@ -120,12 +128,13 @@ def start_game(screen):
 
     # Enable blinking cursor when typing in names
     curses.curs_set(1)
+
     player1_name = get_player_name(screen, player1_text)
     player2_name = get_player_name(screen, player2_text)
 
     curses.curs_set(0)
-    time.sleep(1)
-    
+
+    startgame(screen, player1_name, player2_name)
 
 def main(screen):
     """The menu loop used by curses.
@@ -150,7 +159,7 @@ def main(screen):
         elif pressed_key in enter_keys:
             if menu[current_row] == CHOICE_START:
                 screen.clear()
-                start_game(screen)
+                ask_for_player_names(screen)
                 break
             elif menu[current_row] == CHOICE_QUIT:
                 break
