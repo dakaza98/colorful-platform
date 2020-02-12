@@ -1,10 +1,14 @@
 import curses
 import time
+from curses.textpad import Textbox
 
 CHOICE_START = "start"
 CHOICE_QUIT = "quit"
 
 menu = [CHOICE_START, CHOICE_QUIT]
+
+# KEY_ENTER might not always work because some computers sends the value 10 or 13 instead
+enter_keys = [curses.KEY_ENTER, 10, 13]
 
 title = open('title.txt', 'r')
 titletext = title.read()
@@ -48,7 +52,7 @@ def print_menu(screen, selected_row_index):
     for index, row in enumerate(menu):
         x = int(num_cols / 2) - int(len(row) / 2)
         y = int(num_rows / 2) - len(menu) + index
-        
+
         if index == selected_row_index:
             screen.attron(curses.color_pair(1))
             screen.addstr(y, x, row.capitalize())
@@ -58,31 +62,54 @@ def print_menu(screen, selected_row_index):
 
     screen.refresh()
 
+
+def validate_key_input(key_input):
+    if key_input in enter_keys:
+        return 7
+    else:
+        return key_input
+
 def start_game(screen):
     """Temporary functions that 'starts' the game.
 
     Keyword arguments:
     screen -- the curses screen
     """
-    screen.addstr(0, 0, "Game will now start")
+    player1 = "Inset player 1's name: "
+    player2 = "Insert player 2's name: "
+    num_rows, num_cols = screen.getmaxyx()
+
+    x = int(num_cols / 2) - int(len(player1) / 2)
+    y = int(num_rows / 2)
+
+    # Enable blinking cursor when typing in names
+    screen.addstr(y, x, player1)
     screen.refresh()
-    time.sleep(3)
+
+    curses.curs_set(1)
+    win = curses.newwin(5, 10, y, x + len(player1))
+    textbox = Textbox(win)
+    text = textbox.edit(validate_key_input)
+
+    screen.addstr(0,0,text)
+    screen.refresh()
+
+    curses.curs_set(0)
+    time.sleep(1)
+    
 
 def main(screen):
     """The menu loop used by curses.
-    
+
     Keyword arguments:
     screen -- the curses screen
     """
     # Disable blinking cursor
-    curses.curs_set(0)  
+    curses.curs_set(0)
 
     current_row = 0
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
     print_menu(screen, current_row)
-
-    # KEY_ENTER might not always work because some computers sends the value 10 or 13 instead
-    enter_keys = [curses.KEY_ENTER, 10, 13]
 
     while True:
         pressed_key = screen.getch()
