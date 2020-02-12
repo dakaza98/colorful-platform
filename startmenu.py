@@ -71,10 +71,24 @@ def validate_key_input(key_input):
 
 
 def get_player_name(screen, text):
+    """
+    Prints and centers text on screen.
+    Creates a new text input where the user enters the player name and returns it. 
 
-    num_rows, num_cols = screen.getmaxyx()
+    Keyword arguments:
+    screen             -- the curses screen.
+    text               -- Text that appears before the input.
+    
+    Example:
+    text = "Insert player 1's name" => Insert player 1's name: (user types here) 
+
+    Returns: 
+    The name of the player that the user entered.
+    """
 
     # Centers the text
+    num_rows, num_cols = screen.getmaxyx()
+
     x = int(num_cols / 2) - int(len(text) / 2)
     y = int(num_rows / 2)
 
