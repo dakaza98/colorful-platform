@@ -64,7 +64,13 @@ def print_menu(screen, selected_row_index):
 
 
 def validate_key_input(key_input):
+    """
+    Callback function used by curses when a user types input.
+    The function checks if the pressed key is one of the enter keys and 
+    signals curses to stop asking for input. Otherwise it lets the character through
+    """
     if key_input in enter_keys:
+        # 7 is a magic number that tells curses to stop asking for input
         return 7
     else:
         return key_input
