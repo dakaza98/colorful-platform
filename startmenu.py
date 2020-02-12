@@ -69,30 +69,39 @@ def validate_key_input(key_input):
     else:
         return key_input
 
+
+def get_player_name(screen, text):
+
+    num_rows, num_cols = screen.getmaxyx()
+
+    # Centers the text
+    x = int(num_cols / 2) - int(len(text) / 2)
+    y = int(num_rows / 2)
+
+    screen.addstr(y, x, text)
+    screen.refresh()
+
+    # We must create a new window becuase the edit function will return 
+    # everything that has been printed on the screen and not just the entered name
+    win = curses.newwin(5, 10, y, x + len(text))
+    textbox = Textbox(win)
+    player_name = textbox.edit(validate_key_input)
+
+    return player_name
+
 def start_game(screen):
     """Temporary functions that 'starts' the game.
 
     Keyword arguments:
     screen -- the curses screen
     """
-    player1 = "Inset player 1's name: "
-    player2 = "Insert player 2's name: "
-    num_rows, num_cols = screen.getmaxyx()
-
-    x = int(num_cols / 2) - int(len(player1) / 2)
-    y = int(num_rows / 2)
+    player1_text = "Inset player 1's name: "
+    player2_text = "Insert player 2's name: "
 
     # Enable blinking cursor when typing in names
-    screen.addstr(y, x, player1)
-    screen.refresh()
-
     curses.curs_set(1)
-    win = curses.newwin(5, 10, y, x + len(player1))
-    textbox = Textbox(win)
-    text = textbox.edit(validate_key_input)
-
-    screen.addstr(0,0,text)
-    screen.refresh()
+    player1_name = get_player_name(screen, player1_text)
+    player2_name = get_player_name(screen, player2_text)
 
     curses.curs_set(0)
     time.sleep(1)
