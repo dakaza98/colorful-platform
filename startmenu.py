@@ -1,5 +1,6 @@
 import curses
 import time
+import game_board
 
 CHOICE_START = "start"
 CHOICE_QUIT = "quit"
@@ -66,7 +67,8 @@ def start_game(screen):
     """
     screen.addstr(0, 0, "Game will now start")
     screen.refresh()
-    time.sleep(3)
+
+    game_board.fix_board(screen)    
 
 def main(screen):
     """The menu loop used by curses.
