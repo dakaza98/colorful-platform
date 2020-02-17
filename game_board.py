@@ -47,7 +47,7 @@ def move_plus():
     move = []
     for cord in map_xy:
         if cord[0] == "+":
-            move.append(cord[0]+str(cord[1])+str(cord[2]))
+            move.append([cord[0],str(cord[1]),str(cord[2])])
     
     return move
 
@@ -75,7 +75,8 @@ def print_choice(screen,selected_move_idx,move):
     for idx, row in enumerate(move):
         y = int(row[2])+ 5
         x = int(row[1]) +  w//3      
-        print(x,y)      
+        print(x,y)
+        print(move)      
         if idx == selected_move_idx:
             screen.attron(curses.color_pair(1))
             screen.addstr(y,x, row[0])
