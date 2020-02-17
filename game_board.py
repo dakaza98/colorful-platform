@@ -46,8 +46,8 @@ def print_map(screen,map_xy):
     screen.clear()
     for cord in map_xy:
         h,w = screen.getmaxyx()
-        y = cord[2]
-        x = cord[1] + 30
+        y = cord[2]+ 5
+        x = cord[1] +  w//3
         char = cord[0]
         screen.addstr(y,x,char)
 
