@@ -50,7 +50,7 @@ def move_plus():
             move.append([cord[0],str(cord[1]),str(cord[2])])
     
     return move
-
+print(move_plus())
 
 def print_map(screen):
     
@@ -61,7 +61,15 @@ def print_map(screen):
         x = cord[1] +  w//3    
         char = cord[0]
         print(x,y)
-        if char != "+":
+        if char == "O":
+            curses.init_pair(2,curses.COLOR_YELLOW,curses.COLOR_BLACK)
+                        
+            screen.addstr(y,x,char,curses.color_pair(2))
+        elif char == "X": 
+            curses.init_pair(3,curses.COLOR_RED,curses.COLOR_BLACK)
+
+            screen.addstr(y,x,char,curses.color_pair(3))
+        elif char != "+" and char != "O" and "X":
             screen.addstr(y,x,char)
 
       
@@ -92,7 +100,7 @@ def main(screen):
     curses.curs_set(0)
 
     # color scheme for selected row
-    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_GREEN)
 
     # specify the current selected row
     current_row = 0
@@ -115,4 +123,3 @@ def main(screen):
         print_choice(screen,current_row,move)
 
 
-#curses.wrapper(main)
