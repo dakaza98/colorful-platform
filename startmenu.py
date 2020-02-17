@@ -59,6 +59,7 @@ def print_menu(screen, selected_row_index):
 
     screen.refresh()
 
+
 def start_game(screen):
     """Temporary functions that 'starts' the game.
 
@@ -68,7 +69,7 @@ def start_game(screen):
     screen.addstr(0, 0, "Game will now start")
     screen.refresh()
 
-    game_board.fix_board(screen)    
+    game_board.print_map(screen)
 
 def main(screen):
     """The menu loop used by curses.
@@ -97,6 +98,7 @@ def main(screen):
             if menu[current_row] == CHOICE_START:
                 screen.clear()
                 start_game(screen)
+                time.sleep(3)
                 break
             elif menu[current_row] == CHOICE_QUIT:
                 break

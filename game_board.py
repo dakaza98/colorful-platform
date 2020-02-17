@@ -28,7 +28,7 @@ board_txt = board.read()
 
 
 
-def map_cord(str_board):
+def map_cord(str_board): 
     matrix = [[x for x in line] for line in str_board.split('\n')]
     map_xy = []
     y = 0
@@ -42,8 +42,11 @@ def map_cord(str_board):
     return map_xy
 
 
-def print_map(screen,map_xy):
+
+def print_map(screen):
     screen.clear()
+
+    map_xy = map_cord(board_txt)
     for cord in map_xy:
         h,w = screen.getmaxyx()
         y = cord[2]+ 5
@@ -51,9 +54,10 @@ def print_map(screen,map_xy):
         char = cord[0]
         screen.addstr(y,x,char)
 
+    screen.refresh()    
 
 
-
+"""
 def main(screen):
     # turn off cursor blinking
     curses.curs_set(0)
@@ -65,19 +69,14 @@ def main(screen):
     curses.init_pair(1, curses.COLOR_RED, curses.COLOR_YELLOW)
 
     # text to be written in center
-    text = "Hello, world!"
 
     # find coordinates for centered text
-    x = w//2 - len(text)//2
-    y = h//2
-    print(x,y)
-    print_map(screen,map_cord(board_txt))
+    print_map(screen)
     
     # set color scheme
     screen.attron(curses.color_pair(1))
 
     # write text on screen
-    screen.addstr(y, x, text)
 
     # unset color scheme
     screen.attroff(curses.color_pair(1))
@@ -89,3 +88,4 @@ def main(screen):
     time.sleep(3)
 
 curses.wrapper(main)    
+"""
