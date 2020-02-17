@@ -99,10 +99,10 @@ def move_down(move,current_row):
     
     while True:
         i += 1
-        if i == len(move)-1:
+        if i == len(move):
             i = 0
         
-        if move[current_row][1] == move[i][1] and move[current_row][2] !=   move[i][2]:
+        if move[current_row][1] == move[i][1] and move[current_row][2] != move[i][2]:
      
           return i  
 
