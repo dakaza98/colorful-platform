@@ -94,6 +94,24 @@ def print_choice(screen,selected_move_idx,move):
    
     screen.refresh()    
 
+def move_down(move,current_row):
+    i = current_row
+    
+    while True:
+        i += 1
+        if move[current_row][1] == move[i][1] and move[current_row][2] !=   move[i][2]:
+     
+          return i  
+
+
+def move_up(move,current_row):
+    i = current_row
+    
+    while True:
+        i -= 1
+        if move[current_row][1] == move[i][1] and move[current_row][2] !=   move[i][2]:
+     
+          return i  
 
 def main(screen):
     # turn off cursor blinking
@@ -112,17 +130,24 @@ def main(screen):
     print_choice(screen,current_row,move)
     while 1:
         key = screen.getch()
-        if key == curses.KEY_UP and current_row > 0:
+        if key == curses.KEY_LEFT and current_row > 0:
             current_row -= 1
             print_choice(screen,current_row,move)
             time.sleep(0.08)
-        elif key == curses.KEY_DOWN and current_row < len(move)-1:
+        elif key == curses.KEY_RIGHT and current_row < len(move)-1:
             current_row += 1
             print_choice(screen,current_row,move)
             time.sleep(0.08)
+        elif key == curses.KEY_DOWN:
+            current_row = move_down(move,current_row)
+            print_choice(screen,current_row,move)
+
+        elif key == curses.KEY_UP:
+            current_row = move_up(move,current_row)
+            print_choice(screen,current_row,move)
+
         elif key == curses.KEY_ENTER or key in [10, 13]:
             quit()
-        #print_choice(screen,current_row,move)
         
 
 
