@@ -112,14 +112,17 @@ def main(screen):
     print_choice(screen,current_row,move)
     while 1:
         key = screen.getch()
-
         if key == curses.KEY_UP and current_row > 0:
             current_row -= 1
+            print_choice(screen,current_row,move)
+            time.sleep(0.08)
         elif key == curses.KEY_DOWN and current_row < len(move)-1:
             current_row += 1
+            print_choice(screen,current_row,move)
+            time.sleep(0.08)
         elif key == curses.KEY_ENTER or key in [10, 13]:
             quit()
         #print_choice(screen,current_row,move)
-        print_choice(screen,current_row,move)
+        
 
 
