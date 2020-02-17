@@ -115,4 +115,4 @@ def main(screen):
         print_choice(screen,current_row,move)
 
 
-curses.wrapper(main)
+#curses.wrapper(main)

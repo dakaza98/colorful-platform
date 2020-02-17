@@ -69,8 +69,7 @@ def start_game(screen):
     screen.addstr(0, 0, "Game will now start")
     screen.refresh()
 
-    game_board.print_map(screen)
-    time.sleep(3)
+    game_board.main(screen)
 
 def main(screen):
     """The menu loop used by curses.
