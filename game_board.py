@@ -120,6 +120,9 @@ def move_up(move,current_row):
      
           return i  
 
+def stone_change(move,current_row):
+    move[current_row][0] = "X"
+    return move
 def main(screen):
     # turn off cursor blinking
     curses.curs_set(0)
@@ -154,7 +157,8 @@ def main(screen):
             print_choice(screen,current_row,move)
 
         elif key == curses.KEY_ENTER or key in [10, 13]:
+            move = stone_change(move,current_row)
+            print_choice(screen,current_row,move)
+            time.sleep(3)
             quit()
-        
-
 
