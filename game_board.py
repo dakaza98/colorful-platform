@@ -1,29 +1,91 @@
 import curses
+import numpy as np
+import os
+import time
+#sh, sw = s.getmaxyx()
 
+# Creates a new window
+#w = curses.newwin(sh, sw, 0, 0)
 
+# Setting for accepting the keypad
+#w.keypad(1) 
 
-board = open('Ascii board.txt','r')
+# For refreshing the window every 100 miliseconds
+#w.timeout(100)
+#screen = curses.initscr()
+MAP_WIDTH = 34
+MAP_HEIGHT = 13
+
+map_txt = 'Ascii board.txt'
+board = open( map_txt,'r')
+board.close 
+
 board_txt = board.read()
-board.close
+
+
+#board_matrix = np.matrix(board_txt)
 
 
 
-def fix_board(screen):
+
+def map_cord(str_board):
+    matrix = [[x for x in line] for line in str_board.split('\n')]
+    map_xy = []
+    y = 0
+    for row in matrix:
+        x = 0
+        for c in row:
+            char_xy = [c,x,y]    
+            map_xy.append(char_xy)
+            x += 1
+        y += 1
+    return map_xy
+
+
+def print_map(screen,map_xy):
     screen.clear()
-    splitted_board = board_txt.split
-    first_line = splitted_board[0]
-    _, num_cols = screen.getmaxyx()
-
-    # Add some top margin on the title to get some space between the top and the title
-    top_margin = 2
-
-    # All lines start at the same x position so that the ascii art looks like intended
-    x = int(num_cols / 2) - int(len(first_line) / 2)
-
-    for index, line in enumerate(splitted_board):
-        screen.addstr(index + top_margin, x, splitted_board[index])
+    for cord in map_xy:
+        h,w = screen.getmaxyx()
+        y = cord[2]
+        x = cord[1] + 30
+        char = cord[0]
+        screen.addstr(y,x,char)
 
 
+
+
+def main(screen):
+    # turn off cursor blinking
+    curses.curs_set(0)
+
+    # get height and width of screen
+    h, w = screen.getmaxyx()
+
+    # create a new color scheme
+    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_YELLOW)
+
+    # text to be written in center
+    text = "Hello, world!"
+
+    # find coordinates for centered text
+    x = w//2 - len(text)//2
+    y = h//2
+    print(x,y)
+    print_map(screen,map_cord(board_txt))
     
+    # set color scheme
+    screen.attron(curses.color_pair(1))
 
+    # write text on screen
+    screen.addstr(y, x, text)
 
+    # unset color scheme
+    screen.attroff(curses.color_pair(1))
+
+    # update the screen
+    screen.refresh()
+
+    # wait for 3 sec before exit
+    time.sleep(3)
+
+curses.wrapper(main)    
