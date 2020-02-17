@@ -42,50 +42,76 @@ def map_cord(str_board):
     return map_xy
 
 
+def move_plus():
+    map_xy =map_cord(board_txt)
+    move = []
+    for cord in map_xy:
+        if cord[0] == "+":
+            move.append(cord[0]+str(cord[1])+str(cord[2]))
+    
+    return move
+
 
 def print_map(screen):
-    screen.clear()
-
+    
     map_xy = map_cord(board_txt)
     for cord in map_xy:
         h,w = screen.getmaxyx()
         y = cord[2]+ 5
-        x = cord[1] +  w//3
+        x = cord[1] +  w//3    
         char = cord[0]
-        screen.addstr(y,x,char)
+        print(x,y)
+        if char != "+":
+            screen.addstr(y,x,char)
 
+      
+          
+
+
+def print_choice(screen,selected_move_idx,move):
+    screen.clear()
+    print_map(screen)
+    h, w = screen.getmaxyx()
+    for idx, row in enumerate(move):
+        y = int(row[2])+ 5
+        x = int(row[1]) +  w//3      
+        print(x,y)      
+        if idx == selected_move_idx:
+            screen.attron(curses.color_pair(1))
+            screen.addstr(y,x, row[0])
+            screen.attroff(curses.color_pair(1))
+        else:
+            screen.addstr(y, x, row[0])
+   
     screen.refresh()    
 
 
-"""
 def main(screen):
     # turn off cursor blinking
     curses.curs_set(0)
 
-    # get height and width of screen
-    h, w = screen.getmaxyx()
+    # color scheme for selected row
+    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
-    # create a new color scheme
-    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_YELLOW)
+    # specify the current selected row
+    current_row = 0
 
-    # text to be written in center
-
-    # find coordinates for centered text
-    print_map(screen)
+    # move list
+    move = move_plus()
+    # print the 
     
-    # set color scheme
-    screen.attron(curses.color_pair(1))
+    print_choice(screen,current_row,move)
+    while 1:
+        key = screen.getch()
 
-    # write text on screen
+        if key == curses.KEY_UP and current_row > 0:
+            current_row -= 1
+        elif key == curses.KEY_DOWN and current_row < len(move)-1:
+            current_row += 1
+        elif key == curses.KEY_ENTER or key in [10, 13]:
+            quit()
+        #print_choice(screen,current_row,move)
+        print_choice(screen,current_row,move)
 
-    # unset color scheme
-    screen.attroff(curses.color_pair(1))
 
-    # update the screen
-    screen.refresh()
-
-    # wait for 3 sec before exit
-    time.sleep(3)
-
-curses.wrapper(main)    
-"""
+curses.wrapper(main)
