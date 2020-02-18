@@ -103,6 +103,12 @@ def print_choice(screen,selected_move_idx,move):
    
     screen.refresh()    
 
+
+"""
+input current_row(index) and move list 
+finds the "+" char which has the same xpos but an other Ypos in the move list
+return the index of the new "+"
+"""
 def move_down(move,current_row):
     new_row = current_row
     
@@ -115,7 +121,11 @@ def move_down(move,current_row):
      
           return new_row 
 
-
+"""
+input current_row(index) and move list 
+finds the "+" char which has the same xpos but an other Ypos in the move list
+return the index of the new "+"
+"""
 def move_up(move,current_row):
     new_row = current_row
     
@@ -128,7 +138,11 @@ def move_up(move,current_row):
         if move[current_row][1] == move[new_row][1] and move[current_row][2] !=   move[new_row][2]:
      
           return new_row  
-
+"""
+input current_row(index) and move list
+changes the "+" to a "X" of the current_row in the move list
+returns the changed move list
+"""
 def stone_change(move,current_row):
     move[current_row][0] = "X"
     return move
