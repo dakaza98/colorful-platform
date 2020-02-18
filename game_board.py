@@ -16,14 +16,18 @@ import time
 MAP_WIDTH = 34
 MAP_HEIGHT = 13
 
-map_txt = 'Ascii board.txt'
-board = open( map_txt,'r')
-board.close 
+map_path = 'Ascii board.txt'
 
-board_txt = board.read()
+def read_map(path):
+    try:        
+        board = open( path,'r')
+        board.close 
 
+        board_txt = board.read()
+        return board_txt
+    except IOError:
+        print("Can not find the file" )
 
-#board_matrix = np.matrix(board_txt)
 
 
 """
@@ -52,7 +56,7 @@ Returns a list of lists where every list has ["+",xPos,Ypos]
  example move = [['+', '4', '0'], ['+', '16', '0'],...]
  """ 
 def move_plus():
-    map_xy =map_cord(board_txt)
+    map_xy =map_cord(read_map(map_path))
     move = []
     for cord in map_xy:
         if cord[0] == "+":
@@ -63,7 +67,7 @@ def move_plus():
 
 def print_map(screen):
     
-    map_xy = map_cord(board_txt)
+    map_xy = map_cord(read_map(map_path))
     for cord in map_xy:
         h,w = screen.getmaxyx()
         y = cord[2]+ 5
