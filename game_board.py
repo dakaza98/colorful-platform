@@ -26,8 +26,12 @@ board_txt = board.read()
 #board_matrix = np.matrix(board_txt)
 
 
-
-
+"""
+Input a string,in this case string of the map
+Reads the string from left to right and appends every char to list with its x any y pos
+Returns a list of lists where every list has [char,xPos,Ypos]
+ example map_xy = [['X', 0, 0], [' ', 1, 0], [' ', 2, 0]...,]
+ """
 def map_cord(str_board): 
     matrix = [[x for x in line] for line in str_board.split('\n')]
     map_xy = []
@@ -39,9 +43,14 @@ def map_cord(str_board):
             map_xy.append(char_xy)
             x += 1
         y += 1
+    #print(map_xy)    
     return map_xy
 
-
+"""
+Finds all the "+" chars in the map_xy 
+Returns a list of lists where every list has ["+",xPos,Ypos]
+ example move = [['+', '4', '0'], ['+', '16', '0'],...]
+ """ 
 def move_plus():
     map_xy =map_cord(board_txt)
     move = []
@@ -50,7 +59,7 @@ def move_plus():
             move.append([cord[0],str(cord[1]),str(cord[2])])
     
     return move
-print(move_plus())
+#print(move_plus())
 
 def print_map(screen):
     
@@ -95,34 +104,35 @@ def print_choice(screen,selected_move_idx,move):
     screen.refresh()    
 
 def move_down(move,current_row):
-    i = current_row
+    new_row = current_row
     
     while True:
-        i += 1
-        if i == len(move):
-            i = 0
+        new_row += 1
+        if new_row == len(move):
+            new_row = 0
         
-        if move[current_row][1] == move[i][1] and move[current_row][2] != move[i][2]:
+        if move[current_row][1] == move[new_row][1] and move[current_row][2] != move[new_row][2]:
      
-          return i  
+          return new_row 
 
 
 def move_up(move,current_row):
-    i = current_row
+    new_row = current_row
     
     while True:
-        if i == 0:
-            i = len(move)
+        if new_row == 0:
+            new_row = len(move)
         
-        i -= 1
+        new_row -= 1
         
-        if move[current_row][1] == move[i][1] and move[current_row][2] !=   move[i][2]:
+        if move[current_row][1] == move[new_row][1] and move[current_row][2] !=   move[new_row][2]:
      
-          return i  
+          return new_row  
 
 def stone_change(move,current_row):
     move[current_row][0] = "X"
     return move
+
 def main(screen):
     # turn off cursor blinking
     curses.curs_set(0)
