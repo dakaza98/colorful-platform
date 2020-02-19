@@ -82,7 +82,7 @@ def print_map(screen):
             curses.init_pair(3,curses.COLOR_RED,curses.COLOR_BLACK)
 
             screen.addstr(y,x,char,curses.color_pair(3))
-        elif char != "+" and char != "O" and "X":
+        elif char != "+" and char != "O" and char !="X":
             screen.addstr(y,x,char)
 
       
@@ -169,7 +169,7 @@ def main(screen):
     print_choice(screen,current_row,move)
     while 1:
         key = screen.getch()
-        if key == curses.KEY_LEFT and current_row > 0:
+        if key == curses.KEY_LEFT and current_row > 0:  
             current_row -= 1
             print_choice(screen,current_row,move)
             time.sleep(0.08)
