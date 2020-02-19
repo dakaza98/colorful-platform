@@ -146,6 +146,7 @@ def move_up(move,current_row):
 input current_row(index) and move list
 changes the "+" to a "X" of the current_row in the move list
 returns the changed move list
+example [['+', '8', '6'],...] => [['X', '8', '6'],...]
 """
 def stone_change(move,current_row):
     move[current_row][0] = "X"
