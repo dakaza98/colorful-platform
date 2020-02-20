@@ -2,19 +2,6 @@ import curses
 import numpy as np
 import os
 import time
-#sh, sw = s.getmaxyx()
-
-# Creates a new window
-#w = curses.newwin(sh, sw, 0, 0)
-
-# Setting for accepting the keypad
-#w.keypad(1) 
-
-# For refreshing the window every 100 miliseconds
-#w.timeout(100)
-#screen = curses.initscr()
-MAP_WIDTH = 34
-MAP_HEIGHT = 13
 
 map_path = 'Ascii board.txt'
 
@@ -61,7 +48,6 @@ def move_plus():
     for cord in map_xy:
         if cord[0] == "+":
             move.append([cord[0],str(cord[1]),str(cord[2])])
-    
     return move
 #print(move_plus())
 
@@ -73,7 +59,6 @@ def print_map(screen):
         y = cord[2]+ 5
         x = cord[1] +  w//3    
         char = cord[0]
-        print(x,y)
         if char == "O":
             curses.init_pair(2,curses.COLOR_YELLOW,curses.COLOR_BLACK)
                         
@@ -96,8 +81,6 @@ def print_choice(screen,selected_move_idx,move):
     for idx, row in enumerate(move):
         y = int(row[2])+ 5
         x = int(row[1]) +  w//3      
-        print(x,y)
-        print(move)      
         if idx == selected_move_idx:
             screen.attron(curses.color_pair(1))
             screen.addstr(y,x, row[0])
@@ -189,5 +172,6 @@ def main(screen):
             move = stone_change(move,current_row)
             print_choice(screen,current_row,move)
             time.sleep(3)
+            
             quit()
 
