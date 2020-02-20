@@ -1,8 +1,8 @@
 import curses
-import numpy as np
 import os
 import time
 
+# The path of the textfile of the map
 map_path = 'Ascii board.txt'
 
 def read_map(path):
@@ -17,13 +17,18 @@ def read_map(path):
 
 
 
-"""
-Input a string,in this case string of the map
-Reads the string from left to right and appends every char to list with its x any y pos
-Returns a list of lists where every list has [char,xPos,Ypos]
- example map_xy = [['X', 0, 0], [' ', 1, 0], [' ', 2, 0]...,]
- """
-def map_cord(str_board): 
+
+def map_cord(str_board):
+    """
+    Reads the string from left to right and appends every char to list with its x any y pos
+    the top of the menu. 
+    Returns a list of lists where every list has [char,xPos,Ypos]
+    Example "X  " => [['X', 0, 0], [' ', 1, 0], [' ', 2, 0]...,]
+
+    Keyword arguments:
+    str_board -- the string of the map
+    """
+ 
     matrix = [[x for x in line] for line in str_board.split('\n')]
     map_xy = []
     y = 0
@@ -34,25 +39,28 @@ def map_cord(str_board):
             map_xy.append(char_xy)
             x += 1
         y += 1
-    #print(map_xy)    
     return map_xy
 
-"""
-Finds all the "+" chars in the map_xy 
-Returns a list of lists where every list has ["+",xPos,Ypos]
- example move = [['+', '4', '0'], ['+', '16', '0'],...]
- """ 
 def move_plus():
+    """
+    Finds all the "+" chars in the map_xy 
+    Returns a list of lists where every list has ["+",xPos,Ypos]
+    Example [['X', 0, 0], [' ', 1, 0],...,['+', '4', '0']] => [['+', '4', '0'],...]
+    """
     map_xy =map_cord(read_map(map_path))
     move = []
     for cord in map_xy:
         if cord[0] == "+":
             move.append([cord[0],str(cord[1]),str(cord[2])])
     return move
-#print(move_plus())
 
 def print_map(screen):
-    
+    """Reads the map_xy list  and prints the chars in the Screen
+
+    Keyword arguments:
+    screen -- the curses screen
+    map_xy -- list of lists the chars and their positions 
+    """
     map_xy = map_cord(read_map(map_path))
     for cord in map_xy:
         h,w = screen.getmaxyx()
@@ -75,6 +83,13 @@ def print_map(screen):
 
 
 def print_choice(screen,selected_move_idx,move):
+    """Reads the move list  and prints the chars in the Screen. If selected
+
+    Keyword arguments:
+    screen -- the curses screen
+    selected_move_idx -- the currently selected row in the move
+    move -- the lists of all the "+" and their positions
+    """    
     screen.clear()
     print_map(screen)
     h, w = screen.getmaxyx()
@@ -91,12 +106,14 @@ def print_choice(screen,selected_move_idx,move):
     screen.refresh()    
 
 
-"""
-input current_row(index) and move list 
-finds the "+" char which has the same xpos but an other Ypos in the move list
-return the index of the new "+"
-"""
 def move_down(move,current_row):
+    """ Finds the "+" char which has the same xpos but an other Ypos in the move list
+    return the index of the new "+"
+
+    current_row -- the currently selected row in the move
+    move -- the lists of all the "+" and their positions
+    """
+    
     new_row = current_row
     
     while True:
@@ -108,12 +125,14 @@ def move_down(move,current_row):
      
           return new_row 
 
-"""
-input current_row(index) and move list 
-finds the "+" char which has the same xpos but an other Ypos in the move list
-return the index of the new "+"
-"""
 def move_up(move,current_row):
+    """ Finds the "+" char which has the same xpos but an other Ypos in the move list
+    return the index of the new "+"
+
+    current_row -- the currently selected row in the move
+    move -- the lists of all the "+" and their positions
+    """
+    
     new_row = current_row
     
     while True:
@@ -125,13 +144,16 @@ def move_up(move,current_row):
         if move[current_row][1] == move[new_row][1] and move[current_row][2] !=   move[new_row][2]:
      
           return new_row  
-"""
-input current_row(index) and move list
-changes the "+" to a "X" of the current_row in the move list
-returns the changed move list
-example [['+', '8', '6'],...] => [['X', '8', '6'],...]
-"""
+
 def stone_change(move,current_row):
+    """ Changes the "+" to a "X" of the current_row in the move list
+    returns the changed move list
+
+
+    current_row -- the currently selected row in the move
+    move -- the lists of all the "+" and their positions
+    """
+
     move[current_row][0] = "X"
     return move
 
@@ -147,7 +169,7 @@ def main(screen):
 
     # move list
     move = move_plus()
-    # print the 
+     
     
     print_choice(screen,current_row,move)
     while 1:
