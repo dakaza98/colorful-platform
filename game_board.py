@@ -50,7 +50,7 @@ def convert_map_to_coordinates(str_board):
         y += 1
     
     return map_xy
-print(convert_map_to_coordinates(read_map(map_path)))
+
 def make_plus_list():
     """
     Finds all the "+" chars in the map_xy 
@@ -114,21 +114,6 @@ def print_map(screen):
 
       
           
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
