@@ -51,7 +51,7 @@ def convert_map_to_coordinates(str_board):
     
     return map_xy
 
-def move_plus():
+def make_plus_list():
     """
     Finds all the "+" chars in the map_xy 
     Returns a list of lists where every list has ["+",xPos,Ypos]
@@ -227,7 +227,7 @@ def main(screen,player1_name,player2_name):
     current_row = 0
 
     # plus_list 
-    plus_list = move_plus()
+    plus_list = make_plus_list()
      
     print_choice(screen,current_row,plus_list,player1_name,player2_name)
     while 1:
