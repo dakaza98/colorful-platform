@@ -75,13 +75,16 @@ def print_player_names(screen,player1_name,player2_name):
     curses.init_pair(3,curses.COLOR_RED,curses.COLOR_BLACK)
     h,w = screen.getmaxyx()
 
-    ply1_x = 0 + w//3   
-    ply1_y = 0
-    screen.addstr(ply1_y,ply1_x,player1_name,curses.color_pair(3))
+    ply1_x = -1 + w//3   
+    ply1_y = 2
+    screen.addstr(ply1_y,ply1_x,"Player1",curses.color_pair(3))
+    screen.addstr(ply1_y+1,ply1_x,player1_name,curses.color_pair(3))
+
     curses.init_pair(2,curses.COLOR_YELLOW,curses.COLOR_BLACK)
-    ply2_x = 32 + w//3 
-    ply2_y = 0
-    screen.addstr(ply2_y,ply2_x,player2_name,curses.color_pair(2))
+    ply2_x = 29  + w//3 
+    ply2_y = 2
+    screen.addstr(ply2_y,ply2_x,"Player2",curses.color_pair(2))
+    screen.addstr(ply2_y+1,ply2_x,player2_name,curses.color_pair(2))
     
          
 
