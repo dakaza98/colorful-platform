@@ -8,11 +8,10 @@ map_path = 'Ascii board.txt'
 def read_map(path):
     """
     Reads a text file and returns it as a string
-    If read_map does not find a file at the give path
 
 
     Keyword arguments:
-    path -- path to the file
+    path -- path of the file
 
     """
     try:        
@@ -98,8 +97,11 @@ def print_map(screen):
     map_xy = convert_map_to_coordinates(read_map(map_path))
     for cord in map_xy:
         h,w = screen.getmaxyx()
+
+        #To place the game in the center of the window  
         y = cord[2]+ 5
         x = cord[1] +  w//3    
+        
         char = cord[0]
         if char == "O":
             curses.init_pair(2,curses.COLOR_YELLOW,curses.COLOR_BLACK)
@@ -143,8 +145,8 @@ def print_choice(screen,selected_move_idx,plus_list,player1_name,player2_name):
 
 
 def move_down(plus_list,current_row):
-    """ Finds the "+" char which has the same xpos but an other Ypos in the plus_list list
-    return the index of the new "+"
+    """ Finds the "+" char that is below the current_row. If the current "+" char is at the bottom, 
+        it finds the "+" char at the top with the same x position
 
     current_row -- the currently selected row in the plus_list
     plus_list -- the lists of all the "+" and their positions
@@ -162,8 +164,9 @@ def move_down(plus_list,current_row):
           return new_row 
 
 def move_up(plus_list,current_row):
-    """ Finds the "+" char which has the same xpos but an other Ypos in the plus_list 
-    return the index of the new "+"
+    """ Finds the "+" char that is above the current_row. If the current "+" char is at the bottom, 
+        it finds the "+" char at the top with the same x position
+
 
     current_row -- the currently selected row in the plus_list
     plus_list -- the lists of all the "+" and their positions
