@@ -50,7 +50,7 @@ def convert_map_to_coordinates(str_board):
         y += 1
     
     return map_xy
-
+print(convert_map_to_coordinates(read_map(map_path)))
 def make_plus_list():
     """
     Finds all the "+" chars in the map_xy 
@@ -232,28 +232,24 @@ def main(screen,player1_name,player2_name):
     # plus_list 
     plus_list = make_plus_list()
      
-    print_choice(screen,current_row,plus_list,player1_name,player2_name)
     while 1:
+        print_choice(screen,current_row,plus_list,player1_name,player2_name)
+        
         key = screen.getch()
+
         if key == curses.KEY_LEFT and current_row > 0:  
             current_row -= 1
-            print_choice(screen,current_row,plus_list,player1_name,player2_name)
             time.sleep(0.08)
         elif key == curses.KEY_RIGHT and current_row < len(plus_list)-1:
             current_row += 1
-            print_choice(screen,current_row,plus_list,player1_name,player2_name)
             time.sleep(0.08)
         elif key == curses.KEY_DOWN:
             current_row = move_down(plus_list,current_row)
-            print_choice(screen,current_row,plus_list,player1_name,player2_name)
 
         elif key == curses.KEY_UP:
             current_row = move_up(plus_list,current_row)
-            print_choice(screen,current_row,plus_list,player1_name,player2_name)
 
         elif key == curses.KEY_ENTER or key in [10, 13]:
             plus_list = change_plus_to_X(plus_list,current_row)
-            print_choice(screen,current_row,plus_list,player1_name,player2_name)
-            time.sleep(3)
-            
-            quit()
+                
+           #quit()
