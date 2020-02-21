@@ -48,6 +48,7 @@ def convert_map_to_coordinates(str_board):
             map_xy.append(char_xy)
             x += 1
         y += 1
+    
     return map_xy
 
 def move_plus():
@@ -62,6 +63,27 @@ def move_plus():
         if cord[0] == "+":
             plus_list.append([cord[0],str(cord[1]),str(cord[2])])
     return plus_list
+
+def print_player_names(screen,player1_name,player2_name):
+    """Prints the playernames in screen 
+
+    Keyword arguments:
+    screen -- the curses screen
+    player1_name -- player1 name as string
+    player2_name -- player1 name as string
+    """
+    curses.init_pair(3,curses.COLOR_RED,curses.COLOR_BLACK)
+    h,w = screen.getmaxyx()
+
+    ply1_x = 0 + w//3   
+    ply1_y = 0
+    screen.addstr(ply1_y,ply1_x,player1_name,curses.color_pair(3))
+    curses.init_pair(2,curses.COLOR_YELLOW,curses.COLOR_BLACK)
+    ply2_x = 32 + w//3 
+    ply2_y = 0
+    screen.addstr(ply2_y,ply2_x,player2_name,curses.color_pair(2))
+    
+         
 
 def print_map(screen):
     """Reads the map_xy list  and prints the chars in the Screen
@@ -107,7 +129,7 @@ def print_map(screen):
 
 
 
-def print_choice(screen,selected_move_idx,plus_list):
+def print_choice(screen,selected_move_idx,plus_list,player1_name,player2_name):
     """Reads the plus_list list  and prints the chars in the Screen. If selected
 
     Keyword arguments:
@@ -117,6 +139,7 @@ def print_choice(screen,selected_move_idx,plus_list):
     """    
     screen.clear()
     print_map(screen)
+    print_player_names(screen,player1_name,player2_name)
     h, w = screen.getmaxyx()
     for idx, row in enumerate(plus_list):
         y = int(row[2])+ 5
@@ -193,7 +216,7 @@ def change_plus_to_O (plus_list,current_row):
     plus_list[current_row][0] = "O"
     return plus_list
  
-def main(screen):
+def main(screen,player1_name,player2_name):
     # turn off cursor blinking
     curses.curs_set(0)
 
@@ -206,29 +229,28 @@ def main(screen):
     # plus_list 
     plus_list = move_plus()
      
-    
-    print_choice(screen,current_row,plus_list)
+    print_choice(screen,current_row,plus_list,player1_name,player2_name)
     while 1:
         key = screen.getch()
         if key == curses.KEY_LEFT and current_row > 0:  
             current_row -= 1
-            print_choice(screen,current_row,plus_list)
+            print_choice(screen,current_row,plus_list,player1_name,player2_name)
             time.sleep(0.08)
         elif key == curses.KEY_RIGHT and current_row < len(plus_list)-1:
             current_row += 1
-            print_choice(screen,current_row,plus_list)
+            print_choice(screen,current_row,plus_list,player1_name,player2_name)
             time.sleep(0.08)
         elif key == curses.KEY_DOWN:
             current_row = move_down(plus_list,current_row)
-            print_choice(screen,current_row,plus_list)
+            print_choice(screen,current_row,plus_list,player1_name,player2_name)
 
         elif key == curses.KEY_UP:
             current_row = move_up(plus_list,current_row)
-            print_choice(screen,current_row,plus_list)
+            print_choice(screen,current_row,plus_list,player1_name,player2_name)
 
         elif key == curses.KEY_ENTER or key in [10, 13]:
             plus_list = change_plus_to_X(plus_list,current_row)
-            print_choice(screen,current_row,plus_list)
+            print_choice(screen,current_row,plus_list,player1_name,player2_name)
             time.sleep(3)
             
             quit()
