@@ -53,6 +53,7 @@ def make_plus_list(map_coordinates):
 =======
     Finds all the "+" chars on the map
 >>>>>>> a813015b408bb0b5470c9ac874f052905480d325
+    Finds all the "+" chars in  map_coordinates 
     Returns a list of lists where every list has ["+",xPos,Ypos]
     Example [['X', 0, 0], [' ', 1, 0],...,['+', '4', '0']] => [['+', '4', '0'],...]
     """
@@ -159,6 +160,7 @@ def move_down(plus_list,current_row):
 
 def move_up(plus_list,current_row):
     """ Finds the "+" char that is above the current_row. If the current "+" char is at the bottom, 
+    """ Finds the "+" char that is above the current_row. If the current "+" char is at the top, 
         it finds the "+" char at the top with the same x position
 
 
@@ -191,7 +193,7 @@ def change_plus_to_X (plus_list,current_row):
     return plus_list
 def change_plus_to_O (plus_list,current_row):
     """ Changes the "+" to a "O" of the current_row in the plus_list list
-    returns the changed plus_list list
+    Returns the changed plus_list list
 
 
     current_row -- the currently selected row in the plus_list
@@ -234,6 +236,7 @@ def main(screen,player1_name,player2_name):
     map_coordinates =convert_map_to_coordinates(map_string)
     # plus_list 
     
+    # plus_list, coordinates of the "+" chars in the map_coordinates list 
     plus_list = make_plus_list(map_coordinates)
      
     while 1:
