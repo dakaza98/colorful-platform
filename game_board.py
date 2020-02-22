@@ -228,7 +228,6 @@ def main(screen,player1_name,player2_name):
     
     #coordinates of the chars in the map
     map_coordinates =convert_map_to_coordinates(map_string)
-    # plus_list 
     
     # plus_list, coordinates of the "+" chars in the map_coordinates list 
     plus_list = make_plus_list(map_coordinates)
