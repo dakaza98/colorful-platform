@@ -1,6 +1,9 @@
 import curses
 import time
+
+import game_board
 from curses.textpad import Textbox
+
 
 CHOICE_START = "start"
 CHOICE_QUIT = "quit"
@@ -63,6 +66,9 @@ def print_menu(screen, selected_row_index):
     screen.refresh()
 
 
+
+
+
 def validate_key_input(key_input):
     """
     Callback function used by curses when a user types input.
@@ -109,21 +115,8 @@ def get_player_name(screen, text):
 
     return player_name
 
-def startgame(screen, player1_name, player2_name):
-    screen.clear()
-    screen.addstr(0, 0, "Player1: " + player1_name)
-    screen.addstr(1, 0, "Player2: " + player2_name)
-    screen.refresh()
-
-    time.sleep(1)
-
 def ask_for_player_names(screen):
-    """Temporary functions that 'starts' the game.
-
-    Keyword arguments:
-    screen -- the curses screen
-    """
-    player1_text = "Inset player 1's name: "
+    player1_text = "Insert player 1's name: "
     player2_text = "Insert player 2's name: "
 
     # Enable blinking cursor when typing in names
@@ -133,8 +126,10 @@ def ask_for_player_names(screen):
     player2_name = get_player_name(screen, player2_text)
 
     curses.curs_set(0)
+    screen.refresh()
 
-    startgame(screen, player1_name, player2_name)
+    return player1_name, player2_name
+
 
 def main(screen):
     """The menu loop used by curses.
@@ -159,7 +154,10 @@ def main(screen):
         elif pressed_key in enter_keys:
             if menu[current_row] == CHOICE_START:
                 screen.clear()
-                ask_for_player_names(screen)
+                player1_name, player2_name = ask_for_player_names(screen)
+
+                #starts the game
+                game_board.main(screen,player1_name,player2_name)
                 break
             elif menu[current_row] == CHOICE_QUIT:
                 break
