@@ -174,29 +174,19 @@ def move_up(plus_list,current_row):
      
           return new_row  
 
-def change_plus_to_X (plus_list,current_row):
-    """ Changes the "+" to a "X" of the current_row in the plus_list list
-    Returns the changed plus_list list
 
+
+def place_stone(plus_list,current_row,stone_marker):
+    """ Places a stone on the map by changing the "+" to "X" or "O"
+    Returns the changed plus_list list
 
     current_row -- the currently selected row in the plus_list
     plus_list -- the lists of all the "+" and their positions
+    stone_marker -- the char of the stone 
     """
-
-    plus_list[current_row][0] = "X"
+    plus_list[current_row][0] = stone_marker
     return plus_list
-def change_plus_to_O (plus_list,current_row):
-    """ Changes the "+" to a "O" of the current_row in the plus_list list
-    Returns the changed plus_list list
 
-
-    current_row -- the currently selected row in the plus_list
-    plus_list -- the lists of all the "+" and their positions
-    """
-
-    plus_list[current_row][0] = "O"
-    return plus_list
- 
 def main(screen,player1_name,player2_name):
     """ The game loop used by curses.
 
@@ -250,7 +240,7 @@ def main(screen,player1_name,player2_name):
             current_row = move_up(plus_list,current_row)
 
         elif key == curses.KEY_ENTER or key in [10, 13]:
-            plus_list = change_plus_to_X(plus_list,current_row)
+            plus_list = place_stone(plus_list,current_row,"X")
         
         # 27 = Escape key
         elif key == 27: 
