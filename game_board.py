@@ -137,6 +137,7 @@ def print_choice(screen,selected_move_idx,plus_list,player1_name,player2_name,ma
 def move_down(plus_list,current_row):
     """ Finds the "+" char that is below the current_row. If the current "+" char is at the bottom, 
         it finds the "+" char at the top with the same x position
+    Returns the new y position of the "+" 
 
     current_row -- the currently selected row in the plus_list
     plus_list -- the lists of all the "+" and their positions
@@ -161,6 +162,7 @@ def move_down(plus_list,current_row):
 def move_up(plus_list,current_row):
     """ Finds the "+" char that is above the current_row. If the current "+" char is at the top, 
         it finds the "+" char at the bottom with the same x position
+    Returns the new y position of the "+" 
 
 
     current_row -- the currently selected row in the plus_list
