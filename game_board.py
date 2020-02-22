@@ -100,7 +100,7 @@ def print_map(screen,map_coordinates):
         elif char == "X": 
 
             screen.addstr(y,x,char,curses.color_pair(3))
-        elif char != "+" and char != "O" and char !="X":
+        elif char != "+":
             screen.addstr(y,x,char)
 
       
