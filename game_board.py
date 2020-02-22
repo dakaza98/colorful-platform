@@ -182,7 +182,7 @@ def place_stone(plus_list,current_row,stone_marker):
 
     current_row -- the currently selected row in the plus_list
     plus_list -- the lists of all the "+" and their positions
-    stone_marker -- the char of the stone 
+    stone_marker -- the char of the stone, should be either "X" or "O" 
     """
     plus_list[current_row][0] = stone_marker
     return plus_list
