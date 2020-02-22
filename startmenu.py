@@ -115,6 +115,20 @@ def get_player_name(screen, text):
 
     return player_name
 
+def ask_for_player_names(screen):
+    player1_text = "Insert player 1's name: "
+    player2_text = "Insert player 2's name: "
+
+    # Enable blinking cursor when typing in names
+    curses.curs_set(1)
+
+    player1_name = get_player_name(screen, player1_text)
+    player2_name = get_player_name(screen, player2_text)
+
+    curses.curs_set(0)
+    screen.refresh()
+
+    return player1_name, player2_name
 
 
 def main(screen):
@@ -140,18 +154,8 @@ def main(screen):
         elif pressed_key in enter_keys:
             if menu[current_row] == CHOICE_START:
                 screen.clear()
+                player1_name, player2_name = ask_for_player_names(screen)
 
-                player1_text = "Inset player 1's name: "
-                player2_text = "Insert player 2's name: "
-
-                # Enable blinking cursor when typing in names
-                curses.curs_set(1)
-
-                player1_name = get_player_name(screen, player1_text)
-                player2_name = get_player_name(screen, player2_text)
-
-                curses.curs_set(0)
-                screen.refresh()
                 #starts the game
                 game_board.main(screen,player1_name,player2_name)
                 break
