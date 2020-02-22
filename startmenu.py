@@ -151,7 +151,7 @@ def main(screen):
                 player2_name = get_player_name(screen, player2_text)
 
                 curses.curs_set(0)
-
+                screen.refresh()
                 #starts the game
                 game_board.main(screen,player1_name,player2_name)
                 break
