@@ -109,7 +109,7 @@ def print_map(screen,map_coordinates):
 
 
 def print_choice(screen,selected_move_idx,plus_list,player1_name,player2_name,map_coordinates):
-    """Reads the plus_list list  and prints the chars in the Screen. If selected
+    """Reads the plus_list list  and prints the chars in the Screen.
 
     Keyword arguments:
     screen -- the curses screen
@@ -122,6 +122,8 @@ def print_choice(screen,selected_move_idx,plus_list,player1_name,player2_name,ma
     print_player_names(screen,player1_name,player2_name)
     h, w = screen.getmaxyx()
     for idx, row in enumerate(plus_list):
+
+        # To center the game 5 is added y and w//3 is added to x
         y = int(row[2])+ 5
         x = int(row[1]) +  w//3      
         if idx == selected_move_idx:
