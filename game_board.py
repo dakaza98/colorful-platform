@@ -15,7 +15,7 @@ def read_map(path):
     try:        
         board = open( path,'r')
         board_txt = board.read()
-        board.close 
+        board.close() 
         
         return board_txt
     except IOError:
