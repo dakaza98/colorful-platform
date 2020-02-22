@@ -30,7 +30,7 @@ def convert_map_to_coordinates(str_board):
     Example "X  " => [['X', 0, 0], [' ', 1, 0], [' ', 2, 0]...,]
 
     Keyword arguments:
-    str_board -- the string of the map
+    str_board -- the string version of the map
     """
  
     matrix = [[x for x in line] for line in str_board.split('\n')]
