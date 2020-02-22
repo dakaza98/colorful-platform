@@ -48,7 +48,9 @@ def convert_map_to_coordinates(str_board):
 
 def make_plus_list(map_coordinates):
     """
+<<<<<<< HEAD
     Finds all the "+" chars in the map_coordinates 
+=======
     Returns a list of lists where every list has ["+",xPos,Ypos]
     Example [['X', 0, 0], [' ', 1, 0],...,['+', '4', '0']] => [['+', '4', '0'],...]
     """
