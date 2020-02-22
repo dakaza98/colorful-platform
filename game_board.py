@@ -103,29 +103,21 @@ def print_map(screen,map_coordinates):
         elif char != "+":
             screen.addstr(y,x,char)
 
-      
-          
-
-
-
-def print_choice(screen,selected_move_idx,plus_list,player1_name,player2_name,map_coordinates):
-    """Reads the plus_list list  and prints the chars in the Screen.
+def print_choice(screen, selected_move_idx, plus_list):
+    """Prints all plusses in plus_list on the screen. The currently selected plus is colored.
 
     Keyword arguments:
     screen -- the curses screen
     selected_move_idx -- the currently selected row in the plus_list
     plus_list -- the lists of all the "+" and their positions
-    map_coordinates -- The coordinates of the chars in the map
     """    
-    screen.clear()
-    print_map(screen,map_coordinates)
-    print_player_names(screen,player1_name,player2_name)
     h, w = screen.getmaxyx()
     for idx, row in enumerate(plus_list):
 
         # To have  the game board in the center, 5 is added y and w//3 is added to x
         y = int(row[2])+ 5
         x = int(row[1]) +  w//3      
+
         if idx == selected_move_idx:
             screen.attron(curses.color_pair(1))
             screen.addstr(y,x, row[0])
@@ -133,7 +125,6 @@ def print_choice(screen,selected_move_idx,plus_list,player1_name,player2_name,ma
         else:
             screen.addstr(y, x, row[0])
    
-    screen.refresh()    
 
 
 def move_down(plus_list,current_row):
@@ -158,7 +149,6 @@ def move_down(plus_list,current_row):
         current_y = plus_list[current_row][2]
         new_y = plus_list[new_row][2]
         if current_x == new_x and current_y != new_y:
-            
           return new_row 
 
 def move_up(plus_list,current_row):
@@ -236,8 +226,15 @@ def main(screen,player1_name,player2_name):
     plus_list = make_plus_list(map_coordinates)
      
     while 1:
-        print_choice(screen,current_row,plus_list,player1_name,player2_name,map_coordinates)
+        screen.clear()
+
+        print_map(screen,map_coordinates)
+        print_player_names(screen,player1_name,player2_name)
+
+        print_choice(screen,current_row,plus_list)
         
+        screen.refresh()    
+
         key = screen.getch()
 
         if key == curses.KEY_LEFT and current_row > 0:  
