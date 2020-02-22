@@ -24,8 +24,8 @@ def read_map(path):
 
 def convert_map_to_coordinates(str_board):
     """
-    Reads the string from left to right and appends every char to list with its x any y pos
-    the top of the menu. 
+    Converts the string version of the map to coordinates
+ 
     Returns a list of lists where every list has [char,xPos,Ypos]
     Example "X  " => [['X', 0, 0], [' ', 1, 0], [' ', 2, 0]...,]
 
