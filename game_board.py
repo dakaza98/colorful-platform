@@ -155,7 +155,7 @@ def move_down(plus_list,current_row):
 
         current_y = plus_list[current_row][2]
         new_y = plus_list[new_row][2]
-        if current_x == new_x and plus_list[current_row][2] !=   plus_list[new_row][2]:
+        if current_x == new_x and current_y != new_y:
             
           return new_row 
 
@@ -181,7 +181,7 @@ def move_up(plus_list,current_row):
 
         current_y = plus_list[current_row][2]
         new_y = plus_list[new_row][2]
-        if current_x == new_x and plus_list[current_row][2] !=   plus_list[new_row][2]:
+        if current_x == new_x and current_y != new_y:
      
           return new_row  
 
