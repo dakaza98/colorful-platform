@@ -115,32 +115,6 @@ def get_player_name(screen, text):
 
     return player_name
 
-def startgame(screen, player1_name, player2_name):
-    screen.clear()
-    screen.addstr(0, 0, "Player1: " + player1_name)
-    screen.addstr(1, 0, "Player2: " + player2_name)
-    screen.refresh()
-
-    time.sleep(1)
-
-def ask_for_player_names(screen):
-    """Temporary functions that 'starts' the game.
-
-    Keyword arguments:
-    screen -- the curses screen
-    """
-    player1_text = "Inset player 1's name: "
-    player2_text = "Insert player 2's name: "
-
-    # Enable blinking cursor when typing in names
-    curses.curs_set(1)
-
-    player1_name = get_player_name(screen, player1_text)
-    player2_name = get_player_name(screen, player2_text)
-
-    curses.curs_set(0)
-    #instead of startgame()
-    game_board.main(screen,player1_name,player2_name)
 
 
 def main(screen):
@@ -167,7 +141,19 @@ def main(screen):
             if menu[current_row] == CHOICE_START:
                 screen.clear()
 
-                ask_for_player_names(screen)
+                player1_text = "Inset player 1's name: "
+                player2_text = "Insert player 2's name: "
+
+                # Enable blinking cursor when typing in names
+                curses.curs_set(1)
+
+                player1_name = get_player_name(screen, player1_text)
+                player2_name = get_player_name(screen, player2_text)
+
+                curses.curs_set(0)
+
+                #starts the game
+                game_board.main(screen,player1_name,player2_name)
                 break
             elif menu[current_row] == CHOICE_QUIT:
                 break

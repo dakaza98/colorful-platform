@@ -2,8 +2,6 @@ import curses
 import os
 import time
 
-# The path of the textfile of the map
-map_path = 'Ascii board.txt'
 
 def read_map(path):
     """
@@ -18,13 +16,11 @@ def read_map(path):
         board = open( path,'r')
         board_txt = board.read()
         board.close 
-
+        
         return board_txt
     except IOError:
-        print("Can not find the file at this path =>"+ path )
-      
-
-
+        
+        raise Exception("Can not find the file at this path => "+ path)
 
 def convert_map_to_coordinates(str_board):
     """
@@ -38,27 +34,26 @@ def convert_map_to_coordinates(str_board):
     """
  
     matrix = [[x for x in line] for line in str_board.split('\n')]
-    map_xy = []
+    map_coordinates = []
     y = 0
     for row in matrix:
         x = 0
         for c in row:
             char_xy = [c,x,y]    
-            map_xy.append(char_xy)
+            map_coordinates.append(char_xy)
             x += 1
         y += 1
     
-    return map_xy
+    return map_coordinates
 
-def make_plus_list():
+def make_plus_list(map_coordinates):
     """
-    Finds all the "+" chars in the map_xy 
+    Finds all the "+" chars in the map_coordinates 
     Returns a list of lists where every list has ["+",xPos,Ypos]
     Example [['X', 0, 0], [' ', 1, 0],...,['+', '4', '0']] => [['+', '4', '0'],...]
     """
-    map_xy =convert_map_to_coordinates(read_map(map_path))
     plus_list = []
-    for cord in map_xy:
+    for cord in map_coordinates:
         if cord[0] == "+":
             plus_list.append([cord[0],str(cord[1]),str(cord[2])])
     return plus_list
@@ -69,46 +64,40 @@ def print_player_names(screen,player1_name,player2_name):
     Keyword arguments:
     screen -- the curses screen
     player1_name -- player1 name as string
-    player2_name -- player1 name as string
+    player2_name -- player2 name as string
     """
-    curses.init_pair(3,curses.COLOR_RED,curses.COLOR_BLACK)
     h,w = screen.getmaxyx()
 
-    ply1_x = -1 + w//3   
-    ply1_y = 2
-    screen.addstr(ply1_y,ply1_x,"Player1",curses.color_pair(3))
-    screen.addstr(ply1_y+1,ply1_x,player1_name,curses.color_pair(3))
+    player1_name_x = -1 + w//3   
+    player1_name_y = 2
+    screen.addstr(player1_name_y,player1_name_x,"Player1",curses.color_pair(3))
+    screen.addstr(player1_name_y+1,player1_name_x,player1_name,curses.color_pair(3))
 
-    curses.init_pair(2,curses.COLOR_YELLOW,curses.COLOR_BLACK)
-    ply2_x = 29  + w//3 
-    ply2_y = 2
-    screen.addstr(ply2_y,ply2_x,"Player2",curses.color_pair(2))
-    screen.addstr(ply2_y+1,ply2_x,player2_name,curses.color_pair(2))
+    player2_name_x = 29  + w//3 
+    player2_name_y = 2
+    screen.addstr(player2_name_y,player2_name_x,"Player2",curses.color_pair(2))
+    screen.addstr(player2_name_y+1,player2_name_x,player2_name,curses.color_pair(2))
     
          
 
-def print_map(screen):
-    """Reads the map_xy list  and prints the chars in the Screen
+def print_map(screen,map_coordinates):
+    """Reads the map_coordinates list  and prints the chars in the Screen
 
     Keyword arguments:
     screen -- the curses screen
-    map_xy -- list of lists the chars and their positions 
     """
-    map_xy = convert_map_to_coordinates(read_map(map_path))
-    for cord in map_xy:
+    for cord in map_coordinates:
         h,w = screen.getmaxyx()
 
-        #To place the game in the center of the window  
+        #To place the game board in the center of the window  
         y = cord[2]+ 5
         x = cord[1] +  w//3    
         
         char = cord[0]
         if char == "O":
-            curses.init_pair(2,curses.COLOR_YELLOW,curses.COLOR_BLACK)
-                        
+            
             screen.addstr(y,x,char,curses.color_pair(2))
         elif char == "X": 
-            curses.init_pair(3,curses.COLOR_RED,curses.COLOR_BLACK)
 
             screen.addstr(y,x,char,curses.color_pair(3))
         elif char != "+" and char != "O" and char !="X":
@@ -119,16 +108,17 @@ def print_map(screen):
 
 
 
-def print_choice(screen,selected_move_idx,plus_list,player1_name,player2_name):
+def print_choice(screen,selected_move_idx,plus_list,player1_name,player2_name,map_coordinates):
     """Reads the plus_list list  and prints the chars in the Screen. If selected
 
     Keyword arguments:
     screen -- the curses screen
     selected_move_idx -- the currently selected row in the plus_list
     plus_list -- the lists of all the "+" and their positions
+    map_coordinates -- The coordinates of the chars in the map
     """    
     screen.clear()
-    print_map(screen)
+    print_map(screen,map_coordinates)
     print_player_names(screen,player1_name,player2_name)
     h, w = screen.getmaxyx()
     for idx, row in enumerate(plus_list):
@@ -186,7 +176,7 @@ def move_up(plus_list,current_row):
 
 def change_plus_to_X (plus_list,current_row):
     """ Changes the "+" to a "X" of the current_row in the plus_list list
-    returns the changed plus_list list
+    Returns the changed plus_list list
 
 
     current_row -- the currently selected row in the plus_list
@@ -208,20 +198,42 @@ def change_plus_to_O (plus_list,current_row):
     return plus_list
  
 def main(screen,player1_name,player2_name):
+    """ The game loop used by curses.
+
+    Keyword arguments:
+    screen -- the curses screen
+    player1_name -- The name of player1 as a string
+    player2_name -- The name of player2 as a string
+    """
     # turn off cursor blinking
     curses.curs_set(0)
 
     # color scheme for selected row
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_GREEN)
 
+    # color scheme for player1        
+    curses.init_pair(3,curses.COLOR_RED,curses.COLOR_BLACK)
+    
+    # color scheme for player2
+    curses.init_pair(2,curses.COLOR_YELLOW,curses.COLOR_BLACK)
+            
     # specify the current selected row
     current_row = 0
 
+    # The path of the textfile of the map
+    map_path = 'Ascii board.txt'
+
+    #string of the map
+    map_string = read_map(map_path)
+    
+    #coordinates of the chars in the map
+    map_coordinates =convert_map_to_coordinates(map_string)
     # plus_list 
-    plus_list = make_plus_list()
+    
+    plus_list = make_plus_list(map_coordinates)
      
     while 1:
-        print_choice(screen,current_row,plus_list,player1_name,player2_name)
+        print_choice(screen,current_row,plus_list,player1_name,player2_name,map_coordinates)
         
         key = screen.getch()
 
@@ -239,5 +251,8 @@ def main(screen,player1_name,player2_name):
 
         elif key == curses.KEY_ENTER or key in [10, 13]:
             plus_list = change_plus_to_X(plus_list,current_row)
-                
-           #quit()
+        
+        # 27 = Escape key
+        elif key == 27: 
+            quit()
+            
