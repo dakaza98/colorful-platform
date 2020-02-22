@@ -81,27 +81,33 @@ def print_player_names(screen,player1_name,player2_name):
          
 
 def print_map(screen,map_coordinates):
-    """Reads the map_coordinates list  and prints the chars in the Screen
+    """Prints the all the chars except "+" in map_coordinates at their specified coordinate.
 
     Keyword arguments:
     screen -- the curses screen
+    map_coordinates -- A list of lists where every list has the form [char, xPos, yPos]
     """
     for cord in map_coordinates:
+
+        char = cord[0]
+        
+        if char == "+":        
+            continue
+
         h,w = screen.getmaxyx()
 
         #To place the game board in the center of the window  
         y = cord[2]+ 5
         x = cord[1] +  w//3    
         
-        char = cord[0]
-        if char == "O":
-            
-            screen.addstr(y,x,char,curses.color_pair(2))
-        elif char == "X": 
+        color = 0
 
-            screen.addstr(y,x,char,curses.color_pair(3))
-        elif char != "+":
-            screen.addstr(y,x,char)
+        if char == "O":
+            color = 2
+        elif char == "X": 
+            color = 3
+ 
+        screen.addstr(y,x,char,curses.color_pair(color))
 
 def print_choice(screen, selected_move_idx, plus_list):
     """Prints all plusses in plus_list on the screen. The currently selected plus is colored.
