@@ -59,7 +59,7 @@ def make_plus_list(map_coordinates):
     return plus_list
 
 def print_player_names(screen,player1_name,player2_name):
-    """Prints the playernames in screen 
+    """Prints the playernames in the screen 
 
     Keyword arguments:
     screen -- the curses screen
