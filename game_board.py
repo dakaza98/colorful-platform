@@ -239,10 +239,10 @@ def main(screen,player1_name,player2_name):
 
         if key == curses.KEY_LEFT and current_row > 0:  
             current_row -= 1
-            time.sleep(0.08)
+            time.sleep(0.01)
         elif key == curses.KEY_RIGHT and current_row < len(plus_list)-1:
             current_row += 1
-            time.sleep(0.08)
+            time.sleep(0.01)
         elif key == curses.KEY_DOWN:
             current_row = move_down(plus_list,current_row)
 
