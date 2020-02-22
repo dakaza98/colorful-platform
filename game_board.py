@@ -149,8 +149,13 @@ def move_down(plus_list,current_row):
         if new_row == len(plus_list):
             new_row = 0
         
-        if plus_list[current_row][1] == plus_list[new_row][1] and plus_list[current_row][2] != plus_list[new_row][2]:
-     
+        current_x = plus_list[current_row][1]
+        new_x = plus_list[new_row][1]
+
+        current_y = plus_list[current_row][2]
+        new_y = plus_list[new_row][2]
+        if current_x == new_x and plus_list[current_row][2] !=   plus_list[new_row][2]:
+            
           return new_row 
 
 def move_up(plus_list,current_row):
@@ -169,8 +174,12 @@ def move_up(plus_list,current_row):
             new_row = len(plus_list)
         
         new_row -= 1
-        
-        if plus_list[current_row][1] == plus_list[new_row][1] and plus_list[current_row][2] !=   plus_list[new_row][2]:
+        current_x = plus_list[current_row][1]
+        new_x = plus_list[new_row][1]
+
+        current_y = plus_list[current_row][2]
+        new_y = plus_list[new_row][2]
+        if current_x == new_x and plus_list[current_row][2] !=   plus_list[new_row][2]:
      
           return new_row  
 
