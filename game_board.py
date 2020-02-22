@@ -51,6 +51,8 @@ def make_plus_list(map_coordinates):
 <<<<<<< HEAD
     Finds all the "+" chars in the map_coordinates 
 =======
+    Finds all the "+" chars on the map
+>>>>>>> a813015b408bb0b5470c9ac874f052905480d325
     Returns a list of lists where every list has ["+",xPos,Ypos]
     Example [['X', 0, 0], [' ', 1, 0],...,['+', '4', '0']] => [['+', '4', '0'],...]
     """
