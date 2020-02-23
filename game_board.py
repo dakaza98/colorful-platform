@@ -286,6 +286,28 @@ def print_player_start(screen,player_turn,player1_name,player2_name):
         screen.addstr(text_y,text_x,player2_name.rstrip("\n")+" will start!",curses.color_pair(2))
 
 
+def can_player_act(plus_list,current_row,remaining_stones_p1, remaining_stones_p2,player_turn):
+    """Determines if a player is allowed to attack
+    Returns Tuple (bool,remaining_stones_p1,remaining_stones_p2)
+
+    Keyword argument 
+    plus_list -- list of "+" and placed stones
+    current_row --  currently selected row in the plus_list
+    remaining_stone_p1 -- the amount of stone player1 has
+    remaining_stone_p2 -- the amount of stone player2 ha
+    player_turn -- which player is next to act
+    
+    """
+    current_char = plus_list[current_row][0]
+    can_not_act= (remaining_stones_p1 <=  0 and remaining_stones_p2 <= 0) or current_char != "+"
+    if can_not_act == True:    
+        print("abo")
+        return False,remaining_stones_p1,remaining_stones_p2
+    elif player_turn == True and can_not_act == False :
+        remaining_stones_p1 -= 1
+    elif player_turn == False and can_not_act == False:
+        remaining_stones_p2 -= 1        
+    return True,remaining_stones_p1, remaining_stones_p2
                 
 def main(screen,player1_name,player2_name):
     """ The game loop used by curses.
@@ -330,7 +352,8 @@ def main(screen,player1_name,player2_name):
     #player_turn bool will determine which player that will start True for player1
     player_turn = random_player_start()
     
-    
+    remaining_stones_p1 = 9
+    remaining_stones_p2 = 9
     #Prints player start text once
     print_once = 0
     while 1:
@@ -357,10 +380,15 @@ def main(screen,player1_name,player2_name):
             current_row = move_up(plus_list,current_row)
 
         elif key == curses.KEY_ENTER or key in [10, 13]:
-            stone_marker=which_stone(player_turn)
-            plus_list = place_stone(plus_list,current_row,stone_marker)
-            map_coordinates = remove_stone(map_coordinates,stone_marker)
-            player_turn = switch_player_turn(player_turn)
+            player_can_act, remaining_stones_p1, remaining_stones_p2= can_player_act(plus_list,current_row,remaining_stones_p1,remaining_stones_p2,player_turn) 
+            if player_can_act == True:
+                stone_marker=which_stone(player_turn)
+                plus_list = place_stone(plus_list,current_row,stone_marker)
+                map_coordinates = remove_stone(map_coordinates,stone_marker)
+                player_turn = switch_player_turn(player_turn)
+                print(remaining_stones_p1,remaining_stones_p2)
+            else:
+                continue    
         # 27 = Escape key
         elif key == 27: 
             quit()
