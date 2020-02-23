@@ -1,7 +1,7 @@
 import curses
 import os
 import time
-
+import random
 
 def read_map(path):
     """
@@ -249,6 +249,41 @@ def switch_player_turn(player_turn):
         player_turn = True        
     return player_turn
 
+def random_player_start():
+    """Decides which player that will start to act. 
+    Returns True or False , True for player1 and False for player2 
+    """
+    player_start = random.randint(1,2)
+    if player_start == 1:
+        return True
+    return False
+
+def print_player_start(screen,player_turn,player1_name,player2_name):
+    """ Prints the name of player who will start to act
+    
+    Keyword arguments:
+    screen -- the curses screen
+    player_turn -- bool shows who's turn it is act
+    player1_name -- player1 name as string
+    player2_name -- player2 name as string
+
+    """
+    h,w = screen.getmaxyx()
+
+    #position of text 
+    text_x = 8  + w//3 
+    text_y = 0
+    
+    if player_turn == True:
+          if len(player1_name) ==0:
+              player1_name = "Player1"   
+          screen.addstr(text_y,text_x,player1_name.rstrip("\n")+" will start!",curses.color_pair(3))
+    else:
+        if len(player2_name) ==0:
+            player2_name = "Player2"        
+        screen.addstr(text_y,text_x,player2_name.rstrip("\n")+" will start!",curses.color_pair(2))
+
+    
 def main(screen,player1_name,player2_name):
     """ The game loop used by curses.
 
@@ -290,11 +325,15 @@ def main(screen,player1_name,player2_name):
     
     
     #player_turn bool
-    player_turn = True
-
+    player_turn = random_player_start()
+    
+    #Print player who start once
+    print_once = 0
     while 1:
         screen.clear()
-
+        if print_once == 0:
+            print_player_start(screen,player_turn,player1_name,player2_name)
+        print_once += 1    
         print_map(screen,map_coordinates)
         print_player_names(screen,player1_name,player2_name)
 
