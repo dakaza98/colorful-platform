@@ -120,13 +120,13 @@ def print_choice(screen, selected_move_idx, plus_list,player_turn):
         x = int(row[1]) +  w//3      
         color =which_color_pair(row[0])
         if idx == selected_move_idx:
-            color = 1
+            color_cursor = 1
             #cursor will now have the player colors
             if player_turn == False:
-                color = 4
-            screen.attron(curses.color_pair(color))
+                color_cursor = 4
+            screen.attron(curses.color_pair(color_cursor))
             screen.addstr(y,x, row[0])
-            screen.attroff(curses.color_pair(color))
+            screen.attroff(curses.color_pair(color_cursor))
         else:
             screen.addstr(y, x, row[0],curses.color_pair(color))
    
