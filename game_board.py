@@ -287,7 +287,7 @@ def print_player_start(screen,player_turn,player1_name,player2_name):
 
 
 def can_player_act(plus_list,current_row,remaining_stones_p1, remaining_stones_p2,player_turn):
-    """Determines if a player is allowed to attack
+    """Determines if a player is allowed to act
     Returns Tuple (bool,remaining_stones_p1,remaining_stones_p2)
 
     Keyword argument 
