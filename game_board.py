@@ -283,7 +283,8 @@ def print_player_start(screen,player_turn,player1_name,player2_name):
             player2_name = "Player2"        
         screen.addstr(text_y,text_x,player2_name.rstrip("\n")+" will start!",curses.color_pair(2))
 
-    
+
+                
 def main(screen,player1_name,player2_name):
     """ The game loop used by curses.
 
@@ -342,7 +343,6 @@ def main(screen,player1_name,player2_name):
         screen.refresh()    
 
         key = screen.getch()
-
         if key == curses.KEY_LEFT and current_row > 0:  
             current_row -= 1
         elif key == curses.KEY_RIGHT and current_row < len(plus_list)-1:
