@@ -327,7 +327,7 @@ def main(screen,player1_name,player2_name):
     #player_turn bool
     player_turn = random_player_start()
     
-    #Print player who start once
+    #Print player who will start once
     print_once = 0
     while 1:
         screen.clear()
