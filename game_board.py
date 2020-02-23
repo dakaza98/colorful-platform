@@ -296,7 +296,7 @@ def can_player_act(plus_list,current_row,remaining_stones_p1, remaining_stones_p
     remaining_stone_p1 -- the amount of stone player1 has
     remaining_stone_p2 -- the amount of stone player2 ha
     player_turn -- which player is next to act
-    
+      
     """
     current_char = plus_list[current_row][0]
     can_not_act= (remaining_stones_p1 <=  0 and remaining_stones_p2 <= 0) or current_char != "+"
