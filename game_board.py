@@ -208,7 +208,9 @@ def place_stone(plus_list,current_row,stone_marker):
     plus_list -- the lists of all the "+" and their positions
     stone_marker -- the char of the stone, should be either "X" or "O" 
     """
-    plus_list[current_row][0] = stone_marker
+    current_char = plus_list[current_row][0]
+    if current_char == "+":
+        plus_list[current_row][0] = stone_marker
     return plus_list
 
 def remove_stone(map_coordinates,stone_marker):
@@ -250,7 +252,7 @@ def switch_player_turn(player_turn):
     return player_turn
 
 def random_player_start():
-    """Decides which player that will start to act. 
+    """Determine which player that will start to act. 
     Returns True or False , True for player1 and False for player2 
     """
     player_start = random.randint(1,2)
@@ -325,8 +327,9 @@ def main(screen,player1_name,player2_name):
     plus_list = make_plus_list(map_coordinates)
     
     
-    #player_turn bool
+    #player_turn bool will determine which player that will start True for player1
     player_turn = random_player_start()
+    
     
     #Print player who will start once
     print_once = 0
