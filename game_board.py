@@ -100,16 +100,11 @@ def print_map(screen,map_coordinates):
         y = cord[2]+ 5
         x = cord[1] +  w//3    
         
-        color = 0
+        color = which_color_pair(char)
 
-        if char == "O":
-            color = 2
-        elif char == "X": 
-            color = 3
- 
         screen.addstr(y,x,char,curses.color_pair(color))
 
-def print_choice(screen, selected_move_idx, plus_list):
+def print_choice(screen, selected_move_idx, plus_list,player_turn):
     """Prints all plusses in plus_list on the screen. The currently selected plus is colored.
 
     Keyword arguments:
@@ -123,21 +118,41 @@ def print_choice(screen, selected_move_idx, plus_list):
         # To have  the game board in the center, 5 is added y and w//3 is added to x
         y = int(row[2])+ 5
         x = int(row[1]) +  w//3      
-
+        color =which_color_pair(row[0])
         if idx == selected_move_idx:
-            screen.attron(curses.color_pair(1))
+            color = 1
+            #cursor will now have the player colors
+            if player_turn == False:
+                color = 4
+            screen.attron(curses.color_pair(color))
             screen.addstr(y,x, row[0])
-            screen.attroff(curses.color_pair(1))
+            screen.attroff(curses.color_pair(color))
         else:
-            screen.addstr(y, x, row[0])
+            screen.addstr(y, x, row[0],curses.color_pair(color))
    
 
+def which_color_pair(stone_marker):
+    """Picks a which color that will be choosed for the stone,
+    depening if its an "O" or "x"
+    Returns color which is an int that represents the color_pair
+    
+    Keyword arguments:
+    stone_marker -- char of the stone
+    """
+    color = 0
+
+    if stone_marker== "O":
+        color = 2
+    elif stone_marker == "X": 
+        color = 3
+    return color
 
 def move_down(plus_list,current_row):
     """ Finds the "+" char that is below the current_row. If the current "+" char is at the bottom, 
         it finds the "+" char at the top with the same x position
     Returns the new y position of the "+" 
 
+    Keyword arguments:
     current_row -- the currently selected row in the plus_list
     plus_list -- the lists of all the "+" and their positions
     """
@@ -196,6 +211,44 @@ def place_stone(plus_list,current_row,stone_marker):
     plus_list[current_row][0] = stone_marker
     return plus_list
 
+def remove_stone(map_coordinates,stone_marker):
+    """ When you place a stone it removes the stone from the left or the right side
+        depending on the stone_marker
+    Returns map_coordinates 
+    Keyword arguments:
+    map_coordinates -- list of all chars in the string version of the map
+    stone_marker -- Char version of the stone which can be a "X" or "O"     
+
+    """
+    for stone in map_coordinates:
+        if stone[0] == stone_marker:
+            stone[0] = ""
+            break
+    return  map_coordinates
+def which_stone(player_turn):
+    """Picks which char the stone marker should be based which player is next to act
+    Return stone_marker
+
+    Keyword arguments:
+    stone_marker -- char of the stone,which can be "X" or "O"
+    """
+    stone_marker = "X"
+    if player_turn == False:
+        stone_marker = "O"
+    return stone_marker    
+
+def switch_player_turn(player_turn):
+    """Switches which player turn it is to act
+    Return player_turn
+    Keyword arguments:
+    player_turn -- bool, True is player1 turn and False is player2 turn
+    """
+    if player_turn == True:
+        player_turn = False
+    elif player_turn == False:
+        player_turn = True        
+    return player_turn
+
 def main(screen,player1_name,player2_name):
     """ The game loop used by curses.
 
@@ -207,8 +260,12 @@ def main(screen,player1_name,player2_name):
     # turn off cursor blinking
     curses.curs_set(0)
 
-    # color scheme for selected row
-    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_GREEN)
+    # color scheme for selected row player1
+    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_RED)
+    
+    # color scheme for selected row player2
+    curses.init_pair(4, curses.COLOR_BLACK, curses.COLOR_YELLOW)
+
 
     # color scheme for player1        
     curses.init_pair(3,curses.COLOR_RED,curses.COLOR_BLACK)
@@ -230,14 +287,18 @@ def main(screen,player1_name,player2_name):
     
     # plus_list, coordinates of the "+" chars in the map_coordinates list 
     plus_list = make_plus_list(map_coordinates)
-     
+    
+    
+    #player_turn bool
+    player_turn = True
+
     while 1:
         screen.clear()
 
         print_map(screen,map_coordinates)
         print_player_names(screen,player1_name,player2_name)
 
-        print_choice(screen,current_row,plus_list)
+        print_choice(screen,current_row,plus_list,player_turn)
         
         screen.refresh()    
 
@@ -254,8 +315,10 @@ def main(screen,player1_name,player2_name):
             current_row = move_up(plus_list,current_row)
 
         elif key == curses.KEY_ENTER or key in [10, 13]:
-            plus_list = place_stone(plus_list,current_row,"X")
-        
+            stone_marker=which_stone(player_turn)
+            plus_list = place_stone(plus_list,current_row,stone_marker)
+            map_coordinates = remove_stone(map_coordinates,stone_marker)
+            player_turn = switch_player_turn(player_turn)
         # 27 = Escape key
         elif key == 27: 
             quit()
