@@ -226,7 +226,7 @@ def remove_stone(map_coordinates,stone_marker):
             break
     return  map_coordinates
 def which_stone(player_turn):
-    """Picks which char the stone marker should be based which player is next to act
+    """Picks which char the stone marker should be based on which player is next to act
     Return stone_marker
 
     Keyword arguments:
