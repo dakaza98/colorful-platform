@@ -331,9 +331,9 @@ def main(screen,player1_name,player2_name):
     print_once = 0
     while 1:
         screen.clear()
-        if print_once == 0:
-            print_player_start(screen,player_turn,player1_name,player2_name)
+        if print_once == 0: print_player_start(screen,player_turn,player1_name,player2_name)
         print_once += 1    
+        
         print_map(screen,map_coordinates)
         print_player_names(screen,player1_name,player2_name)
 
