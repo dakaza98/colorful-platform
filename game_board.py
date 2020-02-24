@@ -348,7 +348,7 @@ def main(screen,player1_name,player2_name):
     plus_list = make_plus_list(map_coordinates)
     
     
-    #player_turn bool will determine which player that will start True for player1
+    #player_turn will determine which player that will start ,True for player1
     player_turn = random_player_start()
     
     remaining_stones_p1 = 9
