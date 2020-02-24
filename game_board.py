@@ -385,8 +385,7 @@ def main(screen,player1_name,player2_name):
                 plus_list = place_stone(plus_list,current_row,stone_marker)
                 map_coordinates = remove_stone(map_coordinates,stone_marker)
                 player_turn = switch_player_turn(player_turn)
-            else:
-                continue    
+         
         # 27 = Escape key
         elif key == 27: 
             quit()
