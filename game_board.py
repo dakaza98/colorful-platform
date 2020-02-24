@@ -301,7 +301,6 @@ def can_player_act(plus_list,current_row,remaining_stones_p1, remaining_stones_p
     current_char = plus_list[current_row][0]
     can_not_act= (remaining_stones_p1 <=  0 and remaining_stones_p2 <= 0) or current_char != "+"
     if can_not_act == True:    
-        print("abo")
         return False,remaining_stones_p1,remaining_stones_p2
     elif player_turn == True and can_not_act == False :
         remaining_stones_p1 -= 1
@@ -386,7 +385,6 @@ def main(screen,player1_name,player2_name):
                 plus_list = place_stone(plus_list,current_row,stone_marker)
                 map_coordinates = remove_stone(map_coordinates,stone_marker)
                 player_turn = switch_player_turn(player_turn)
-                print(remaining_stones_p1,remaining_stones_p2)
             else:
                 continue    
         # 27 = Escape key
