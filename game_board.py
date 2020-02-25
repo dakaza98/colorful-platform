@@ -104,13 +104,14 @@ def print_map(screen,map_coordinates):
 
         screen.addstr(y,x,char,curses.color_pair(color))
 
-def print_choice(screen, selected_move_idx, plus_list,player_turn):
+def print_choice(screen, selected_move_idx, plus_list,player1_turn):
     """Prints all plusses in plus_list on the screen. The currently selected plus is colored.
 
     Keyword arguments:
     screen -- the curses screen
     selected_move_idx -- the currently selected row in the plus_list
     plus_list -- the lists of all the "+" and their positions
+    player1_turn -- bool,True for player1  and False for player2
     """    
     h, w = screen.getmaxyx()
     for idx, row in enumerate(plus_list):
@@ -122,7 +123,7 @@ def print_choice(screen, selected_move_idx, plus_list,player_turn):
         if idx == selected_move_idx:
             color_cursor = 1
             #cursor will now have the player colors
-            if player_turn == False:
+            if player1_turn == False:
                 color_cursor = 4
             screen.attron(curses.color_pair(color_cursor))
             screen.addstr(y,x, row[0])
@@ -225,45 +226,43 @@ def remove_stone(map_coordinates,stone_marker):
             stone[0] = ""
             break
     return  map_coordinates
-def which_stone(player_turn):
+def which_stone(player1_turn):
     """Picks which char the stone marker should be based on which player is next to act
-    Return stone_marker
+    Return stone_marker, which can either be a "X" or "O" depending on who is placing the stone
 
     Keyword arguments:
-    stone_marker -- char of the stone,which can be "X" or "O"
+    player1_turn -- bool,True for player1  and False for player2
+
     """
     stone_marker = "X"
-    if player_turn == False:
+    if player1_turn == False:
         stone_marker = "O"
     return stone_marker    
 
-def switch_player_turn(player_turn):
+def switch_player_turn(player1_turn):
     """Switches which player turn it is to act
-    Return player_turn
+    Return player1_turn , which boolean value get switched to let the other player act
     Keyword arguments:
-    player_turn -- bool, True is player1 turn and False is player2 turn
+    player1_turn -- bool, True is player1 turn and False is player2 turn
+    
     """
-    if player_turn == True:
-        player_turn = False
-    elif player_turn == False:
-        player_turn = True        
-    return player_turn
+    return not player1_turn
 
 def random_player_start():
     """Determine which player that will start to act. 
-    Returns True or False , True for player1 and False for player2 
+    Returns a bool , True for player1 and False for player2 
     """
     player_start = random.randint(1,2)
     if player_start == 1:
         return True
     return False
 
-def print_player_start(screen,player_turn,player1_name,player2_name):
-    """ Prints the name of player who will start to act
+def print_player_start(screen,player1_turn,player1_name,player2_name):
+    """ Prints the name of player who will start to act at the top of the screen
     
     Keyword arguments:
     screen -- the curses screen
-    player_turn -- bool shows who's turn it is act
+    player1_turn -- bool, True is player1 turn and False is player2 turn    
     player1_name -- player1 name as string
     player2_name -- player2 name as string
 
@@ -274,7 +273,7 @@ def print_player_start(screen,player_turn,player1_name,player2_name):
     text_x = 8  + w//3 
     text_y = 0
     
-    if player_turn == True:
+    if player1_turn == True:
           if len(player1_name) ==0:
               player1_name = "Player1"   
           screen.addstr(text_y,text_x,player1_name.rstrip("\n")+" will start!",curses.color_pair(3))
@@ -284,7 +283,7 @@ def print_player_start(screen,player_turn,player1_name,player2_name):
         screen.addstr(text_y,text_x,player2_name.rstrip("\n")+" will start!",curses.color_pair(2))
 
 
-def can_player_act(plus_list,current_row,remaining_stones_p1, remaining_stones_p2,player_turn):
+def can_player_act(plus_list,current_row,remaining_stones_p1, remaining_stones_p2,player1_turn):
     """Determines if a player is allowed to act
     Returns Tuple (bool,remaining_stones_p1,remaining_stones_p2)
 
@@ -292,17 +291,17 @@ def can_player_act(plus_list,current_row,remaining_stones_p1, remaining_stones_p
     plus_list -- list of "+" and placed stones
     current_row --  currently selected row in the plus_list
     remaining_stone_p1 -- the amount of stone player1 has
-    remaining_stone_p2 -- the amount of stone player2 ha
-    player_turn -- which player is next to act
+    remaining_stone_p2 -- the amount of stone player2 has
+    player1_turn -- bool, True is player1 turn and False is player2 turn    
       
     """
     current_char = plus_list[current_row][0]
     can_not_act= (remaining_stones_p1 <=  0 and remaining_stones_p2 <= 0) or current_char != "+"
     if can_not_act == True:    
         return False,remaining_stones_p1,remaining_stones_p2
-    elif player_turn == True and can_not_act == False :
+    elif player1_turn == True and can_not_act == False :
         remaining_stones_p1 -= 1
-    elif player_turn == False and can_not_act == False:
+    elif player1_turn == False and can_not_act == False:
         remaining_stones_p2 -= 1        
     return True,remaining_stones_p1, remaining_stones_p2
                 
@@ -346,8 +345,8 @@ def main(screen,player1_name,player2_name):
     plus_list = make_plus_list(map_coordinates)
     
     
-    #player_turn will determine which player that will start ,True for player1
-    player_turn = random_player_start()
+    #player_1turn will determine which player that will start ,True for player1
+    player1_turn = random_player_start()
     
     remaining_stones_p1 = 9
     remaining_stones_p2 = 9
@@ -355,13 +354,14 @@ def main(screen,player1_name,player2_name):
     print_once = 0
     while 1:
         screen.clear()
-        if print_once == 0: print_player_start(screen,player_turn,player1_name,player2_name)
-        print_once += 1    
+        if print_once == 0: 
+            print_player_start(screen,player1_turn,player1_name,player2_name)
+            print_once += 1    
         
         print_map(screen,map_coordinates)
         print_player_names(screen,player1_name,player2_name)
 
-        print_choice(screen,current_row,plus_list,player_turn)
+        print_choice(screen,current_row,plus_list,player1_turn)
         
         screen.refresh()    
 
@@ -377,12 +377,12 @@ def main(screen,player1_name,player2_name):
             current_row = move_up(plus_list,current_row)
 
         elif key == curses.KEY_ENTER or key in [10, 13]:
-            player_can_act, remaining_stones_p1, remaining_stones_p2= can_player_act(plus_list,current_row,remaining_stones_p1,remaining_stones_p2,player_turn) 
+            player_can_act, remaining_stones_p1, remaining_stones_p2= can_player_act(plus_list,current_row,remaining_stones_p1,remaining_stones_p2,player1_turn) 
             if player_can_act == True:
-                stone_marker=which_stone(player_turn)
+                stone_marker=which_stone(player1_turn)
                 plus_list = place_stone(plus_list,current_row,stone_marker)
                 map_coordinates = remove_stone(map_coordinates,stone_marker)
-                player_turn = switch_player_turn(player_turn)
+                player1_turn = switch_player_turn(player1_turn)
          
         # 27 = Escape key
         elif key == 27: 
