@@ -208,9 +208,7 @@ def place_stone(plus_list,current_row,stone_marker):
     plus_list -- the lists of all the "+" and their positions
     stone_marker -- the char of the stone, should be either "X" or "O" 
     """
-    current_char = plus_list[current_row][0]
-    if current_char == "+":
-        plus_list[current_row][0] = stone_marker
+    plus_list[current_row][0] = stone_marker
     return plus_list
 
 def remove_stone(map_coordinates,stone_marker):
