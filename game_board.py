@@ -1,7 +1,7 @@
 import curses
 import os
 import time
-
+import random
 
 def read_map(path):
     """
@@ -100,22 +100,18 @@ def print_map(screen,map_coordinates):
         y = cord[2]+ 5
         x = cord[1] +  w//3    
         
-        color = 0
+        color = which_color_pair(char)
 
-        if char == "O":
-            color = 2
-        elif char == "X": 
-            color = 3
- 
         screen.addstr(y,x,char,curses.color_pair(color))
 
-def print_choice(screen, selected_move_idx, plus_list):
+def print_choice(screen, selected_move_idx, plus_list,player1_turn):
     """Prints all plusses in plus_list on the screen. The currently selected plus is colored.
 
     Keyword arguments:
     screen -- the curses screen
     selected_move_idx -- the currently selected row in the plus_list
     plus_list -- the lists of all the "+" and their positions
+    player1_turn -- bool,True for player1  and False for player2
     """    
     h, w = screen.getmaxyx()
     for idx, row in enumerate(plus_list):
@@ -123,21 +119,41 @@ def print_choice(screen, selected_move_idx, plus_list):
         # To have  the game board in the center, 5 is added y and w//3 is added to x
         y = int(row[2])+ 5
         x = int(row[1]) +  w//3      
-
+        color =which_color_pair(row[0])
         if idx == selected_move_idx:
-            screen.attron(curses.color_pair(1))
+            color_cursor = 1
+            #cursor will now have the player colors
+            if player1_turn == False:
+                color_cursor = 4
+            screen.attron(curses.color_pair(color_cursor))
             screen.addstr(y,x, row[0])
-            screen.attroff(curses.color_pair(1))
+            screen.attroff(curses.color_pair(color_cursor))
         else:
-            screen.addstr(y, x, row[0])
+            screen.addstr(y, x, row[0],curses.color_pair(color))
    
 
+def which_color_pair(stone_marker):
+    """Picks a which color that will be choosed for the stone,
+    depening if its an "O" or "x"
+    Returns color which is an int that represents the color_pair
+    
+    Keyword arguments:
+    stone_marker -- char of the stone
+    """
+    color = 0
+
+    if stone_marker== "O":
+        color = 2
+    elif stone_marker == "X": 
+        color = 3
+    return color
 
 def move_down(plus_list,current_row):
     """ Finds the "+" char that is below the current_row. If the current "+" char is at the bottom, 
         it finds the "+" char at the top with the same x position
     Returns the new y position of the "+" 
 
+    Keyword arguments:
     current_row -- the currently selected row in the plus_list
     plus_list -- the lists of all the "+" and their positions
     """
@@ -196,6 +212,99 @@ def place_stone(plus_list,current_row,stone_marker):
     plus_list[current_row][0] = stone_marker
     return plus_list
 
+def remove_stone(map_coordinates,stone_marker):
+    """ When you place a stone it removes the stone from the left or the right side
+        depending on the stone_marker
+    Returns map_coordinates 
+    Keyword arguments:
+    map_coordinates -- list of all chars in the string version of the map
+    stone_marker -- Char version of the stone which can be a "X" or "O"     
+
+    """
+    for stone in map_coordinates:
+        if stone[0] == stone_marker:
+            stone[0] = ""
+            break
+    return  map_coordinates
+def which_stone(player1_turn):
+    """Picks which char the stone marker should be based on which player is next to act
+    Return stone_marker, which can either be a "X" or "O" depending on who is placing the stone
+
+    Keyword arguments:
+    player1_turn -- bool,True for player1  and False for player2
+
+    """
+    stone_marker = "X"
+    if player1_turn == False:
+        stone_marker = "O"
+    return stone_marker    
+
+def switch_player_turn(player1_turn):
+    """Switches which player turn it is to act
+    Return player1_turn , which boolean value get switched to let the other player act
+    Keyword arguments:
+    player1_turn -- bool, True is player1 turn and False is player2 turn
+    
+    """
+    return not player1_turn
+
+def random_player_start():
+    """Determine which player that will start to act. 
+    Returns a bool , True for player1 and False for player2 
+    """
+    player_start = random.randint(1,2)
+    if player_start == 1:
+        return True
+    return False
+
+def print_player_start(screen,player1_turn,player1_name,player2_name):
+    """ Prints the name of player who will start to act at the top of the screen
+    
+    Keyword arguments:
+    screen -- the curses screen
+    player1_turn -- bool, True is player1 turn and False is player2 turn    
+    player1_name -- player1 name as string
+    player2_name -- player2 name as string
+
+    """
+    h,w = screen.getmaxyx()
+
+    #position of text 
+    text_x = 8  + w//3 
+    text_y = 0
+    
+    if player1_turn == True:
+          if len(player1_name) ==0:
+              player1_name = "Player1"   
+          screen.addstr(text_y,text_x,player1_name.rstrip("\n")+" will start!",curses.color_pair(3))
+    else:
+        if len(player2_name) ==0:
+            player2_name = "Player2"        
+        screen.addstr(text_y,text_x,player2_name.rstrip("\n")+" will start!",curses.color_pair(2))
+
+
+def can_player_act(plus_list,current_row,remaining_stones_p1, remaining_stones_p2,player1_turn):
+    """Determines if a player is allowed to act
+    Returns Tuple (bool,remaining_stones_p1,remaining_stones_p2)
+
+    Keyword argument 
+    plus_list -- list of "+" and placed stones
+    current_row --  currently selected row in the plus_list
+    remaining_stone_p1 -- the amount of stone player1 has
+    remaining_stone_p2 -- the amount of stone player2 has
+    player1_turn -- bool, True is player1 turn and False is player2 turn    
+      
+    """
+    current_char = plus_list[current_row][0]
+    can_not_act= (remaining_stones_p1 <=  0 and remaining_stones_p2 <= 0) or current_char != "+"
+    if can_not_act == True:    
+        return False,remaining_stones_p1,remaining_stones_p2
+    elif player1_turn == True and can_not_act == False :
+        remaining_stones_p1 -= 1
+    elif player1_turn == False and can_not_act == False:
+        remaining_stones_p2 -= 1        
+    return True,remaining_stones_p1, remaining_stones_p2
+                
 def main(screen,player1_name,player2_name):
     """ The game loop used by curses.
 
@@ -207,8 +316,12 @@ def main(screen,player1_name,player2_name):
     # turn off cursor blinking
     curses.curs_set(0)
 
-    # color scheme for selected row
-    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_GREEN)
+    # color scheme for selected row player1
+    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_RED)
+    
+    # color scheme for selected row player2
+    curses.init_pair(4, curses.COLOR_BLACK, curses.COLOR_YELLOW)
+
 
     # color scheme for player1        
     curses.init_pair(3,curses.COLOR_RED,curses.COLOR_BLACK)
@@ -230,19 +343,29 @@ def main(screen,player1_name,player2_name):
     
     # plus_list, coordinates of the "+" chars in the map_coordinates list 
     plus_list = make_plus_list(map_coordinates)
-     
+    
+    
+    #player_1turn will determine which player that will start ,True for player1
+    player1_turn = random_player_start()
+    
+    remaining_stones_p1 = 9
+    remaining_stones_p2 = 9
+    #Prints player start text once
+    print_once = 0
     while 1:
         screen.clear()
-
+        if print_once == 0: 
+            print_player_start(screen,player1_turn,player1_name,player2_name)
+            print_once += 1    
+        
         print_map(screen,map_coordinates)
         print_player_names(screen,player1_name,player2_name)
 
-        print_choice(screen,current_row,plus_list)
+        print_choice(screen,current_row,plus_list,player1_turn)
         
         screen.refresh()    
 
         key = screen.getch()
-
         if key == curses.KEY_LEFT and current_row > 0:  
             current_row -= 1
         elif key == curses.KEY_RIGHT and current_row < len(plus_list)-1:
@@ -254,8 +377,13 @@ def main(screen,player1_name,player2_name):
             current_row = move_up(plus_list,current_row)
 
         elif key == curses.KEY_ENTER or key in [10, 13]:
-            plus_list = place_stone(plus_list,current_row,"X")
-        
+            player_can_act, remaining_stones_p1, remaining_stones_p2= can_player_act(plus_list,current_row,remaining_stones_p1,remaining_stones_p2,player1_turn) 
+            if player_can_act == True:
+                stone_marker=which_stone(player1_turn)
+                plus_list = place_stone(plus_list,current_row,stone_marker)
+                map_coordinates = remove_stone(map_coordinates,stone_marker)
+                player1_turn = switch_player_turn(player1_turn)
+         
         # 27 = Escape key
         elif key == 27: 
             quit()
