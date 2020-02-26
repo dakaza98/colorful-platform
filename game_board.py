@@ -352,55 +352,60 @@ def test_place_stone(matrix,stone_marker):
                 matrix[y][x] = stone_marker
                 return matrix
 
-def check_winner_row(matrix,player1_turn):
+def check_winner_row(matrix,player1_turn,player1_name,player2_name):
     #checks row seams to work
     player_stone = 'X'
     opponent_stone = 'O'
+    player_name = player1_name.replace("\n","")
     if player1_turn == False:
         player_stone = 'O'
         opponent_stone = 'X'
+        player_name = player2_name.replace("\n","")
     for row in matrix:
-        check_player1 = []
+        check_player = []
         found_X = False
         for item in row:
             if item == player_stone:
                 found_X = True
-                check_player1
+                check_player
             if item == ' ' or item == opponent_stone or item == '|':
-                check_player1 = []
+                check_player = []
                 found_X = False     
             if found_X == True and item != ' ':
-                check_player1.append(item)
-            amount_X = check_player1.count(player_stone) 
-            if check_player1 and all(elem ==player_stone or elem == '-' for elem in check_player1 ) and amount_X >= 3:
-                print("winner")
+                check_player.append(item)
+            amount_player_stone = check_player.count(player_stone) 
+            if check_player and all(elem ==player_stone or elem == '-' for elem in check_player ) and amount_player_stone == 3:
+                print("winner_row",player_name)
+                print(check_player)
                 quit()
 
 
                  
-def check_winner_col(matrix,player1_turn):
+def check_winner_col(matrix,player1_turn,player1_name,player2_name):
     #to check the col
     transponse_matrix = np.transpose(matrix)
     player_stone = 'X'
     opponent_stone = 'O'
+    player_name = player1_name.replace("\n","")
     if player1_turn == False:
         player_stone = 'O'
         opponent_stone = 'X'
+        player_name = player2_name.replace("\n","")
     for row in transponse_matrix:
-        check_player1 = []
+        check_player = []
         found_X = False
         for item in row:
             if item == player_stone:
                 found_X = True
             if item == ' ' or item == opponent_stone or item == '-':
-                check_player1 = []
+                check_player = []
                 found_X = False     
             if found_X == True and item != ' ':
-                check_player1.append(item)
-            amount_X = check_player1.count(player_stone) 
-            if check_player1 and all(elem ==player_stone or elem == '|' for elem in check_player1 ) and amount_X >= 3:
-                print("winner bar")
-                print(check_player1)
+                check_player.append(item)
+            amount_player_stone = check_player.count(player_stone) 
+            if check_player and all(elem ==player_stone or elem == '|' for elem in check_player ) and amount_player_stone == 3:
+                print("winner column",player_name)
+                print(check_player)
                 quit()
 
                 
@@ -418,10 +423,7 @@ def remove_X_O(str_board):
     new_str_board = new_str_board.replace("O"," ")
     return new_str_board        
 
-def remove_spaces_ascii(str_board):
 
-    new_board_txt = str_board.replace(" ","#")
-    return new_board_txt
 def main(screen,player1_name,player2_name):
     """ The game loop used by curses.
 
@@ -458,9 +460,7 @@ def main(screen,player1_name,player2_name):
     map_string = read_map(map_path)
     
     #test
-    test = True
     matrix = convert_map_matrix(map_string)
-    test_stuff = 0
     #test_ends
 
     #coordinates of the chars in the map
@@ -510,8 +510,8 @@ def main(screen,player1_name,player2_name):
                 plus_list = place_stone(plus_list,current_row,stone_marker)
                 map_coordinates = remove_stone(map_coordinates,stone_marker)
                 matrix = plus_list_to_matrix(plus_list,matrix) 
-                check_winner_col(matrix,player1_turn)
-                check_winner_row(matrix,player1_turn)
+                check_winner_col(matrix,player1_turn,player1_name,player2_name)
+                check_winner_row(matrix,player1_turn,player1_name,player2_name)
                 player1_turn = switch_player_turn(player1_turn)
 
 
