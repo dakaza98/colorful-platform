@@ -376,8 +376,9 @@ def check_winner_row(matrix,player1_turn,player1_name,player2_name):
             if check_player and all(elem ==player_stone or elem == '-' for elem in check_player ) and amount_player_stone == 3:
                 print("winner_row",player_name)
                 print(check_player)
-                quit()
+                return True
 
+    return False                
 
                  
 def check_winner_col(matrix,player1_turn,player1_name,player2_name):
@@ -404,10 +405,16 @@ def check_winner_col(matrix,player1_turn,player1_name,player2_name):
             amount_player_stone = check_player.count(player_stone) 
             if check_player and all(elem ==player_stone or elem == '|' for elem in check_player ) and amount_player_stone == 3:
                 print("winner column",player_name)
-                print(check_player)
-                quit()
-
-                
+                return True
+    return False            
+def check_winner(matrix,player1_turn,player1_name,player2_name):
+    
+    player_won_col= check_winner_col(matrix,player1_turn,player1_name,player2_name)
+    player_won_row = check_winner_row(matrix,player1_turn,player1_name,player2_name)
+    if player_won_col == True or player_won_row == True:
+        return True
+    return False    
+    
     
 
 def plus_list_to_matrix(plus_list,matrix):
@@ -421,6 +428,16 @@ def remove_X_O(str_board):
     new_str_board = str_board.replace("X"," ")
     new_str_board = new_str_board.replace("O"," ")
     return new_str_board        
+
+def remove_stone_player(player_won,plus_list,current_row,player1_turn):
+    if player_won == True:
+        remove_stone_marker = "O"
+        if player1_turn == False:
+            remove_stone_marker = "X"
+        if plus_list[current_row][0] == remove_stone_marker:    
+            plus_list[current_row][0] = "+"
+    return plus_list
+            
 
 
 def main(screen,player1_name,player2_name):
@@ -460,6 +477,7 @@ def main(screen,player1_name,player2_name):
     
     #test
     matrix = convert_map_matrix(map_string)
+    game_won = False
     #test_ends
 
     #coordinates of the chars in the map
@@ -468,7 +486,7 @@ def main(screen,player1_name,player2_name):
     # plus_list, coordinates of the "+" chars in the map_coordinates list 
     plus_list = make_plus_list(map_coordinates)
     
-    #player_1turn will determine which player that will start ,True for player1
+    #player1_turn will determine which player that will start ,True for player1
     player1_turn = random_player_start()
     
     remaining_stones_p1 = 9
@@ -502,16 +520,27 @@ def main(screen,player1_name,player2_name):
             current_row = move_up(plus_list,current_row)
 
         elif key == curses.KEY_ENTER or key in [10, 13]:
+            game_won = check_winner(matrix,player1_turn,player1_name,player2_name)
             
             player_can_act, remaining_stones_p1, remaining_stones_p2= can_player_act(plus_list,current_row,remaining_stones_p1,remaining_stones_p2,player1_turn) 
-            if player_can_act == True:
+            if player_can_act == True and game_won == False:
                 stone_marker=which_stone(player1_turn)
                 plus_list = place_stone(plus_list,current_row,stone_marker)
                 map_coordinates = remove_stone(map_coordinates,stone_marker)
                 matrix = plus_list_to_matrix(plus_list,matrix) 
-                check_winner_col(matrix,player1_turn,player1_name,player2_name)
-                check_winner_row(matrix,player1_turn,player1_name,player2_name)
+                #check_winner_col(matrix,player1_turn,player1_name,player2_name)
+                #check_winner_row(matrix,player1_turn,player1_name,player2_name)
+                plus_list = remove_stone_player(game_won,plus_list,current_row,player1_turn)
                 player1_turn = switch_player_turn(player1_turn)
+            elif game_won == True:
+                stone_marker=which_stone(player1_turn)
+                map_coordinates = remove_stone(map_coordinates,stone_marker)
+                matrix = plus_list_to_matrix(plus_list,matrix) 
+                #check_winner_col(matrix,player1_turn,player1_name,player2_name)
+                #check_winner_row(matrix,player1_turn,player1_name,player2_name)
+                plus_list = remove_stone_player(game_won,plus_list,current_row,player1_turn)
+                player1_turn = switch_player_turn(player1_turn)
+                game_won = False
 
 
         # 27 = Escape key
