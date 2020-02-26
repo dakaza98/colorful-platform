@@ -34,6 +34,7 @@ def convert_map_to_coordinates(str_board):
     """
  
     matrix = [[x for x in line] for line in str_board.split('\n')]
+
     map_coordinates = []
     y = 0
     for row in matrix:
@@ -46,6 +47,7 @@ def convert_map_to_coordinates(str_board):
     
     return map_coordinates
 
+          
 def make_plus_list(map_coordinates):
     """
     Finds all the "+" chars in  map_coordinates 
@@ -256,7 +258,9 @@ def random_player_start():
     if player_start == 1:
         return True
     return False
+#x + y value defines the node
 
+    
 def print_player_start(screen,player1_turn,player1_name,player2_name):
     """ Prints the name of player who will start to act at the top of the screen
     
@@ -304,7 +308,87 @@ def can_player_act(plus_list,current_row,remaining_stones_p1, remaining_stones_p
     elif player1_turn == False and can_not_act == False:
         remaining_stones_p2 -= 1        
     return True,remaining_stones_p1, remaining_stones_p2
-                
+
+
+
+def test_matrix(str_board):
+    matrix = [[x for x in line] for line in str_board.split('\n')]
+    moves =[]
+    for row in matrix:
+        roven = []
+
+        for c in row:
+            if c == "-" or c == "+" or c == "|" or c == " ":
+                roven.append(c)
+        moves.append(roven)        
+    return moves              
+
+
+def test_new_print(screen,matrix):
+    """
+
+        #To place the game board in the center of the window  
+    y = cord[2]+ 5
+    x = cord[1] +  w//3    
+        
+    color = which_color_pair(char)
+
+    """
+    h,w = screen.getmaxyx()
+
+    for y in range(len(matrix)):
+        for x in range(len(matrix[y])):
+          screen.addstr(y+5,x+ w//3,matrix[y][x],curses.color_pair(3))
+def convert_map_matrix(str_board):
+    matrix = [[x for x in line] for line in str_board.split('\n')]
+    return matrix
+
+def test_place_stone(matrix,stone_marker):
+    for y in range(len(matrix)):
+        for x in range(len(matrix[y])):
+            if matrix[y][x] == "+":
+                matrix[y][x] = stone_marker
+                return matrix
+def check_winner(matrix):
+    all_match = True
+    X_list = []
+    dash_list = []
+    #checks row
+    for row in matrix:
+        for i, item in enumerate(row):
+            if item == "X":
+                print(item)
+                X_list.append(item)
+            if i+1 < len(row):
+                if row[i+1] == "-":
+                    dash_list.append(row[i+1])
+                    if dash_list.count(dash_list[0]) == len(dash_list) and len(X_list) == 3: 
+                        #print("winner")
+                        break
+                    
+    check_col(matrix)                
+def check_col(matrix):
+    
+    for col in range(len(matrix)):
+        check = []
+        for row in matrix:
+            check.append(row[col])
+            X_list = []
+            bar_list = []
+        for i, item in enumerate(check):
+            if item == "X":
+                X_list.append(item)
+            if i+1 < len(check):    
+                if check[i+1] == "|":
+                    bar_list.append(check[i+1])
+                    if bar_list.count(bar_list[0]) == len(bar_list) and len(X_list) == 3: 
+                        print("winner_bar")
+                        break
+def remove_X_O(str_board):
+    new_str_board = str_board.replace("X"," ")
+    new_str_board = new_str_board.replace("O"," ")
+    return new_str_board        
+    
 def main(screen,player1_name,player2_name):
     """ The game loop used by curses.
 
@@ -333,17 +417,26 @@ def main(screen,player1_name,player2_name):
     current_row = 0
 
     # The path of the textfile of the map
-    map_path = 'Ascii board.txt'
-
+    #map_path = 'Ascii board.txt'
+    
+    #test
+    map_path = 'Ascii_board_test.txt'
     #string of the map
     map_string = read_map(map_path)
     
+    test_map_string = remove_X_O(map_string)
+    #test
+    test = True
+    matrix = convert_map_matrix(test_map_string)
+    
+    aps= test_matrix(map_string)
+    #test_ends
+
     #coordinates of the chars in the map
     map_coordinates =convert_map_to_coordinates(map_string)
     
     # plus_list, coordinates of the "+" chars in the map_coordinates list 
     plus_list = make_plus_list(map_coordinates)
-    
     
     #player_1turn will determine which player that will start ,True for player1
     player1_turn = random_player_start()
@@ -354,15 +447,18 @@ def main(screen,player1_name,player2_name):
     print_once = 0
     while 1:
         screen.clear()
-        if print_once == 0: 
-            print_player_start(screen,player1_turn,player1_name,player2_name)
-            print_once += 1    
-        
-        print_map(screen,map_coordinates)
-        print_player_names(screen,player1_name,player2_name)
+        if test == False:
+                
+            if print_once == 0: 
+                print_player_start(screen,player1_turn,player1_name,player2_name)
+                print_once += 1    
+            
+            print_map(screen,map_coordinates)
+            print_player_names(screen,player1_name,player2_name)
 
-        print_choice(screen,current_row,plus_list,player1_turn)
-        
+            print_choice(screen,current_row,plus_list,player1_turn)
+        #test
+        test_new_print(screen,matrix)
         screen.refresh()    
 
         key = screen.getch()
@@ -377,13 +473,16 @@ def main(screen,player1_name,player2_name):
             current_row = move_up(plus_list,current_row)
 
         elif key == curses.KEY_ENTER or key in [10, 13]:
+            """
             player_can_act, remaining_stones_p1, remaining_stones_p2= can_player_act(plus_list,current_row,remaining_stones_p1,remaining_stones_p2,player1_turn) 
             if player_can_act == True:
                 stone_marker=which_stone(player1_turn)
                 plus_list = place_stone(plus_list,current_row,stone_marker)
                 map_coordinates = remove_stone(map_coordinates,stone_marker)
                 player1_turn = switch_player_turn(player1_turn)
-         
+            """
+            matrix = test_place_stone(matrix,"X")
+            check_winner(matrix)
         # 27 = Escape key
         elif key == 27: 
             quit()
@@ -392,3 +491,4 @@ def main(screen,player1_name,player2_name):
         # Prevent the screen from repainting to often
         time.sleep(0.01)
             
+    
