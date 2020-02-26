@@ -344,13 +344,7 @@ def convert_map_matrix(str_board):
     matrix = [[x for x in line] for line in str_board.split('\n')]
     return matrix
 
-def test_place_stone(matrix,stone_marker):
-    for y in range(len(matrix)):
-        for x in range(len(matrix[y])):
-            if matrix[y][x] == "+" and matrix[y][x] != "O":
 
-                matrix[y][x] = stone_marker
-                return matrix
 
 def check_winner_row(matrix,player1_turn,player1_name,player2_name):
     #checks row seams to work
