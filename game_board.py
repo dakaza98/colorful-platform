@@ -2,6 +2,7 @@ import curses
 import os
 import time
 import random
+import numpy as np
 
 def read_map(path):
     """
@@ -346,49 +347,64 @@ def convert_map_matrix(str_board):
 def test_place_stone(matrix,stone_marker):
     for y in range(len(matrix)):
         for x in range(len(matrix[y])):
-            if matrix[y][x] == "+":
+            if matrix[y][x] == "+" and matrix[y][x] != "O":
+
                 matrix[y][x] = stone_marker
                 return matrix
+
 def check_winner(matrix):
-    all_match = True
-    X_list = []
-    dash_list = []
-    #checks row
+    print(matrix)
+    #checks row seams to work
     for row in matrix:
-        for i, item in enumerate(row):
-            if item == "X":
-                print(item)
-                X_list.append(item)
-            if i+1 < len(row):
-                if row[i+1] == "-":
-                    dash_list.append(row[i+1])
-                    if dash_list.count(dash_list[0]) == len(dash_list) and len(X_list) == 3: 
-                        #print("winner")
-                        break
-                    
+        check_player1 = []
+        found_X = False
+        for item in row:
+            if item == 'X':
+                found_X = True
+            if item == '#' or item == 'O' or item == '|':
+                check_player1 = []
+                found_X = False     
+            if found_X == True and item != '#':
+                check_player1.append(item)
+            amount_X = check_player1.count('X') 
+            if check_player1 and all(elem =='X' or elem == '-' for elem in check_player1 ) and amount_X >= 3:
+                print("winner")
+   
+
     check_col(matrix)                
 def check_col(matrix):
+    #to check the col
+    transponse_matrix = np.transpose(matrix)
     
-    for col in range(len(matrix)):
-        check = []
-        for row in matrix:
-            check.append(row[col])
-            X_list = []
-            bar_list = []
-        for i, item in enumerate(check):
-            if item == "X":
-                X_list.append(item)
-            if i+1 < len(check):    
-                if check[i+1] == "|":
-                    bar_list.append(check[i+1])
-                    if bar_list.count(bar_list[0]) == len(bar_list) and len(X_list) == 3: 
-                        print("winner_bar")
-                        break
+    for row in transponse_matrix:
+        check_player1 = []
+        found_X = False
+        for item in row:
+            if item == 'X':
+                found_X = True
+            if item == '#' or item == 'O' or item == '-':
+                check_player1 = []
+                found_X = False     
+            if found_X == True and item != '#':
+                check_player1.append(item)
+            amount_X = check_player1.count('X') 
+            if check_player1 and all(elem =='X' or elem == '|' for elem in check_player1 ) and amount_X >= 3:
+                print("winner bar")
+                print(check_player1)
+
+                quit()    
+    
+
+
 def remove_X_O(str_board):
     new_str_board = str_board.replace("X"," ")
     new_str_board = new_str_board.replace("O"," ")
     return new_str_board        
-    
+
+def remove_spaces_ascii(str_board):
+
+    new_board_txt = str_board.replace(" ","#")
+    return new_board_txt
 def main(screen,player1_name,player2_name):
     """ The game loop used by curses.
 
@@ -423,12 +439,12 @@ def main(screen,player1_name,player2_name):
     map_path = 'Ascii_board_test.txt'
     #string of the map
     map_string = read_map(map_path)
-    
+    map_string = remove_spaces_ascii(map_string)
     test_map_string = remove_X_O(map_string)
     #test
     test = True
     matrix = convert_map_matrix(test_map_string)
-    
+    test_stuff = 0
     aps= test_matrix(map_string)
     #test_ends
 
@@ -445,6 +461,7 @@ def main(screen,player1_name,player2_name):
     remaining_stones_p2 = 9
     #Prints player start text once
     print_once = 0
+    
     while 1:
         screen.clear()
         if test == False:
@@ -481,7 +498,9 @@ def main(screen,player1_name,player2_name):
                 map_coordinates = remove_stone(map_coordinates,stone_marker)
                 player1_turn = switch_player_turn(player1_turn)
             """
-            matrix = test_place_stone(matrix,"X")
+            if test_stuff == 11 or test_stuff <= 3: matrix = test_place_stone(matrix,"O")
+            if test_stuff > 3 and test_stuff != 11: matrix = test_place_stone(matrix,"X")
+            test_stuff += 1
             check_winner(matrix)
         # 27 = Escape key
         elif key == 27: 
