@@ -352,50 +352,67 @@ def test_place_stone(matrix,stone_marker):
                 matrix[y][x] = stone_marker
                 return matrix
 
-def check_winner(matrix):
-    print(matrix)
+def check_winner_row(matrix,player1_turn):
     #checks row seams to work
+    player_stone = 'X'
+    opponent_stone = 'O'
+    if player1_turn == False:
+        player_stone = 'O'
+        opponent_stone = 'X'
     for row in matrix:
         check_player1 = []
         found_X = False
         for item in row:
-            if item == 'X':
+            if item == player_stone:
                 found_X = True
-            if item == '#' or item == 'O' or item == '|':
+                check_player1
+            if item == ' ' or item == opponent_stone or item == '|':
                 check_player1 = []
                 found_X = False     
-            if found_X == True and item != '#':
+            if found_X == True and item != ' ':
                 check_player1.append(item)
-            amount_X = check_player1.count('X') 
-            if check_player1 and all(elem =='X' or elem == '-' for elem in check_player1 ) and amount_X >= 3:
+            amount_X = check_player1.count(player_stone) 
+            if check_player1 and all(elem ==player_stone or elem == '-' for elem in check_player1 ) and amount_X >= 3:
                 print("winner")
-   
+                quit()
 
-    check_col(matrix)                
-def check_col(matrix):
+
+                 
+def check_winner_col(matrix,player1_turn):
     #to check the col
     transponse_matrix = np.transpose(matrix)
-    
+    player_stone = 'X'
+    opponent_stone = 'O'
+    if player1_turn == False:
+        player_stone = 'O'
+        opponent_stone = 'X'
     for row in transponse_matrix:
         check_player1 = []
         found_X = False
         for item in row:
-            if item == 'X':
+            if item == player_stone:
                 found_X = True
-            if item == '#' or item == 'O' or item == '-':
+            if item == ' ' or item == opponent_stone or item == '-':
                 check_player1 = []
                 found_X = False     
-            if found_X == True and item != '#':
+            if found_X == True and item != ' ':
                 check_player1.append(item)
-            amount_X = check_player1.count('X') 
-            if check_player1 and all(elem =='X' or elem == '|' for elem in check_player1 ) and amount_X >= 3:
+            amount_X = check_player1.count(player_stone) 
+            if check_player1 and all(elem ==player_stone or elem == '|' for elem in check_player1 ) and amount_X >= 3:
                 print("winner bar")
                 print(check_player1)
+                quit()
 
-                quit()    
+                
     
 
-
+def plus_list_to_matrix(plus_list,matrix):
+    for row in plus_list:
+        if row[0] == 'X' or row[0] == 'O':
+            x = int(row[1])
+            y = int(row[2])
+            matrix[y][x]= row[0]
+    return matrix          
 def remove_X_O(str_board):
     new_str_board = str_board.replace("X"," ")
     new_str_board = new_str_board.replace("O"," ")
@@ -439,13 +456,11 @@ def main(screen,player1_name,player2_name):
     map_path = 'Ascii_board_test.txt'
     #string of the map
     map_string = read_map(map_path)
-    map_string = remove_spaces_ascii(map_string)
-    test_map_string = remove_X_O(map_string)
+    
     #test
     test = True
-    matrix = convert_map_matrix(test_map_string)
+    matrix = convert_map_matrix(map_string)
     test_stuff = 0
-    aps= test_matrix(map_string)
     #test_ends
 
     #coordinates of the chars in the map
@@ -464,18 +479,16 @@ def main(screen,player1_name,player2_name):
     
     while 1:
         screen.clear()
-        if test == False:
+    
                 
-            if print_once == 0: 
-                print_player_start(screen,player1_turn,player1_name,player2_name)
-                print_once += 1    
+        if print_once == 0: 
+            print_player_start(screen,player1_turn,player1_name,player2_name)
+            print_once += 1    
             
-            print_map(screen,map_coordinates)
-            print_player_names(screen,player1_name,player2_name)
-
-            print_choice(screen,current_row,plus_list,player1_turn)
+        print_map(screen,map_coordinates)            
+        print_player_names(screen,player1_name,player2_name)
+        print_choice(screen,current_row,plus_list,player1_turn)
         #test
-        test_new_print(screen,matrix)
         screen.refresh()    
 
         key = screen.getch()
@@ -490,18 +503,18 @@ def main(screen,player1_name,player2_name):
             current_row = move_up(plus_list,current_row)
 
         elif key == curses.KEY_ENTER or key in [10, 13]:
-            """
+            
             player_can_act, remaining_stones_p1, remaining_stones_p2= can_player_act(plus_list,current_row,remaining_stones_p1,remaining_stones_p2,player1_turn) 
             if player_can_act == True:
                 stone_marker=which_stone(player1_turn)
                 plus_list = place_stone(plus_list,current_row,stone_marker)
                 map_coordinates = remove_stone(map_coordinates,stone_marker)
+                matrix = plus_list_to_matrix(plus_list,matrix) 
+                check_winner_col(matrix,player1_turn)
+                check_winner_row(matrix,player1_turn)
                 player1_turn = switch_player_turn(player1_turn)
-            """
-            if test_stuff == 11 or test_stuff <= 3: matrix = test_place_stone(matrix,"O")
-            if test_stuff > 3 and test_stuff != 11: matrix = test_place_stone(matrix,"X")
-            test_stuff += 1
-            check_winner(matrix)
+
+
         # 27 = Escape key
         elif key == 27: 
             quit()
