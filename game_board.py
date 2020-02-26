@@ -422,7 +422,15 @@ def remove_X_O(str_board):
     new_str_board = str_board.replace("X"," ")
     new_str_board = new_str_board.replace("O"," ")
     return new_str_board        
-
+def remove_stone_player(player_won,plus_list,current_row,player1_turn):
+    if player_won == True:
+        remove_stone_marker = "O"
+        if player1_turn == False:
+            remove_stone_marker = "X"
+        if plus_list[current_row][0] == remove_stone_marker:    
+            plus_list[current_row][0] = "+"
+    return plus_list
+            
 
 def main(screen,player1_name,player2_name):
     """ The game loop used by curses.
