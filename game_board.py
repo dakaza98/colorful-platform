@@ -259,6 +259,7 @@ def random_player_start():
     if player_start == 1:
         return True
     return False
+#x + y value defines the node
 
     
 def print_player_start(screen,player1_turn,player1_name,player2_name):
