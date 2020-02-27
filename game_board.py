@@ -187,13 +187,13 @@ def move_up(plus_list,current_row):
     current_row -- the currently selected row in the plus_list
     plus_list -- the lists of all the "+" and their positions
     """
-    
+
     new_row = current_row
-    
+
     while True:
         if new_row == 0:
             new_row = len(plus_list)
-        
+
         new_row -= 1
         current_x = plus_list[current_row][1]
         new_x = plus_list[new_row][1]
@@ -201,8 +201,19 @@ def move_up(plus_list,current_row):
         current_y = plus_list[current_row][2]
         new_y = plus_list[new_row][2]
         if current_x == new_x and current_y != new_y:
-     
-          return new_row  
+            if (int(current_x) != 16 and int(current_y) >= 6) or int(current_x) == 16 and int(current_y) != 0 and int(current_y) != 8:
+               return new_row
+            else:
+                return current_row
+
+def move_right(plus_list, current_row):
+
+    new_row = current_row
+
+    while True:
+        if new_row == 0:
+            new_row = len(plus_list)
+
 
 def move_left(plus_list, current_row):
     
@@ -225,7 +236,7 @@ def move_left(plus_list, current_row):
             else:
                 return current_row
 
-def place_stone(plus_list,current_row,stone_marker):
+def place_stone(plus_list, current_row, stone_marker):
     """ Places a stone on the map by changing the "+" to "X" or "O"
     Returns the changed plus_list list
 
