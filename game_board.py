@@ -76,7 +76,7 @@ def print_player_names(screen,player1_name,player2_name):
     screen.addstr(player1_name_y,player1_name_x,"Player1",curses.color_pair(3))
     screen.addstr(player1_name_y+1,player1_name_x,player1_name,curses.color_pair(3))
 
-    player2_name_x = 27  + w//3 
+    player2_name_x = 29  + w//3 
     player2_name_y = 2
     screen.addstr(player2_name_y,player2_name_x,"Player2",curses.color_pair(2))
     screen.addstr(player2_name_y+1,player2_name_x,player2_name,curses.color_pair(2))
@@ -106,15 +106,18 @@ def print_map(screen,map_coordinates,remaining_stones_p1,remaining_stones_p2):
         color = which_color_pair(char)
 
         screen.addstr(y,x,char,curses.color_pair(color))
-        
-        
-        remaining_stones_p1_x = -10 + w//3   
-        remaining_stones_p1_y = 5
-        screen.addstr(remaining_stones_p1_y,remaining_stones_p1_x,"stones: "+str(remaining_stones_p1),curses.color_pair(3))
 
-        remaining_stones_p2_x = 27  + w//3 
-        remaining_stones_p2_y = 5
-        screen.addstr(remaining_stones_p2_y,remaining_stones_p2_x,"stones: "+str(remaining_stones_p2),curses.color_pair(2))
+        remaining_stones_p1_x = -9 + w//3   
+        remaining_stones_p1_y = 4
+
+        for i in range(remaining_stones_p1):
+
+            screen.addstr(remaining_stones_p1_y+i,remaining_stones_p1_x,"X",curses.color_pair(3))
+
+        remaining_stones_p2_x = 30  + w//3 
+        remaining_stones_p2_y = 4
+        for i in range(remaining_stones_p2):
+            screen.addstr(remaining_stones_p2_y+i,remaining_stones_p2_x,"O",curses.color_pair(2))
         
 def print_choice(screen, selected_move_idx, plus_list,player1_turn):
     """Prints all plusses in plus_list on the screen. The currently selected plus is colored.
