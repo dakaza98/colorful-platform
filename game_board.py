@@ -71,19 +71,19 @@ def print_player_names(screen,player1_name,player2_name):
     """
     h,w = screen.getmaxyx()
 
-    player1_name_x = -1 + w//3   
+    player1_name_x = -10 + w//3   
     player1_name_y = 2
     screen.addstr(player1_name_y,player1_name_x,"Player1",curses.color_pair(3))
     screen.addstr(player1_name_y+1,player1_name_x,player1_name,curses.color_pair(3))
 
-    player2_name_x = 29  + w//3 
+    player2_name_x = 27  + w//3 
     player2_name_y = 2
     screen.addstr(player2_name_y,player2_name_x,"Player2",curses.color_pair(2))
     screen.addstr(player2_name_y+1,player2_name_x,player2_name,curses.color_pair(2))
     
          
 
-def print_map(screen,map_coordinates):
+def print_map(screen,map_coordinates,remaining_stones_p1,remaining_stones_p2):
     """Prints the all the chars except "+" in map_coordinates at their specified coordinate.
 
     Keyword arguments:
@@ -102,11 +102,20 @@ def print_map(screen,map_coordinates):
         #To place the game board in the center of the window  
         y = cord[2]+ 5
         x = cord[1] +  w//3    
-        
+       
         color = which_color_pair(char)
 
         screen.addstr(y,x,char,curses.color_pair(color))
+        
+        
+        remaining_stones_p1_x = -10 + w//3   
+        remaining_stones_p1_y = 5
+        screen.addstr(remaining_stones_p1_y,remaining_stones_p1_x,"stones: "+str(remaining_stones_p1),curses.color_pair(3))
 
+        remaining_stones_p2_x = 27  + w//3 
+        remaining_stones_p2_y = 5
+        screen.addstr(remaining_stones_p2_y,remaining_stones_p2_x,"stones: "+str(remaining_stones_p2),curses.color_pair(2))
+        
 def print_choice(screen, selected_move_idx, plus_list,player1_turn):
     """Prints all plusses in plus_list on the screen. The currently selected plus is colored.
 
@@ -275,7 +284,7 @@ def print_player_start(screen,player1_turn,player1_name,player2_name):
     h,w = screen.getmaxyx()
 
     #position of text 
-    text_x = 8  + w//3 
+    text_x = 4  + w//3 
     text_y = 0
     
     if player1_turn == True:
@@ -296,7 +305,7 @@ def can_player_act(plus_list,current_row,remaining_stones_p1, remaining_stones_p
     plus_list -- list of "+" and placed stones
     current_row --  currently selected row in the plus_list
     remaining_stone_p1 -- the amount of stone player1 has
-    remaining_stone_p2 -- the amount of stone player2 has
+    remaining_stones_p2 -- the amount of stone player2 has
     player1_turn -- bool, True is player1 turn and False is player2 turn    
       
     """
@@ -386,10 +395,12 @@ def plus_list_to_matrix(plus_list,matrix):
             y = int(row[2])
             matrix[y][x]= row[0]
     return matrix          
+
 def remove_X_O(str_board):
     new_str_board = str_board.replace("X"," ")
     new_str_board = new_str_board.replace("O"," ")
     return new_str_board        
+
 def remove_stone_player(player_won,plus_list,current_row,player1_turn):
     if player_won == True:
         remove_stone_marker = "O"
@@ -398,7 +409,7 @@ def remove_stone_player(player_won,plus_list,current_row,player1_turn):
         if plus_list[current_row][0] == remove_stone_marker:    
             plus_list[current_row][0] = "+"
     return plus_list
-            
+
 
 def main(screen,player1_name,player2_name):
     """ The game loop used by curses.
@@ -461,7 +472,7 @@ def main(screen,player1_name,player2_name):
             print_player_start(screen,player1_turn,player1_name,player2_name)
             print_once += 1    
             
-        print_map(screen,map_coordinates)            
+        print_map(screen,map_coordinates,remaining_stones_p1,remaining_stones_p2)            
         print_player_names(screen,player1_name,player2_name)
         print_choice(screen,current_row,plus_list,player1_turn)
         #test
@@ -482,6 +493,7 @@ def main(screen,player1_name,player2_name):
             
             player_can_act, remaining_stones_p1, remaining_stones_p2= can_player_act(plus_list,current_row,remaining_stones_p1,remaining_stones_p2,player1_turn) 
             if player_can_act == True:
+
                 stone_marker=which_stone(player1_turn)
                 plus_list = place_stone(plus_list,current_row,stone_marker)
                 map_coordinates = remove_stone(map_coordinates,stone_marker)
@@ -489,7 +501,6 @@ def main(screen,player1_name,player2_name):
                 check_winner_col(matrix,player1_turn,player1_name,player2_name)
                 check_winner_row(matrix,player1_turn,player1_name,player2_name)
                 player1_turn = switch_player_turn(player1_turn)
-
 
         # 27 = Escape key
         elif key == 27: 
