@@ -108,14 +108,14 @@ def print_map(screen,map_coordinates,remaining_stones_p1,remaining_stones_p2):
         screen.addstr(y,x,char,curses.color_pair(color))
 
         remaining_stones_p1_x = -9 + w//3   
-        remaining_stones_p1_y = 4
+        remaining_stones_p1_y = 5
 
         for i in range(remaining_stones_p1):
 
             screen.addstr(remaining_stones_p1_y+i,remaining_stones_p1_x,"X",curses.color_pair(3))
 
         remaining_stones_p2_x = 30  + w//3 
-        remaining_stones_p2_y = 4
+        remaining_stones_p2_y = 5
         for i in range(remaining_stones_p2):
             screen.addstr(remaining_stones_p2_y+i,remaining_stones_p2_x,"O",curses.color_pair(2))
         
