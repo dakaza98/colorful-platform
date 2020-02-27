@@ -148,106 +148,118 @@ def which_color_pair(stone_marker):
         color = 3
     return color
 
-def move_down(plus_list,current_row):
-    """ Finds the "+" char that is below the current_row. If the current "+" char is at the bottom, 
-        it finds the "+" char at the top with the same x position
-    Returns the new y position of the "+" 
+def move_down(plus_list,loc):
+    """ Finds the "+" char that is above loc. If the current "+" char is at a coordinate that
+        that violates the rules for movement, the positiono wont change.
+    Returns the new x position of the "+"  
 
-    Keyword arguments:
-    current_row -- the currently selected row in the plus_list
+
+    loc -- the currently selected position in the plus_list
     plus_list -- the lists of all the "+" and their positions
     """
-    
-    new_row = current_row
+    new_loc = loc
     
     while True:
-        new_row += 1
-        if new_row == len(plus_list):
-            new_row = 0
+        new_loc += 1
+        if new_loc == len(plus_list):
+            new_loc = 0
         
-        current_x = plus_list[current_row][1]
-        new_x = plus_list[new_row][1]
+        current_x = plus_list[loc][1]
+        new_x = plus_list[new_loc][1]
 
-        current_y = plus_list[current_row][2]
-        new_y = plus_list[new_row][2]
+        current_y = plus_list[loc][2]
+        new_y = plus_list[new_loc][2]
         if current_x == new_x and current_y != new_y:
             #Check if allowed to move down
             if (int(current_x) != 16 and int(current_y) <= 6) or (int(current_x) == 16 and int(current_y) != 4 and int(current_y) != 12):
-                return new_row
+                return new_loc
             else:
-                return current_row
+                return loc
 
 
-def move_up(plus_list,current_row):
-    """ Finds the "+" char that is above the current_row. If the current "+" char is at the top, 
-        it finds the "+" char at the bottom with the same x position
-    Returns the new y position of the "+" 
+def move_up(plus_list,loc):
+    """ Finds the "+" char that is above loc. If the current "+" char is at a coordinate that
+        that violates the rules for movement, the positiono wont change.
+    Returns the new x position of the "+"  
 
 
-    current_row -- the currently selected row in the plus_list
+    loc -- the currently selected position in the plus_list
     plus_list -- the lists of all the "+" and their positions
     """
-
-    new_row = current_row
+    new_loc = loc
 
     while True:
-        if new_row == 0:
-            new_row = len(plus_list)
+        if new_loc == 0:
+            new_loc = len(plus_list)
 
-        new_row -= 1
-        current_x = plus_list[current_row][1]
-        new_x = plus_list[new_row][1]
+        new_loc -= 1
+        current_x = plus_list[loc][1]
+        new_x = plus_list[new_loc][1]
 
-        current_y = plus_list[current_row][2]
-        new_y = plus_list[new_row][2]
+        current_y = plus_list[loc][2]
+        new_y = plus_list[new_loc][2]
         if current_x == new_x and current_y != new_y:
             if (int(current_x) != 16 and int(current_y) >= 6) or int(current_x) == 16 and int(current_y) != 0 and int(current_y) != 8:
-               return new_row
+               return new_loc
             else:
-                return current_row
+                return loc
 
-def move_right(plus_list, current_row):
+def move_right(plus_list, loc):
+    """ Finds the "+" char that is right of loc. If the current "+" char is at a coordinate that
+        that violates the rules for movement, the positiono wont change.
+    Returns the new x position of the "+"  
 
-    new_row = current_row
+
+    loc -- the currently selected position in the plus_list
+    plus_list -- the lists of all the "+" and their positions
+    """
+    new_loc = loc
     
     while True:
-        new_row += 1
-        if new_row == len(plus_list):
-            new_row = 0
+        new_loc += 1
+        if new_loc == len(plus_list):
+            new_loc = 0
         
-        current_x = plus_list[current_row][1]
-        new_x = plus_list[new_row][1]
+        current_x = plus_list[loc][1]
+        new_x = plus_list[new_loc][1]
 
-        current_y = plus_list[current_row][2]
-        new_y = plus_list[new_row][2]
+        current_y = plus_list[loc][2]
+        new_y = plus_list[new_loc][2]
         if current_y == new_y and current_x != new_x:
             #Check if allowed to move left
             if (int(current_y) != 6 and int(current_x) <= 16) or (int(current_y) == 6 and int(current_x) != 12 and int(current_x) != 28):
-                return new_row
+                return new_loc
             else:
-                return current_row
+                return loc
 
 
-def move_left(plus_list, current_row):
-    
-    new_row = current_row
+def move_left(plus_list, loc):
+    """ Finds the "+" char that is left of loc. If the current "+" char is at a coordinate that
+        that violates the rules for movement, the positiono wont change.
+    Returns the new x position of the "+"  
+
+
+    loc -- the currently selected position in the plus_list
+    plus_list -- the lists of all the "+" and their positions
+    """
+    new_loc = loc
     
     while True:
-        new_row -= 1
-        if new_row == len(plus_list):
-            new_row = 0
+        new_loc -= 1
+        if new_loc == len(plus_list):
+            new_loc = 0
         
-        current_x = plus_list[current_row][1]
-        new_x = plus_list[new_row][1]
+        current_x = plus_list[loc][1]
+        new_x = plus_list[loc][1]
 
-        current_y = plus_list[current_row][2]
-        new_y = plus_list[new_row][2]
+        current_y = plus_list[loc][2]
+        new_y = plus_list[new_loc][2]
         if current_y == new_y and current_x != new_x:
             #Check if allowed to move left
             if (int(current_y) != 6 and int(current_x) >= 16) or (int(current_y) == 6 and int(current_x) != 4 and int(current_x) != 20):
-                return new_row
+                return new_loc
             else:
-                return current_row
+                return loc
 
 def place_stone(plus_list, current_row, stone_marker):
     """ Places a stone on the map by changing the "+" to "X" or "O"
