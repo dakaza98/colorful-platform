@@ -171,7 +171,12 @@ def move_down(plus_list,current_row):
         current_y = plus_list[current_row][2]
         new_y = plus_list[new_row][2]
         if current_x == new_x and current_y != new_y:
-          return new_row 
+            #Check if allowed to move down
+            if (int(current_x) != 16 and int(current_y) <= 6) or (int(current_x) == 16 and int(current_y) != 4 and int(current_y) != 12):
+                return new_row
+            else:
+                return current_row
+
 
 def move_up(plus_list,current_row):
     """ Finds the "+" char that is above the current_row. If the current "+" char is at the top, 
@@ -374,7 +379,7 @@ def main(screen,player1_name,player2_name):
 
         print_choice(screen,current_row,plus_list,player1_turn)
         
-        screen.refresh()    
+        screen.refresh()   
 
         key = screen.getch()
         if key == curses.KEY_LEFT and current_row > 0:  
@@ -394,7 +399,7 @@ def main(screen,player1_name,player2_name):
                 plus_list = place_stone(plus_list,current_row,stone_marker)
                 map_coordinates = remove_stone(map_coordinates,stone_marker)
                 player1_turn = switch_player_turn(player1_turn)
-         
+        
         # 27 = Escape key
         elif key == 27: 
             quit()
