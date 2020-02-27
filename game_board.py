@@ -204,7 +204,26 @@ def move_up(plus_list,current_row):
      
           return new_row  
 
+def move_left(plus_list, current_row):
+    
+    new_row = current_row
+    
+    while True:
+        new_row -= 1
+        if new_row == len(plus_list):
+            new_row = 0
+        
+        current_x = plus_list[current_row][1]
+        new_x = plus_list[new_row][1]
 
+        current_y = plus_list[current_row][2]
+        new_y = plus_list[new_row][2]
+        if current_y == new_y and current_x != new_x:
+            #Check if allowed to move left
+            if (int(current_y) != 6 and int(current_x) >= 16) or (int(current_y) == 6 and int(current_x) != 4 and int(current_x) != 20):
+                return new_row
+            else:
+                return current_row
 
 def place_stone(plus_list,current_row,stone_marker):
     """ Places a stone on the map by changing the "+" to "X" or "O"
@@ -371,8 +390,8 @@ def main(screen,player1_name,player2_name):
         screen.refresh()   
 
         key = screen.getch()
-        if key == curses.KEY_LEFT and current_row > 0:  
-            current_row -= 1
+        if key == curses.KEY_LEFT:  
+            current_row = move_left(plus_list, current_row)
         elif key == curses.KEY_RIGHT and current_row < len(plus_list)-1:
             current_row += 1
         elif key == curses.KEY_DOWN:
