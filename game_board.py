@@ -312,34 +312,8 @@ def can_player_act(plus_list,current_row,remaining_stones_p1, remaining_stones_p
 
 
 
-def test_matrix(str_board):
-    matrix = [[x for x in line] for line in str_board.split('\n')]
-    moves =[]
-    for row in matrix:
-        roven = []
-
-        for c in row:
-            if c == "-" or c == "+" or c == "|" or c == " ":
-                roven.append(c)
-        moves.append(roven)        
-    return moves              
 
 
-def test_new_print(screen,matrix):
-    """
-
-        #To place the game board in the center of the window  
-    y = cord[2]+ 5
-    x = cord[1] +  w//3    
-        
-    color = which_color_pair(char)
-
-    """
-    h,w = screen.getmaxyx()
-
-    for y in range(len(matrix)):
-        for x in range(len(matrix[y])):
-          screen.addstr(y+5,x+ w//3,matrix[y][x],curses.color_pair(3))
 def convert_map_matrix(str_board):
     matrix = [[x for x in line] for line in str_board.split('\n')]
     return matrix
