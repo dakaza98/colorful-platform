@@ -209,10 +209,23 @@ def move_up(plus_list,current_row):
 def move_right(plus_list, current_row):
 
     new_row = current_row
-
+    
     while True:
-        if new_row == 0:
-            new_row = len(plus_list)
+        new_row += 1
+        if new_row == len(plus_list):
+            new_row = 0
+        
+        current_x = plus_list[current_row][1]
+        new_x = plus_list[new_row][1]
+
+        current_y = plus_list[current_row][2]
+        new_y = plus_list[new_row][2]
+        if current_y == new_y and current_x != new_x:
+            #Check if allowed to move left
+            if (int(current_y) != 6 and int(current_x) <= 16) or (int(current_y) == 6 and int(current_x) != 12 and int(current_x) != 28):
+                return new_row
+            else:
+                return current_row
 
 
 def move_left(plus_list, current_row):
@@ -399,12 +412,12 @@ def main(screen,player1_name,player2_name):
         print_choice(screen,current_row,plus_list,player1_turn)
         
         screen.refresh()   
-
+        #print(plus_list)
         key = screen.getch()
         if key == curses.KEY_LEFT:  
             current_row = move_left(plus_list, current_row)
-        elif key == curses.KEY_RIGHT and current_row < len(plus_list)-1:
-            current_row += 1
+        elif key == curses.KEY_RIGHT: # and current_row < len(plus_list)-1:
+            current_row = move_right(plus_list, current_row)
         elif key == curses.KEY_DOWN:
             current_row = move_down(plus_list,current_row)
 
