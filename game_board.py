@@ -250,7 +250,7 @@ def move_left(plus_list, loc):
             new_loc = 0
         
         current_x = plus_list[loc][1]
-        new_x = plus_list[loc][1]
+        new_x = plus_list[new_loc][1]
 
         current_y = plus_list[loc][2]
         new_y = plus_list[new_loc][2]
