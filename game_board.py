@@ -569,10 +569,10 @@ def main(screen,player1_name,player2_name):
                
                 print("3 i rad? ",col_3,row_3,"vem 3rad ->",remove_who,"turn->", player1_turn)
             
-            #player has 3 in a row and and is allowed to remove a stone from the opponent
+            #player has 3 in a row and and is allowed to remove a stone from the opponent ,atm player can choose not to remove a stone 
             elif (col_3 == True or row_3 == True) and (remove_who == player1_turn):
                 
-                #should be changed
+                
 
 
                 if (can_player_remove(plus_list,current_row,remove_who) == True) :
@@ -586,7 +586,7 @@ def main(screen,player1_name,player2_name):
                     col_3 = False
                     row_3 =False 
                     print("hej")
-                    
+
                 remove_print = False    
         # 27 = Escape key
         elif key == 27: 
