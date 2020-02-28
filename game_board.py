@@ -332,15 +332,15 @@ def convert_map_matrix(str_board):
 
 
 
-def check_winner_row(matrix,player1_turn,player1_name,player2_name):
+def check_row(matrix,player1_turn,list_3_row):
     #checks row seams to work
     player_stone = 'X'
     opponent_stone = 'O'
-    player_name = player1_name.replace("\n","")
+    pre_list_3_row = list_3_row
+    new_3_row = False
     if player1_turn == False:
         player_stone = 'O'
         opponent_stone = 'X'
-        player_name = player2_name.replace("\n","")
     for row in matrix:
         check_player = []
         found_X = False
@@ -355,22 +355,25 @@ def check_winner_row(matrix,player1_turn,player1_name,player2_name):
                 check_player.append(item)
             amount_player_stone = check_player.count(player_stone) 
             if check_player and all(elem ==player_stone or elem == '-' for elem in check_player ) and amount_player_stone == 3:
-                print("winner_row",player_name)
-                print(check_player)
-                quit()
+                if check_player not in list_3_row:
+                    new_3_row = True
+                    list_3_row.append(check_player)
 
+    return list_3_row,new_3_row,player1_turn    
+    
+    
 
                  
-def check_winner_col(matrix,player1_turn,player1_name,player2_name):
+def check_col(matrix,player1_turn,list_3_col):
     #to check the col
     transponse_matrix = np.transpose(matrix)
     player_stone = 'X'
     opponent_stone = 'O'
-    player_name = player1_name.replace("\n","")
+    new_3_col = False
+    pre_list_3_col = list_3_col
     if player1_turn == False:
         player_stone = 'O'
         opponent_stone = 'X'
-        player_name = player2_name.replace("\n","")
     for row in transponse_matrix:
         check_player = []
         found_X = False
@@ -384,10 +387,12 @@ def check_winner_col(matrix,player1_turn,player1_name,player2_name):
                 check_player.append(item)
             amount_player_stone = check_player.count(player_stone) 
             if check_player and all(elem ==player_stone or elem == '|' for elem in check_player ) and amount_player_stone == 3:
-                print("winner column",player_name)
-                print(check_player)
-                quit()
+                if check_player not in list_3_col:
+                    new_3_col = True
+                    list_3_col.append(check_player)
+ 
 
+    return list_3_col,new_3_col,player1_turn
                 
     
 
@@ -404,14 +409,18 @@ def remove_X_O(str_board):
     new_str_board = new_str_board.replace("O"," ")
     return new_str_board        
 
-def remove_stone_player(player_won,plus_list,current_row,player1_turn):
-    if player_won == True:
+def remove_stone_player(who_three_row,who_three_col,plus_list,current_row):
+    #if player2 has 3 in a row/col player2 can only remove "X"
+    remove_stone_marker = "X"
+    #rev for player1
+    if who_three_row == True and who_three_col == True:
         remove_stone_marker = "O"
-        if player1_turn == False:
-            remove_stone_marker = "X"
-        if plus_list[current_row][0] == remove_stone_marker:    
-            plus_list[current_row][0] = "+"
+
+
+    if plus_list[current_row][0] == remove_stone_marker:    
+        plus_list[current_row][0] = "+"
     return plus_list
+
 
 
 def main(screen,player1_name,player2_name):
@@ -466,7 +475,8 @@ def main(screen,player1_name,player2_name):
     remaining_stones_p2 = 9
     #Prints player start text once
     print_once = 0
-    
+    list_3_row = []
+    list_3_col = []
     while 1:
         screen.clear()
     
@@ -501,10 +511,22 @@ def main(screen,player1_name,player2_name):
                 plus_list = place_stone(plus_list,current_row,stone_marker)
                 map_coordinates = remove_stone(map_coordinates,stone_marker)
                 matrix = plus_list_to_matrix(plus_list,matrix) 
-                check_winner_col(matrix,player1_turn,player1_name,player2_name)
-                check_winner_row(matrix,player1_turn,player1_name,player2_name)
+                 
+                list_3_row ,is_three_row,who_remove_row= check_row(matrix,player1_turn,list_3_row)
+                list_3_col ,is_three_col,who_remove_col= check_col(matrix,player1_turn,list_3_col)
                 player1_turn = switch_player_turn(player1_turn)
-
+               
+                print("3 i rad? ",is_three_col,is_three_row,"vem 3rad ->",who_remove_col,"turn->",not player1_turn)
+            elif is_three_col == True or is_three_row == True and who_remove_col != player1_turn:
+                print("tju")
+                plus_list = remove_stone_player(who_remove_col,who_remove_row,plus_list,current_row)
+                map_coordinates = remove_stone(map_coordinates,stone_marker)
+                matrix = plus_list_to_matrix(plus_list,matrix) 
+                 
+                list_3_row ,is_three_row,who_remove_row= check_row(matrix,player1_turn,list_3_row)
+                list_3_col ,is_three_col,who_remove_col= check_col(matrix,player1_turn,list_3_col)
+                player1_turn = switch_player_turn(player1_turn)
+             
         # 27 = Escape key
         elif key == 27: 
             quit()
