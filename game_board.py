@@ -216,7 +216,7 @@ def move_up(plus_list,current_row):
 
 
 
-def place_stone(plus_list,current_row,stone_marker):
+def place_stone(plus_list,current_row,stone_marker,remaining_stone_p1,remaining_stones_p2):
     """ Places a stone on the map by changing the "+" to "X" or "O"
     Returns the changed plus_list list
 
@@ -224,8 +224,13 @@ def place_stone(plus_list,current_row,stone_marker):
     plus_list -- the lists of all the "+" and their positions
     stone_marker -- the char of the stone, should be either "X" or "O" 
     """
+    if stone_marker == "X":
+        remaining_stone_p1 = remaining_stone_p1-1
+    elif stone_marker == "O":
+        remaining_stones_p2 = remaining_stones_p2 -1    
+
     plus_list[current_row][0] = stone_marker
-    return plus_list
+    return plus_list,remaining_stone_p1,remaining_stones_p2
 
 def remove_stone(map_coordinates,stone_marker):
     """ When you place a stone it removes the stone from the left or the right side
@@ -315,15 +320,21 @@ def can_player_act(plus_list,current_row,remaining_stones_p1, remaining_stones_p
     current_char = plus_list[current_row][0]
     can_not_act= (remaining_stones_p1 <=  0 and remaining_stones_p2 <= 0) or current_char != "+"
     if can_not_act == True:    
-        return False,remaining_stones_p1,remaining_stones_p2
-    elif player1_turn == True and can_not_act == False :
-        remaining_stones_p1 -= 1
-    elif player1_turn == False and can_not_act == False:
-        remaining_stones_p2 -= 1        
-    return True,remaining_stones_p1, remaining_stones_p2
+        return False
+
+    return True
 
 
 
+def can_player_remove(plus_list,current_row,player1_remove):
+    #if player1_remove == True , the stones thare allowed to be removed is "O" and rev for player2
+    current_car = plus_list[current_row][0]
+    remove_stone_marker = "O"
+    if player1_remove == False:
+        remove_stone_marker = "X"
+    if current_car == remove_stone_marker:
+        return True
+    return False        
 
 
 def convert_map_matrix(str_board):
@@ -343,15 +354,15 @@ def check_row(matrix,player1_turn,list_3_row):
         opponent_stone = 'X'
     for row in matrix:
         check_player = []
-        found_X = False
+        found_player_stone = False
         for item in row:
             if item == player_stone:
-                found_X = True
+                found_player_stone = True
                 check_player
             if item == ' ' or item == opponent_stone or item == '|':
                 check_player = []
-                found_X = False     
-            if found_X == True and item != ' ':
+                found_player_stone = False     
+            if found_player_stone == True and item != ' ':
                 check_player.append(item)
             amount_player_stone = check_player.count(player_stone) 
             if check_player and all(elem ==player_stone or elem == '-' for elem in check_player ) and amount_player_stone == 3:
@@ -376,14 +387,14 @@ def check_col(matrix,player1_turn,list_3_col):
         opponent_stone = 'X'
     for row in transponse_matrix:
         check_player = []
-        found_X = False
+        found_player_stone = False
         for item in row:
             if item == player_stone:
-                found_X = True
+                found_player_stone = True
             if item == ' ' or item == opponent_stone or item == '-':
                 check_player = []
-                found_X = False     
-            if found_X == True and item != ' ':
+                found_player_stone = False     
+            if found_player_stone == True and item != ' ':
                 check_player.append(item)
             amount_player_stone = check_player.count(player_stone) 
             if check_player and all(elem ==player_stone or elem == '|' for elem in check_player ) and amount_player_stone == 3:
@@ -508,11 +519,11 @@ def main(screen,player1_name,player2_name):
 
         elif key == curses.KEY_ENTER or key in [10, 13]:
             
-            player_can_act, remaining_stones_p1, remaining_stones_p2= can_player_act(plus_list,current_row,remaining_stones_p1,remaining_stones_p2,player1_turn) 
+            player_can_act = can_player_act(plus_list,current_row,remaining_stones_p1,remaining_stones_p2,player1_turn) 
             if player_can_act == True:
 
                 stone_marker=which_stone(player1_turn)
-                plus_list = place_stone(plus_list,current_row,stone_marker)
+                plus_list,remaining_stones_p1,remaining_stones_p2 = place_stone(plus_list,current_row,stone_marker,remaining_stones_p1,remaining_stones_p2)
                 map_coordinates = remove_stone(map_coordinates,stone_marker)
                 matrix = plus_list_to_matrix(plus_list,matrix) 
                  
@@ -524,7 +535,7 @@ def main(screen,player1_name,player2_name):
                     col_3 = is_three_col
                     row_3 = is_three_row
                     remove_who = who_remove_col
-                    
+                
                 player1_turn = switch_player_turn(player1_turn)
                
                 print("3 i rad? ",col_3,row_3,"vem 3rad ->",remove_who,"turn->", player1_turn)
@@ -532,16 +543,19 @@ def main(screen,player1_name,player2_name):
             #player has 3 in a row and and is allowed to remove a stone from the opponent
             elif (col_3 == True or row_3 == True) and (remove_who == player1_turn):
                 print("tju")
-                plus_list = remove_stone_player(remove_who,remove_who,plus_list,current_row)
-                map_coordinates = remove_stone(map_coordinates,stone_marker)
-                matrix = plus_list_to_matrix(plus_list,matrix) 
-                 
-                list_3_row ,is_three_row,who_remove_row= check_row(matrix,player1_turn,list_3_row)
-                list_3_col ,is_three_col,who_remove_col= check_col(matrix,player1_turn,list_3_col)
-                player1_turn = switch_player_turn(player1_turn)
-                col_3 = False
-                row_3 =False 
-                
+                    
+
+                if (can_player_remove(plus_list,current_row,remove_who) == True):
+                    plus_list = remove_stone_player(remove_who,remove_who,plus_list,current_row)
+                    map_coordinates = remove_stone(map_coordinates,stone_marker)
+                    matrix = plus_list_to_matrix(plus_list,matrix) 
+                    
+                    list_3_row ,is_three_row,who_remove_row= check_row(matrix,player1_turn,list_3_row)
+                    list_3_col ,is_three_col,who_remove_col= check_col(matrix,player1_turn,list_3_col)
+                    player1_turn = switch_player_turn(player1_turn)
+                    col_3 = False
+                    row_3 =False 
+                    print("hej")
         # 27 = Escape key
         elif key == 27: 
             quit()
