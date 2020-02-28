@@ -518,6 +518,7 @@ def main(screen,player1_name,player2_name):
     row_3 = False
     remove_who = player1_turn
     remove_print = False
+    stone_removed = True
     while 1:
         screen.clear()
     
@@ -528,7 +529,7 @@ def main(screen,player1_name,player2_name):
 
         if remove_print == True and remove_who == player1_turn:
             print_player_remove(screen,player1_turn,player1_name,player2_name)
-
+            stone_removed = False
         print_map(screen,map_coordinates,remaining_stones_p1,remaining_stones_p2)            
         print_player_names(screen,player1_name,player2_name)
         print_choice(screen,current_row,plus_list,player1_turn)
@@ -549,7 +550,7 @@ def main(screen,player1_name,player2_name):
         elif key == curses.KEY_ENTER or key in [10, 13]:
             
             player_can_act = can_player_act(plus_list,current_row,remaining_stones_p1,remaining_stones_p2,player1_turn) 
-            if player_can_act == True:
+            if player_can_act == True and stone_removed == True:
 
                 stone_marker=which_stone(player1_turn)
                 plus_list,remaining_stones_p1,remaining_stones_p2 = place_stone(plus_list,current_row,stone_marker,remaining_stones_p1,remaining_stones_p2)
@@ -570,7 +571,7 @@ def main(screen,player1_name,player2_name):
                 print("3 i rad? ",col_3,row_3,"vem 3rad ->",remove_who,"turn->", player1_turn)
             
             #player has 3 in a row and and is allowed to remove a stone from the opponent ,atm player can choose not to remove a stone 
-            elif (col_3 == True or row_3 == True) and (remove_who == player1_turn):
+            elif (col_3 == True or row_3 == True) and (remove_who == player1_turn) and stone_removed == False:
                 
                 
 
@@ -585,6 +586,7 @@ def main(screen,player1_name,player2_name):
                     player1_turn = switch_player_turn(player1_turn)
                     col_3 = False
                     row_3 =False 
+                    stone_removed = True
                     print("hej")
 
                 remove_print = False    
