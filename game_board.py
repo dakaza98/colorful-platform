@@ -304,6 +304,31 @@ def print_player_start(screen,player1_turn,player1_name,player2_name):
             player2_name = "Player2"        
         screen.addstr(text_y,text_x,player2_name.rstrip("\n")+" will start!",curses.color_pair(2))
 
+def print_player_remove(screen,player1_turn,player1_name,player2_name):
+    """ Prints the name of player who will be able to remove a stone at the top of the screen
+    
+    Keyword arguments:
+    screen -- the curses screen
+    player1_turn -- bool, True is player1 turn and False is player2 turn    
+    player1_name -- player1 name as string
+    player2_name -- player2 name as string
+
+    """
+    h,w = screen.getmaxyx()
+
+    #position of text 
+    text_x = 4  + w//3 
+    text_y = 0
+    
+    if player1_turn == True:
+          if len(player1_name) ==0:
+              player1_name = "Player1"   
+          screen.addstr(text_y,text_x,player1_name.rstrip("\n")+" remove a stone!",curses.color_pair(3))
+    else:
+        if len(player2_name) ==0:
+            player2_name = "Player2"        
+        screen.addstr(text_y,text_x,player2_name.rstrip("\n")+" remove a stone!",curses.color_pair(2))
+
 
 def can_player_act(plus_list,current_row,remaining_stones_p1, remaining_stones_p2,player1_turn):
     """Determines if a player is allowed to act
@@ -492,7 +517,7 @@ def main(screen,player1_name,player2_name):
     col_3 = False
     row_3 = False
     remove_who = player1_turn
-    
+    remove_print = False
     while 1:
         screen.clear()
     
@@ -500,11 +525,14 @@ def main(screen,player1_name,player2_name):
         if print_once == 0: 
             print_player_start(screen,player1_turn,player1_name,player2_name)
             print_once += 1    
-            
+
+        if remove_print == True and remove_who == player1_turn:
+            print_player_remove(screen,player1_turn,player1_name,player2_name)
+
         print_map(screen,map_coordinates,remaining_stones_p1,remaining_stones_p2)            
         print_player_names(screen,player1_name,player2_name)
         print_choice(screen,current_row,plus_list,player1_turn)
-        #test
+        
         screen.refresh()    
 
         key = screen.getch()
@@ -536,14 +564,16 @@ def main(screen,player1_name,player2_name):
                     col_3 = is_three_col
                     row_3 = is_three_row
                     remove_who = who_remove_col
+                    remove_print = True
                 player1_turn = switch_player_turn(player1_turn)
                
                 print("3 i rad? ",col_3,row_3,"vem 3rad ->",remove_who,"turn->", player1_turn)
             
             #player has 3 in a row and and is allowed to remove a stone from the opponent
             elif (col_3 == True or row_3 == True) and (remove_who == player1_turn):
-                print("tju")
-                    
+                
+                #should be changed
+
 
                 if (can_player_remove(plus_list,current_row,remove_who) == True) :
                     plus_list= remove_stone_player(remove_who,remove_who,plus_list,current_row)
@@ -555,6 +585,7 @@ def main(screen,player1_name,player2_name):
                     player1_turn = switch_player_turn(player1_turn)
                     col_3 = False
                     row_3 =False 
+                    remove_print = False
                     print("hej")
         # 27 = Escape key
         elif key == 27: 
