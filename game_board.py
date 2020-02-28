@@ -430,7 +430,7 @@ def remove_stone_player(who_three_row,who_three_col,plus_list,current_row):
 
     if plus_list[current_row][0] == remove_stone_marker:    
         plus_list[current_row][0] = "+"
-    print(remove_stone_marker)    
+     
     return plus_list
 
 
@@ -492,6 +492,7 @@ def main(screen,player1_name,player2_name):
     col_3 = False
     row_3 = False
     remove_who = player1_turn
+    
     while 1:
         screen.clear()
     
@@ -535,7 +536,6 @@ def main(screen,player1_name,player2_name):
                     col_3 = is_three_col
                     row_3 = is_three_row
                     remove_who = who_remove_col
-                
                 player1_turn = switch_player_turn(player1_turn)
                
                 print("3 i rad? ",col_3,row_3,"vem 3rad ->",remove_who,"turn->", player1_turn)
@@ -545,8 +545,8 @@ def main(screen,player1_name,player2_name):
                 print("tju")
                     
 
-                if (can_player_remove(plus_list,current_row,remove_who) == True):
-                    plus_list = remove_stone_player(remove_who,remove_who,plus_list,current_row)
+                if (can_player_remove(plus_list,current_row,remove_who) == True) :
+                    plus_list= remove_stone_player(remove_who,remove_who,plus_list,current_row)
                     map_coordinates = remove_stone(map_coordinates,stone_marker)
                     matrix = plus_list_to_matrix(plus_list,matrix) 
                     
