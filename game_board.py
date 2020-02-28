@@ -585,8 +585,9 @@ def main(screen,player1_name,player2_name):
                     player1_turn = switch_player_turn(player1_turn)
                     col_3 = False
                     row_3 =False 
-                    remove_print = False
                     print("hej")
+                    
+                remove_print = False    
         # 27 = Escape key
         elif key == 27: 
             quit()
