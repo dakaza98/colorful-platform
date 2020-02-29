@@ -83,7 +83,7 @@ def print_player_names(screen,player1_name,player2_name):
     
          
 
-def print_map(screen,map_coordinates,remaining_stones_p1,remaining_stones_p2):
+def print_map(screen,map_coordinates,stone_pool_player1,stone_pool_player2):
     """Prints the all the chars except "+" in map_coordinates at their specified coordinate.
 
     Keyword arguments:
@@ -107,18 +107,41 @@ def print_map(screen,map_coordinates,remaining_stones_p1,remaining_stones_p2):
 
         screen.addstr(y,x,char,curses.color_pair(color))
 
-        remaining_stones_p1_x = -9 + w//3   
-        remaining_stones_p1_y = 5
 
-        for i in range(remaining_stones_p1):
+        #Posistions of the stones showing on the left and right side of the game board
+        stone_pool_player1_x = -9 + w//3   
+        stone_pool_player1_y = 7
 
-            screen.addstr(remaining_stones_p1_y+i,remaining_stones_p1_x,"X",curses.color_pair(3))
+        for i in range(stone_pool_player1):
 
-        remaining_stones_p2_x = 30  + w//3 
-        remaining_stones_p2_y = 5
-        for i in range(remaining_stones_p2):
-            screen.addstr(remaining_stones_p2_y+i,remaining_stones_p2_x,"O",curses.color_pair(2))
-        
+            screen.addstr(stone_pool_player1_y+i,stone_pool_player1_x,"X",curses.color_pair(3))
+
+        stone_pool_player2_x = 30  + w//3 
+        stone_pool_player2_y = 7
+        for i in range(stone_pool_player2):
+            screen.addstr(stone_pool_player2_y+i,stone_pool_player2_x,"O",curses.color_pair(2))
+
+def print_remaining_stone(screen,remaining_stones_player1,remaining_stones_player2):
+    """Prints the amount of stones left for player1 and player2 at the left and right side of the board
+
+    Keyword arguments:
+    screen -- the curses screen
+    remaining_stones_player1 = the total amount of stones for player1
+    remaining_stones_player2 = the total amount of stones for player2
+    """
+    h,w = screen.getmaxyx()
+
+    #Positions of the text showing the remaining stones for player1 
+    remaining_stones_player1_x = -22 + w//3   
+    remaining_stones_player1_y = 5
+    screen.addstr(remaining_stones_player1_y,remaining_stones_player1_x,"Remaining stones: "+str(remaining_stones_player1),curses.color_pair(3))
+
+    #Positions of the text showing the remaining stones for player2 
+    remaining_stones_player2_x = 30 + w//3   
+    remaining_stones_player2_y = 5
+    screen.addstr(remaining_stones_player2_y,remaining_stones_player2_x,"Remaining stones: "+str(remaining_stones_player2),curses.color_pair(2))
+
+
 def print_choice(screen, selected_move_idx, plus_list,player1_turn):
     """Prints all plusses in plus_list on the screen. The currently selected plus is colored.
 
@@ -216,7 +239,7 @@ def move_up(plus_list,current_row):
 
 
 
-def place_stone(plus_list,current_row,stone_marker,remaining_stone_p1,remaining_stones_p2):
+def place_stone(plus_list,current_row,stone_marker,stone_pool_player1,stone_pool_player2):
     """ Places a stone on the map by changing the "+" to "X" or "O"
     Returns the changed plus_list list
 
@@ -225,12 +248,12 @@ def place_stone(plus_list,current_row,stone_marker,remaining_stone_p1,remaining_
     stone_marker -- the char of the stone, should be either "X" or "O" 
     """
     if stone_marker == "X":
-        remaining_stone_p1 = remaining_stone_p1-1
+        stone_pool_player1 = stone_pool_player1-1
     elif stone_marker == "O":
-        remaining_stones_p2 = remaining_stones_p2 -1    
+        stone_pool_player2 = stone_pool_player2 -1    
 
     plus_list[current_row][0] = stone_marker
-    return plus_list,remaining_stone_p1,remaining_stones_p2
+    return plus_list,stone_pool_player1,stone_pool_player2
 
 def remove_stone(map_coordinates,stone_marker):
     """ When you place a stone it removes the stone from the left or the right side
@@ -330,20 +353,20 @@ def print_player_remove(screen,player1_turn,player1_name,player2_name):
         screen.addstr(text_y,text_x,player2_name.rstrip("\n")+" remove a stone!",curses.color_pair(2))
 
 
-def can_player_act(plus_list,current_row,remaining_stones_p1, remaining_stones_p2,player1_turn):
+def can_player_act(plus_list,current_row,stone_pool_player1, stone_pool_player2,player1_turn):
     """Determines if a player is allowed to act
-    Returns Tuple (bool,remaining_stones_p1,remaining_stones_p2)
+    Returns Tuple (bool,stone_pool_player1,stone_pool_player2)
 
     Keyword argument 
     plus_list -- list of "+" and placed stones
     current_row --  currently selected row in the plus_list
-    remaining_stone_p1 -- the amount of stone player1 has
-    remaining_stones_p2 -- the amount of stone player2 has
+    stone_pool_player1 -- the amount of stone player1 has
+    stone_pool_player2 -- the amount of stone player2 has
     player1_turn -- bool, True is player1 turn and False is player2 turn    
       
     """
     current_char = plus_list[current_row][0]
-    can_not_act= (remaining_stones_p1 <=  0 and remaining_stones_p2 <= 0) or current_char != "+"
+    can_not_act= (stone_pool_player1 <=  0 and stone_pool_player2 <= 0) or current_char != "+"
     if can_not_act == True:    
         return False
 
@@ -440,23 +463,22 @@ def plus_list_to_matrix(plus_list,matrix):
             matrix[y][x]= row[0]
     return matrix          
 
-def remove_X_O(str_board):
-    new_str_board = str_board.replace("X"," ")
-    new_str_board = new_str_board.replace("O"," ")
-    return new_str_board        
-
-def remove_stone_player(who_three_row,who_three_col,plus_list,current_row):
+def remove_stone_player(who_three_row,who_three_col,plus_list,current_row,stone_pool_player1,stone_pool_player2):
     #if player2 has 3 in a row/col player2 can only remove "X"
-    remove_stone_marker = "X"
+    
     #rev for player1
     if who_three_row == True and who_three_col == True:
         remove_stone_marker = "O"
-
+        stone_pool_player2 = stone_pool_player2 -1
+    
+    elif who_three_row == False and who_three_col == False:
+        remove_stone_marker = "X" 
+        stone_pool_player1 = stone_pool_player1 -1
 
     if plus_list[current_row][0] == remove_stone_marker:    
         plus_list[current_row][0] = "+"
-     
-    return plus_list
+
+    return plus_list,stone_pool_player1,stone_pool_player2
 
 
 
@@ -490,7 +512,7 @@ def main(screen,player1_name,player2_name):
     # The path of the textfile of the map
     #map_path = 'Ascii board.txt'
     
-    #test
+    #new map without the the "X" and "O" to the left and right side of the board
     map_path = 'Ascii_board_test.txt'
     #string of the map
     map_string = read_map(map_path)
@@ -508,8 +530,14 @@ def main(screen,player1_name,player2_name):
     #player_1turn will determine which player that will start ,True for player1
     player1_turn = random_player_start()
     
-    remaining_stones_p1 = 9
-    remaining_stones_p2 = 9
+    #The amount of stones left to be placed,if these amounts = 0 phase1 ends
+    stone_pool_player1 = 9
+    stone_pool_player2 = 9
+
+    #The total amount of stones, if one of these amounts <= 2 that player loses
+    remaining_stones_player1 = 9
+    remaining_stones_player2 = 9
+    
     #Prints player start text once
     print_once = 0
     list_3_row = []
@@ -533,10 +561,10 @@ def main(screen,player1_name,player2_name):
             #should not be here , this bool is used to the player need to wait for his/hers turn
             stone_removed = False
         
-        print_map(screen,map_coordinates,remaining_stones_p1,remaining_stones_p2)            
+        print_map(screen,map_coordinates,stone_pool_player1,stone_pool_player2)            
         print_player_names(screen,player1_name,player2_name)
         print_choice(screen,current_row,plus_list,player1_turn)
-        
+        print_remaining_stone(screen,remaining_stones_player1,remaining_stones_player2)
         screen.refresh()    
 
         key = screen.getch()
@@ -552,11 +580,11 @@ def main(screen,player1_name,player2_name):
 
         elif key == curses.KEY_ENTER or key in [10, 13]:
             
-            player_can_act = can_player_act(plus_list,current_row,remaining_stones_p1,remaining_stones_p2,player1_turn) 
+            player_can_act = can_player_act(plus_list,current_row,stone_pool_player1,stone_pool_player2,player1_turn) 
             if player_can_act == True and stone_removed == True:
 
                 stone_marker=which_stone(player1_turn)
-                plus_list,remaining_stones_p1,remaining_stones_p2 = place_stone(plus_list,current_row,stone_marker,remaining_stones_p1,remaining_stones_p2)
+                plus_list,stone_pool_player1,stone_pool_player2 = place_stone(plus_list,current_row,stone_marker,stone_pool_player1,stone_pool_player2)
                 map_coordinates = remove_stone(map_coordinates,stone_marker)
                 matrix = plus_list_to_matrix(plus_list,matrix) 
                  
@@ -580,7 +608,7 @@ def main(screen,player1_name,player2_name):
 
 
                 if (can_player_remove(plus_list,current_row,remove_who) == True) :
-                    plus_list= remove_stone_player(remove_who,remove_who,plus_list,current_row)
+                    plus_list,remaining_stones_player1,remaining_stones_player2= remove_stone_player(remove_who,remove_who,plus_list,current_row,remaining_stones_player1,remaining_stones_player2)
                     map_coordinates = remove_stone(map_coordinates,stone_marker)
                     matrix = plus_list_to_matrix(plus_list,matrix) 
                     
