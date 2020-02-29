@@ -445,7 +445,7 @@ def remove_X_O(str_board):
     new_str_board = new_str_board.replace("O"," ")
     return new_str_board        
 
-def remove_stone_player(who_three_row,who_three_col,plus_list,current_row,remove_print):
+def remove_stone_player(who_three_row,who_three_col,plus_list,current_row):
     #if player2 has 3 in a row/col player2 can only remove "X"
     remove_stone_marker = "X"
     #rev for player1
@@ -455,9 +455,8 @@ def remove_stone_player(who_three_row,who_three_col,plus_list,current_row,remove
 
     if plus_list[current_row][0] == remove_stone_marker:    
         plus_list[current_row][0] = "+"
-        remove_print = True
      
-    return plus_list,remove_print
+    return plus_list
 
 
 
@@ -528,7 +527,7 @@ def main(screen,player1_name,player2_name):
             print_player_start(screen,player1_turn,player1_name,player2_name)
             print_once += 1    
 
-        if remove_print == True and remove_who == player1_turn :
+        if remove_print == True and remove_who == player1_turn:
             print_player_remove(screen,player1_turn,player1_name,player2_name)
 
             #should not be here , this bool is used to the player need to wait for his/hers turn
@@ -581,7 +580,7 @@ def main(screen,player1_name,player2_name):
 
 
                 if (can_player_remove(plus_list,current_row,remove_who) == True) :
-                    plus_list,remove_print= remove_stone_player(remove_who,remove_who,plus_list,current_row,remove_print)
+                    plus_list= remove_stone_player(remove_who,remove_who,plus_list,current_row)
                     map_coordinates = remove_stone(map_coordinates,stone_marker)
                     matrix = plus_list_to_matrix(plus_list,matrix) 
                     
@@ -593,7 +592,7 @@ def main(screen,player1_name,player2_name):
                     stone_removed = True
                     print("hej")
 
-                       
+                    remove_print = False    
         # 27 = Escape key
         elif key == 27: 
             quit()
