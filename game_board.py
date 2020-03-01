@@ -603,6 +603,7 @@ def main(screen,player1_name,player2_name):
 
 
                 if (can_player_remove(plus_list,current_row,who_remove_row) == True) :
+                    
                     plus_list,remaining_stones_player1,remaining_stones_player2= remove_stone_player(who_remove_row,who_remove_row,plus_list,current_row,remaining_stones_player1,remaining_stones_player2)
                     map_coordinates = remove_stone(map_coordinates,stone_marker)
                     matrix = plus_list_to_matrix(plus_list,matrix) 
@@ -613,7 +614,7 @@ def main(screen,player1_name,player2_name):
                     stone_removed = True
                     remove_print = False    
         # 27 = Escape key
-        elif key == 27: 
+        elif key == 27:     
             quit()
 
 
