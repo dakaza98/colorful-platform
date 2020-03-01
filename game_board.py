@@ -72,18 +72,18 @@ def print_player_names(screen,player1_name,player2_name):
     h,w = screen.getmaxyx()
 
     player1_name_x = -10 + w//3   
-    player1_name_y = 2
+    player1_name_y = 4
     screen.addstr(player1_name_y,player1_name_x,"Player1",curses.color_pair(3))
     screen.addstr(player1_name_y+1,player1_name_x,player1_name,curses.color_pair(3))
 
     player2_name_x = 29  + w//3 
-    player2_name_y = 2
+    player2_name_y = 4
     screen.addstr(player2_name_y,player2_name_x,"Player2",curses.color_pair(2))
     screen.addstr(player2_name_y+1,player2_name_x,player2_name,curses.color_pair(2))
     
          
 
-def print_map(screen,map_coordinates,stone_pool_player1,stone_pool_player2):
+def print_map(screen,map_coordinates,stone_pool_player1,stone_pool_player2,phase):
     """Prints the all the chars except "+" in map_coordinates at their specified coordinate.
 
     Keyword arguments:
@@ -100,24 +100,28 @@ def print_map(screen,map_coordinates,stone_pool_player1,stone_pool_player2):
         h,w = screen.getmaxyx()
 
         #To place the game board in the center of the window  
-        y = cord[2]+ 5
+        y = cord[2]+ 9
         x = cord[1] +  w//3    
        
         color = which_color_pair(char)
 
         screen.addstr(y,x,char,curses.color_pair(color))
 
+        #print phase
+        phase_y =  5
+        phase_x =  6 + w//3
+        screen.addstr(phase_y,phase_x,"Phase: "+str(phase),curses.color_pair(5))
 
         #Posistions of the stones showing on the left and right side of the game board
         stone_pool_player1_x = -9 + w//3   
-        stone_pool_player1_y = 7
+        stone_pool_player1_y = 9
 
         for i in range(stone_pool_player1):
 
             screen.addstr(stone_pool_player1_y+i,stone_pool_player1_x,"X",curses.color_pair(3))
 
         stone_pool_player2_x = 30  + w//3 
-        stone_pool_player2_y = 7
+        stone_pool_player2_y = 9
         for i in range(stone_pool_player2):
             screen.addstr(stone_pool_player2_y+i,stone_pool_player2_x,"O",curses.color_pair(2))
 
@@ -133,12 +137,12 @@ def print_remaining_stone(screen,remaining_stones_player1,remaining_stones_playe
 
     #Positions of the text showing the remaining stones for player1 
     remaining_stones_player1_x = -22 + w//3   
-    remaining_stones_player1_y = 5
+    remaining_stones_player1_y = 7
     screen.addstr(remaining_stones_player1_y,remaining_stones_player1_x,"Remaining stones: "+str(remaining_stones_player1),curses.color_pair(3))
 
     #Positions of the text showing the remaining stones for player2 
     remaining_stones_player2_x = 30 + w//3   
-    remaining_stones_player2_y = 5
+    remaining_stones_player2_y = 7
     screen.addstr(remaining_stones_player2_y,remaining_stones_player2_x,"Remaining stones: "+str(remaining_stones_player2),curses.color_pair(2))
 
 
@@ -155,7 +159,7 @@ def print_choice(screen, selected_move_idx, plus_list,player1_turn):
     for idx, row in enumerate(plus_list):
 
         # To have  the game board in the center, 5 is added y and w//3 is added to x
-        y = int(row[2])+ 5
+        y = int(row[2])+ 9
         x = int(row[1]) +  w//3      
         color =which_color_pair(row[0])
         if idx == selected_move_idx:
@@ -303,7 +307,7 @@ def print_player_start(screen,player1_turn,player1_name,player2_name):
 
     #position of text 
     text_x = 4  + w//3 
-    text_y = 0
+    text_y = 1
     
     if player1_turn == True:
           if len(player1_name) ==0:
@@ -327,8 +331,8 @@ def print_player_remove(screen,player1_turn,player1_name,player2_name):
     h,w = screen.getmaxyx()
 
     #position of text 
-    text_x = 4  + w//3 
-    text_y = 0
+    text_x = 3  + w//3 
+    text_y = 2
     
     if player1_turn == True:
           if len(player1_name) ==0:
@@ -478,6 +482,10 @@ def remove_stone_player(plus_list,current_row,player1_turn,stone_pool_player1,st
 
     return plus_list,stone_pool_player1,stone_pool_player2
 
+def switch_to_phase2(phase,stone_pool_player1,stone_pool_player2):
+    if stone_pool_player1 == 0 and stone_pool_player2 == 0:
+        phase = 2
+    return phase
 
 def main(screen,player1_name,player2_name):
     """ The game loop used by curses.
@@ -503,7 +511,9 @@ def main(screen,player1_name,player2_name):
     
     # color scheme for player2
     curses.init_pair(2,curses.COLOR_YELLOW,curses.COLOR_BLACK)
-            
+
+    # color scheme for phase 
+    curses.init_pair(5,curses.COLOR_CYAN,curses.COLOR_BLACK)        
     # specify the current selected row
     current_row = 0
 
@@ -546,7 +556,7 @@ def main(screen,player1_name,player2_name):
 
     #Which phase
     phase = 1
-    while phase == 1:
+    while phase == 1 :
         screen.clear()
     
                 
@@ -558,12 +568,12 @@ def main(screen,player1_name,player2_name):
             print_player_remove(screen,player1_turn,player1_name,player2_name)
 
         
-        print_map(screen,map_coordinates,stone_pool_player1,stone_pool_player2)            
+        print_map(screen,map_coordinates,stone_pool_player1,stone_pool_player2,phase)            
         print_player_names(screen,player1_name,player2_name)
         print_choice(screen,current_row,plus_list,player1_turn)
         print_remaining_stone(screen,remaining_stones_player1,remaining_stones_player2)
         screen.refresh()    
-            
+        phase = switch_to_phase2(phase,stone_pool_player1,stone_pool_player2)    
         key = screen.getch()
         if key == curses.KEY_LEFT and current_row > 0:  
             current_row -= 1
@@ -600,9 +610,17 @@ def main(screen,player1_name,player2_name):
         # 27 = Escape key
         elif key == 27:     
             quit()
-
-
+        
         # Prevent the screen from repainting to often
         time.sleep(0.01)
-            
-    
+
+    while phase == 2:
+        #here should phase 2 be
+        screen.clear()
+        print_map(screen,map_coordinates,stone_pool_player1,stone_pool_player2,phase)            
+        print_player_names(screen,player1_name,player2_name)
+        print_choice(screen,current_row,plus_list,player1_turn)
+        print_remaining_stone(screen,remaining_stones_player1,remaining_stones_player2) 
+        screen.refresh()
+        time.sleep(3)
+        quit()
