@@ -590,18 +590,13 @@ def main(screen,player1_name,player2_name):
                 else:
                     player1_turn = switch_player_turn(player1_turn)  
             #player has 3 in a row and and is allowed to remove a stone from the opponent ,atm player can choose not to remove a stone 
-            elif has_player_3_row == True  and stone_removed == False:
-                
-
-
-
-                if (can_player_remove(plus_list,current_row ,player1_turn ) == True):
-                    
-                    plus_list,remaining_stones_player1,remaining_stones_player2= remove_stone_player( plus_list,current_row,player1_turn,remaining_stones_player1,remaining_stones_player2)
-                    matrix = plus_list_to_matrix(plus_list,matrix)
-                    player1_turn = switch_player_turn(player1_turn)
-                    stone_removed = True
-                    remove_print = False    
+            elif has_player_3_row == True  and stone_removed == False and can_player_remove(plus_list,current_row ,player1_turn)  == True:
+                                    
+                plus_list,remaining_stones_player1,remaining_stones_player2= remove_stone_player( plus_list,current_row,player1_turn,remaining_stones_player1,remaining_stones_player2)
+                matrix = plus_list_to_matrix(plus_list,matrix)
+                player1_turn = switch_player_turn(player1_turn)
+                stone_removed = True
+                remove_print = False    
         # 27 = Escape key
         elif key == 27:     
             quit()
