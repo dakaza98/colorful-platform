@@ -113,7 +113,7 @@ def print_map(screen,map_coordinates,stone_pool_player1,stone_pool_player2,phase
         screen.addstr(y,x,char,curses.color_pair(color))
 
         #print phase
-        phase_y =  5
+        phase_y =  4
         phase_x =  6 + w//3
         screen.addstr(phase_y,phase_x,"Phase: "+str(phase),curses.color_pair(5))
 
@@ -553,6 +553,25 @@ def switch_to_phase2(phase,stone_pool_player1,stone_pool_player2):
         phase = 2
     return phase
 
+def can_player_move_stone(plus_list,current_row,player1_turn):
+    stone_marker = "X"
+    if player1_turn == False:
+        stone_marker = "O"
+    current_stone_y = plus_list[current_row][2]
+    current_stone_x = plus_list[current_row][1]
+    if plus_list[current_row][0] == stone_marker:
+        return True
+    return False
+
+def  move_stone(plus_list,matrix,current_row,player1_turn):
+    stone_marker = "X"
+    if player1_turn == False:
+        stone_marker = "O"
+    current_stone_y = int(plus_list[current_row][2])
+    current_stone_x = int(plus_list[current_row][1])
+    current_stone = matrix[current_stone_y][current_stone_x]
+    row = matrix[current_stone_y]
+    print(row)
 
 def main(screen,player1_name,player2_name):
     """ The game loop used by curses.
@@ -687,15 +706,12 @@ def main(screen,player1_name,player2_name):
         
         # Prevent the screen from repainting to often
         time.sleep(0.01)
-
+    
+    #phase2
     while phase == 2:
         #here should phase 2 be
         screen.clear()
                 
-        if print_once == 0: 
-            print_player_start(screen,player1_turn,player1_name,player2_name)
-            print_once += 1    
-
         if stone_removed == False:
             print_player_remove(screen,player1_turn,player1_name,player2_name)
 
@@ -721,12 +737,11 @@ def main(screen,player1_name,player2_name):
             current_row = move_up(plus_list,current_row)
 
         elif key == curses.KEY_ENTER or key in [10, 13]:
-            
-            player_can_act = can_player_act(plus_list,current_row,stone_pool_player1,stone_pool_player2,player1_turn) 
-            if player_can_act == True and stone_removed == True:
-
+            player_can_move_stone = can_player_move_stone(plus_list,current_row,player1_turn)
+            if player_can_move_stone == True and stone_removed == True:
+                
                 stone_marker=which_stone(player1_turn)
-                plus_list,stone_pool_player1,stone_pool_player2 = place_stone(plus_list,current_row,stone_marker,stone_pool_player1,stone_pool_player2)
+                move_stone(plus_list,matrix,current_row,player1_turn)
                 matrix = plus_list_to_matrix(plus_list,matrix)
                  
                 list_3_row,list_3_col,has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
