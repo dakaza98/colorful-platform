@@ -23,6 +23,7 @@ def read_map(path):
         
         raise Exception("Can not find the file at this path => "+ path)
 
+
 def convert_map_to_coordinates(str_board):
     """
     Converts the string version of the map to coordinates
