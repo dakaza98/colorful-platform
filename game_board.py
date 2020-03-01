@@ -255,21 +255,7 @@ def place_stone(plus_list,current_row,stone_marker,stone_pool_player1,stone_pool
     plus_list[current_row][0] = stone_marker
     return plus_list,stone_pool_player1,stone_pool_player2
 
-#is not needed 
-def remove_stone(map_coordinates,stone_marker):
-    """ When you place a stone it removes the stone from the left or the right side
-        depending on the stone_marker
-    Returns map_coordinates 
-    Keyword arguments:
-    map_coordinates -- list of all chars in the string version of the map
-    stone_marker -- Char version of the stone which can be a "X" or "O"     
 
-    """
-    for stone in map_coordinates:
-        if stone[0] == stone_marker:
-            stone[0] = ""
-            break
-    return  map_coordinates
 def which_stone(player1_turn):
     """Picks which char the stone marker should be based on which player is next to act
     Return stone_marker, which can either be a "X" or "O" depending on who is placing the stone
@@ -596,7 +582,6 @@ def main(screen,player1_name,player2_name):
                 stone_marker=which_stone(player1_turn)
                 plus_list,stone_pool_player1,stone_pool_player2 = place_stone(plus_list,current_row,stone_marker,stone_pool_player1,stone_pool_player2)
                 matrix = plus_list_to_matrix(plus_list,matrix)
-                map_coordinates = remove_stone(map_coordinates,stone_marker)
                  
                 list_3_row,list_3_col,has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
                 if has_player_3_row == True:
