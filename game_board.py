@@ -553,6 +553,7 @@ def switch_to_phase2(phase,stone_pool_player1,stone_pool_player2):
         phase = 2
     return phase
 
+
 def main(screen,player1_name,player2_name):
     """ The game loop used by curses.
 
@@ -644,7 +645,7 @@ def main(screen,player1_name,player2_name):
         
         phase = switch_to_phase2(phase,stone_pool_player1,stone_pool_player2)
         # switch phases should maybe be done is a different way    
-        if phase != 1 : 
+        if phase != 1:
             break
 
         key = screen.getch()
@@ -690,10 +691,59 @@ def main(screen,player1_name,player2_name):
     while phase == 2:
         #here should phase 2 be
         screen.clear()
+                
+        if print_once == 0: 
+            print_player_start(screen,player1_turn,player1_name,player2_name)
+            print_once += 1    
+
+        if stone_removed == False:
+            print_player_remove(screen,player1_turn,player1_name,player2_name)
+
+        
         print_map(screen,map_coordinates,stone_pool_player1,stone_pool_player2,phase)            
         print_player_names(screen,player1_name,player2_name)
         print_choice(screen,current_row,plus_list,player1_turn)
-        print_remaining_stone(screen,remaining_stones_player1,remaining_stones_player2) 
-        screen.refresh()
-        time.sleep(3)
-        quit()
+        print_remaining_stone(screen,remaining_stones_player1,remaining_stones_player2)
+        screen.refresh()    
+        
+        # switch phases should maybe be done is a different way    
+        
+
+        key = screen.getch()
+        if key == curses.KEY_LEFT and current_row > 0:  
+            current_row -= 1
+        elif key == curses.KEY_RIGHT and current_row < len(plus_list)-1:
+            current_row += 1
+        elif key == curses.KEY_DOWN:
+            current_row = move_down(plus_list,current_row)
+
+        elif key == curses.KEY_UP:
+            current_row = move_up(plus_list,current_row)
+
+        elif key == curses.KEY_ENTER or key in [10, 13]:
+            
+            player_can_act = can_player_act(plus_list,current_row,stone_pool_player1,stone_pool_player2,player1_turn) 
+            if player_can_act == True and stone_removed == True:
+
+                stone_marker=which_stone(player1_turn)
+                plus_list,stone_pool_player1,stone_pool_player2 = place_stone(plus_list,current_row,stone_marker,stone_pool_player1,stone_pool_player2)
+                matrix = plus_list_to_matrix(plus_list,matrix)
+                 
+                list_3_row,list_3_col,has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
+                
+                if has_player_3_row == True:
+                    stone_removed = False
+                else:
+                    player1_turn = switch_player_turn(player1_turn)  
+
+            elif has_player_3_row == True  and stone_removed == False and can_player_remove(plus_list,current_row ,player1_turn)  == True:
+                                    
+                plus_list,remaining_stones_player1,remaining_stones_player2= remove_stone_player( plus_list,current_row,player1_turn,remaining_stones_player1,remaining_stones_player2)
+                matrix = plus_list_to_matrix(plus_list,matrix)
+                player1_turn = switch_player_turn(player1_turn)
+                stone_removed = True
+        # 27 = Escape key
+        elif key == 27:     
+            quit()
+        # Prevent the screen from repainting to often
+        time.sleep(0.01)
