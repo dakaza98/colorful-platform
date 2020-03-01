@@ -541,10 +541,12 @@ def main(screen,player1_name,player2_name):
     list_3_row = []
     list_3_col = []
    
-
-    remove_print = False
+    #If player has removed a stone = True else False
     stone_removed = True
-    while 1:
+
+    #Which phase
+    phase = 1
+    while phase == 1:
         screen.clear()
     
                 
@@ -552,10 +554,9 @@ def main(screen,player1_name,player2_name):
             print_player_start(screen,player1_turn,player1_name,player2_name)
             print_once += 1    
 
-        if remove_print == True:
+        if stone_removed == False:
             print_player_remove(screen,player1_turn,player1_name,player2_name)
 
-            #should not be here , this bool is used to the player need to wait for his/hers turn
         
         print_map(screen,map_coordinates,stone_pool_player1,stone_pool_player2)            
         print_player_names(screen,player1_name,player2_name)
@@ -584,19 +585,18 @@ def main(screen,player1_name,player2_name):
                 matrix = plus_list_to_matrix(plus_list,matrix)
                  
                 list_3_row,list_3_col,has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
+                
                 if has_player_3_row == True:
-                    remove_print = True
                     stone_removed = False
                 else:
                     player1_turn = switch_player_turn(player1_turn)  
-            #player has 3 in a row and and is allowed to remove a stone from the opponent ,atm player can choose not to remove a stone 
+
             elif has_player_3_row == True  and stone_removed == False and can_player_remove(plus_list,current_row ,player1_turn)  == True:
                                     
                 plus_list,remaining_stones_player1,remaining_stones_player2= remove_stone_player( plus_list,current_row,player1_turn,remaining_stones_player1,remaining_stones_player2)
                 matrix = plus_list_to_matrix(plus_list,matrix)
                 player1_turn = switch_player_turn(player1_turn)
                 stone_removed = True
-                remove_print = False    
         # 27 = Escape key
         elif key == 27:     
             quit()
