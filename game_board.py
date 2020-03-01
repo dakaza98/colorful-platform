@@ -489,6 +489,7 @@ def main(screen,player1_name,player2_name):
     screen -- the curses screen
     player1_name -- The name of player1 as a string
     player2_name -- The name of player2 as a string
+    
     """
     # turn off cursor blinking
     curses.curs_set(0)
