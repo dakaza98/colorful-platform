@@ -542,9 +542,8 @@ def main(screen,player1_name,player2_name):
     print_once = 0
     list_3_row = []
     list_3_col = []
-    col_3 = False
-    row_3 = False
-    remove_who = player1_turn
+   
+    who_remove_row = player1_turn
     remove_print = False
     stone_removed = True
     while 1:
@@ -555,11 +554,10 @@ def main(screen,player1_name,player2_name):
             print_player_start(screen,player1_turn,player1_name,player2_name)
             print_once += 1    
 
-        if remove_print == True and remove_who == player1_turn:
+        if remove_print == True and who_remove_row == player1_turn:
             print_player_remove(screen,player1_turn,player1_name,player2_name)
 
             #should not be here , this bool is used to the player need to wait for his/hers turn
-            stone_removed = False
         
         print_map(screen,map_coordinates,stone_pool_player1,stone_pool_player2)            
         print_player_names(screen,player1_name,player2_name)
@@ -590,36 +588,28 @@ def main(screen,player1_name,player2_name):
                  
                 list_3_row ,is_three_row,who_remove_row= check_row(matrix,player1_turn,list_3_row)
                 list_3_col ,is_three_col,who_remove_col= check_col(matrix,player1_turn,list_3_col)
-                #player who gets 3 in a row can remove a stone when its his/hers turn again
+
                 if is_three_row == True or is_three_col == True:
-                    three_player1_turn = player1_turn
-                    col_3 = is_three_col
-                    row_3 = is_three_row
-                    remove_who = who_remove_col
                     remove_print = True
-                player1_turn = switch_player_turn(player1_turn)
-               
-                print("3 i rad? ",col_3,row_3,"vem 3rad ->",remove_who,"turn->", player1_turn)
+                    stone_removed = False
+                else:
+                    player1_turn = switch_player_turn(player1_turn)  
             
             #player has 3 in a row and and is allowed to remove a stone from the opponent ,atm player can choose not to remove a stone 
-            elif (col_3 == True or row_3 == True) and (remove_who == player1_turn) and stone_removed == False:
+            elif (is_three_row == True or is_three_row == True) and (who_remove_row == player1_turn) and stone_removed == False:
                 
                 
 
 
-                if (can_player_remove(plus_list,current_row,remove_who) == True) :
-                    plus_list,remaining_stones_player1,remaining_stones_player2= remove_stone_player(remove_who,remove_who,plus_list,current_row,remaining_stones_player1,remaining_stones_player2)
+                if (can_player_remove(plus_list,current_row,who_remove_row) == True) :
+                    plus_list,remaining_stones_player1,remaining_stones_player2= remove_stone_player(who_remove_row,who_remove_row,plus_list,current_row,remaining_stones_player1,remaining_stones_player2)
                     map_coordinates = remove_stone(map_coordinates,stone_marker)
                     matrix = plus_list_to_matrix(plus_list,matrix) 
                     
                     list_3_row ,is_three_row,who_remove_row= check_row(matrix,player1_turn,list_3_row)
                     list_3_col ,is_three_col,who_remove_col= check_col(matrix,player1_turn,list_3_col)
                     player1_turn = switch_player_turn(player1_turn)
-                    col_3 = False
-                    row_3 =False 
                     stone_removed = True
-                    print("hej")
-
                     remove_print = False    
         # 27 = Escape key
         elif key == 27: 
