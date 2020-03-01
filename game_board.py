@@ -595,14 +595,13 @@ def main(screen,player1_name,player2_name):
                     stone_removed = False
                 else:
                     player1_turn = switch_player_turn(player1_turn)  
-            
             #player has 3 in a row and and is allowed to remove a stone from the opponent ,atm player can choose not to remove a stone 
-            elif (is_three_row == True or is_three_row == True) and (who_remove_row == player1_turn) and stone_removed == False:
-                
+            elif (is_three_col == True or is_three_row == True) and (who_remove_row == player1_turn) and stone_removed == False:
                 
 
 
-                if (can_player_remove(plus_list,current_row,who_remove_row) == True) :
+
+                if (can_player_remove(plus_list,current_row,who_remove_row) == True):
                     
                     plus_list,remaining_stones_player1,remaining_stones_player2= remove_stone_player(who_remove_row,who_remove_row,plus_list,current_row,remaining_stones_player1,remaining_stones_player2)
                     map_coordinates = remove_stone(map_coordinates,stone_marker)
