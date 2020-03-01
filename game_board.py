@@ -563,6 +563,15 @@ def can_player_move_stone(plus_list,current_row,player1_turn):
         return True
     return False
 
+def select_stone_to_move(plus_list,current_row,player1_turn):
+    stone_marker = "X"
+    if player1_turn == False:
+        stone_marker = "O"
+    current_stone_y = plus_list[current_row][2]
+    current_stone_x = plus_list[current_row][1]
+    
+    return stone_marker,current_stone_x,current_stone_y
+    
 def  move_stone(plus_list,matrix,current_row,player1_turn):
     stone_marker = "X"
     if player1_turn == False:
