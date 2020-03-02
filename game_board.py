@@ -421,13 +421,12 @@ def check_row(matrix,player1_turn,list_3_row):
     if player1_turn == False:
         player_stone = 'O'
         opponent_stone = 'X'
-    for row in matrix:
+    for id_row,row in enumerate(matrix):
         check_player = []
         found_player_stone = False
         for item in row:
             if item == player_stone:
                 found_player_stone = True
-                check_player
             if item == ' ' or item == opponent_stone or item == '|':
                 check_player = []
                 found_player_stone = False     
@@ -435,9 +434,9 @@ def check_row(matrix,player1_turn,list_3_row):
                 check_player.append(item)
             amount_player_stone = check_player.count(player_stone) 
             if check_player and all(elem ==player_stone or elem == '-' for elem in check_player ) and amount_player_stone == 3:
-                if check_player not in list_3_row:
+                if ([id_row]+check_player) not in list_3_row:
                     is_three_row = True
-                    list_3_row.append(check_player)
+                    list_3_row.append([id_row]+check_player)
 
     return list_3_row,is_three_row    
     
@@ -461,7 +460,7 @@ def check_col(matrix,player1_turn,list_3_col):
     if player1_turn == False:
         player_stone = 'O'
         opponent_stone = 'X'
-    for row in transponse_matrix:
+    for id_col,row in enumerate(transponse_matrix):
         check_player = []
         found_player_stone = False
         for item in row:
@@ -474,9 +473,9 @@ def check_col(matrix,player1_turn,list_3_col):
                 check_player.append(item)
             amount_player_stone = check_player.count(player_stone) 
             if check_player and all(elem ==player_stone or elem == '|' for elem in check_player ) and amount_player_stone == 3:
-                if check_player not in list_3_col:
+                if ([id_col]+check_player) not in list_3_col:
                     is_three_col = True
-                    list_3_col.append(check_player)
+                    list_3_col.append([id_col]+check_player)
  
     return list_3_col,is_three_col
                 
@@ -492,9 +491,11 @@ def check_both(matrix,list_3_row,list_3_col,player1_turn):
     """        
     list_3_row,is_three_row = check_row(matrix,player1_turn,list_3_row)
     list_3_col,is_three_col = check_col(matrix,player1_turn,list_3_col)
+    print(list_3_row)
+    print(list_3_col)
     if is_three_row == True or is_three_col == True:
         return list_3_row,list_3_row,True
-
+    
     return list_3_row,list_3_row,False
 
     
@@ -642,7 +643,10 @@ def is_neighbour_a_plus(plus_list,current_row,neighbours):
         return True
     return False    
 
-
+def remove_old_3(plus_list,current_row,list_3_row,list_3_col):
+    current_stone_x = plus_list[current_row][1]
+    current_stone_x = plus_list[current_row][1]
+    
         
 def print_player_move(screen,player1_turn,player1_name,player2_name):
     """ Prints the name of player who will be able to move a stone at the top of the screen
