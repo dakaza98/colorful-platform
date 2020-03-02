@@ -554,6 +554,18 @@ def switch_to_phase2(phase,stone_pool_player1,stone_pool_player2):
         phase = 2
     return phase
 
+
+def switch_to_phase3(phase,remaining_stones_player1,remaining_stones_player2):
+    """ Switches to phase3 if both stone pools of the player are empty
+    Return: Phase
+
+    Keyword arguments:
+    phase -- the current phase of the game e
+    """
+    if remaining_stones_player1 == 3 and remaining_stones_player2 == 3:
+        phase = 2
+    return phase
+
 def can_player_move_stone(plus_list,current_row,player1_turn,neighbours):
     stone_marker = "X"
     if player1_turn == False:
@@ -775,11 +787,7 @@ def main(screen,player1_name,player2_name):
         print_remaining_stone(screen,remaining_stones_player1,remaining_stones_player2)
         screen.refresh()    
         
-        phase = switch_to_phase2(phase,stone_pool_player1,stone_pool_player2)
-        # switch phases should maybe be done is a different way    
-        if phase != 1:
-            break
-
+    
         key = screen.getch()
         if key == curses.KEY_LEFT and current_row > 0:  
             current_row -= 1
