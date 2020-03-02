@@ -881,7 +881,8 @@ def main(screen,player1_name,player2_name):
                 if is_neighbour_a_plus(plus_list,current_row,neighbours,selected_stone_index) == True:
                     plus_list = move_stone(plus_list,current_row,player1_turn,selected_stone_index)
                     matrix = plus_list_to_matrix(plus_list,matrix)
-                    list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
+                    #this makes it too op to just move in and out from a three in a row 
+                    #list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
                     list_3_row,list_3_col,has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
                     is_stone_selected = False
            
