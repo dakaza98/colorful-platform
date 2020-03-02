@@ -3,6 +3,7 @@ import os
 import time
 import random
 import numpy as np
+import itertools
 
 def read_map(path):
     """
@@ -574,7 +575,8 @@ def can_player_move_stone(plus_list,current_row,player1_turn,neighbours):
         stone_marker = "O"
     current_stone_y = plus_list[current_row][2]
     current_stone_x = plus_list[current_row][1]
-    if plus_list[current_row][0] == stone_marker:
+    
+    if plus_list[current_row][0] == stone_marker and "+" in itertools.chain( *neighbours):
         return True
     return False
 
@@ -651,7 +653,8 @@ def find_all_neighbours(plus_list,matrix,current_row):
     return neighbours 
 
 def is_neighbour_a_plus(plus_list,current_row,neighbours):
-    elem = plus_list[current_row]   
+    elem = plus_list[current_row]
+    print(True)   
     if elem[0] == "+" and elem in neighbours:
         return True
     return False    
@@ -763,7 +766,6 @@ def main(screen,player1_name,player2_name):
 
     #phase 2 stuff
     is_stone_selected = False
-    neighbours = []
     while phase == 1 :
         phase = switch_to_phase2(phase,stone_pool_player1,stone_pool_player2)
         # switch phases should maybe be done is a different way    
@@ -866,14 +868,16 @@ def main(screen,player1_name,player2_name):
             current_row = move_up(plus_list,current_row)
 
         elif key == curses.KEY_ENTER or key in [10, 13]:
-            player_can_move_stone = can_player_move_stone(plus_list,current_row,player1_turn)
+            print(neighbours)
+            player_can_move_stone = can_player_move_stone(plus_list,current_row,player1_turn,neighbours)
+            
             if player_can_move_stone == True and stone_removed == True and is_stone_selected == False:
                 stone_marker=which_stone(player1_turn)
                 selected_stone_index = get_selected_stone_index(current_row)
                 is_stone_selected = True
                 matrix = plus_list_to_matrix(plus_list,matrix)
-                neighbours = find_all_neighbours(plus_list,matrix,current_row)
                 list_3_row,list_3_col,has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
+                    neighbours = find_all_neighbours(plus_list,matrix,current_row)
                 
                 if has_player_3_row == True:
                     stone_removed = False
@@ -886,7 +890,6 @@ def main(screen,player1_name,player2_name):
                 list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
                 list_3_row,list_3_col,has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
                 is_stone_selected = False
-                neighbours = []
                 if has_player_3_row == True:
                     stone_removed = False
                 elif is_stone_selected == False:
@@ -935,7 +938,7 @@ def main(screen,player1_name,player2_name):
             current_row = move_up(plus_list,current_row)
 
         elif key == curses.KEY_ENTER or key in [10, 13]:
-            player_can_move_stone = can_player_move_stone(plus_list,current_row,player1_turn)
+            player_can_move_stone = can_player_move_stone(plus_list,current_row,player1_turn,neighbours)
             if player_can_move_stone == True and stone_removed == True and is_stone_selected == False:
                 stone_marker=which_stone(player1_turn)
                 selected_stone_index = get_selected_stone_index(current_row)
@@ -954,7 +957,6 @@ def main(screen,player1_name,player2_name):
                 list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
                 list_3_row,list_3_col,has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
                 is_stone_selected = False
-                neighbours = []
                 if has_player_3_row == True:
                     stone_removed = False
                 elif is_stone_selected == False:
