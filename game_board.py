@@ -492,13 +492,12 @@ def check_both(matrix,list_3_row,list_3_col,player1_turn):
     """        
     list_3_row,is_three_row = check_row(matrix,player1_turn,list_3_row)
     list_3_col,is_three_col = check_col(matrix,player1_turn,list_3_col)
-    print("row",list_3_row)
-    print("col",list_3_col)
+
 
     if is_three_row == True or is_three_col == True:
-        return list_3_row,list_3_row,True
+        return list_3_row,list_3_col,True
     
-    return list_3_row,list_3_row,False
+    return list_3_row,list_3_col,False
 
     
 
