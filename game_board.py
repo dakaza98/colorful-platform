@@ -431,7 +431,7 @@ def check_row(matrix,player1_turn,list_3_row):
             if item == ' ' or item == opponent_stone or item == '|':
                 check_player = []
                 found_player_stone = False     
-            if found_player_stone == True and item != ' ':
+            elif found_player_stone == True and item != ' ':
                 check_player.append(item)
             amount_player_stone = check_player.count(player_stone) 
             if check_player and all(elem ==player_stone or elem == '-' for elem in check_player ) and amount_player_stone == 3:
@@ -470,7 +470,7 @@ def check_col(matrix,player1_turn,list_3_col):
             if item == ' ' or item == opponent_stone or item == '-':
                 check_player = []
                 found_player_stone = False     
-            if found_player_stone == True and item != ' ':
+            elif found_player_stone == True and item != ' ':
                 check_player.append(item)
             amount_player_stone = check_player.count(player_stone) 
             if check_player and all(elem ==player_stone or elem == '|' for elem in check_player ) and amount_player_stone == 3:
@@ -492,6 +492,9 @@ def check_both(matrix,list_3_row,list_3_col,player1_turn):
     """        
     list_3_row,is_three_row = check_row(matrix,player1_turn,list_3_row)
     list_3_col,is_three_col = check_col(matrix,player1_turn,list_3_col)
+    print("row",list_3_row)
+    print("col",list_3_col)
+
     if is_three_row == True or is_three_col == True:
         return list_3_row,list_3_row,True
     
@@ -572,7 +575,6 @@ def can_player_move_stone(plus_list,current_row,player1_turn,neighbours):
         stone_marker = "O"
     current_stone_y = plus_list[current_row][2]
     current_stone_x = plus_list[current_row][1]
-    print(neighbours)
     if plus_list[current_row][0] == stone_marker and "+" in itertools.chain( *neighbours):
             return True
     return False
@@ -832,6 +834,12 @@ def main(screen,player1_name,player2_name):
     #phase2
     while phase == 2:
         #here should phase 2 be
+        phase = switch_to_phase3(phase,remaining_stones_player1,remaining_stones_player2)
+        # switch phases should maybe be done is a different way    
+        if phase != 2 : 
+            break        
+
+        
         screen.clear()
                 
         if stone_removed == False:
@@ -885,6 +893,82 @@ def main(screen,player1_name,player2_name):
                     #list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
                     list_3_row,list_3_col,has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
                     is_stone_selected = False
+           
+                if has_player_3_row == True:
+                    stone_removed = False
+                elif is_stone_selected == False:
+                    player1_turn = switch_player_turn(player1_turn)
+
+                    
+            elif has_player_3_row == True  and stone_removed == False and is_stone_selected == False  and can_player_remove(plus_list,current_row ,player1_turn)  == True:
+                plus_list,remaining_stones_player1,remaining_stones_player2= remove_stone_player( plus_list,current_row,player1_turn,remaining_stones_player1,remaining_stones_player2)
+                matrix = plus_list_to_matrix(plus_list,matrix)
+                list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
+                player1_turn = switch_player_turn(player1_turn)
+                stone_removed = True
+        # 27 = Escape key
+        elif key == 27:     
+            quit()
+        # Prevent the screen from repainting to often
+        time.sleep(0.01)
+
+
+    #phase3
+    while phase == 3:
+        #here should phase 2 be
+        screen.clear()
+                
+        if stone_removed == False:
+            print_player_remove(screen,player1_turn,player1_name,player2_name)
+
+        if is_stone_selected == False and stone_removed == True:
+            print_player_move(screen,player1_turn,player1_name,player2_name)
+        
+        print_map(screen,map_coordinates,stone_pool_player1,stone_pool_player2,phase)            
+        print_player_names(screen,player1_name,player2_name)
+        print_choice(screen,current_row,plus_list,player1_turn)
+        print_remaining_stone(screen,remaining_stones_player1,remaining_stones_player2)
+        screen.refresh()    
+        
+        # switch phases should maybe be done is a different way    
+        
+
+        key = screen.getch()
+        if key == curses.KEY_LEFT and current_row > 0:  
+            current_row -= 1
+        elif key == curses.KEY_RIGHT and current_row < len(plus_list)-1:
+            current_row += 1
+        elif key == curses.KEY_DOWN:
+            current_row = move_down(plus_list,current_row)
+
+        elif key == curses.KEY_UP:
+            current_row = move_up(plus_list,current_row)
+
+        elif key == curses.KEY_ENTER or key in [10, 13]:
+            neighbours = find_all_neighbours(plus_list,matrix,current_row)
+            player_can_move_stone = can_player_move_stone(plus_list,current_row,player1_turn,neighbours ==None)
+
+            if player_can_move_stone == True and stone_removed == True and is_stone_selected == False:
+                stone_marker=which_stone(player1_turn)
+                selected_stone_index = get_selected_stone_index(current_row)
+                is_stone_selected = True
+                matrix = plus_list_to_matrix(plus_list,matrix)
+                list_3_row,list_3_col,has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
+
+                if has_player_3_row == True:
+                    stone_removed = False
+                elif is_stone_selected == False:
+                    player1_turn = switch_player_turn(player1_turn)
+
+            elif  is_stone_selected == True and stone_removed == True and plus_list[current_row][0] == "+":
+                #had to move this if statement inside because selected stone index
+                #if is_neighbour_a_plus(plus_list,current_row,neighbours,selected_stone_index) == True:
+                plus_list = move_stone(plus_list,current_row,player1_turn,selected_stone_index)
+                matrix = plus_list_to_matrix(plus_list,matrix)
+                #this makes it too op to just move in and out from a three in a row 
+                #list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
+                list_3_row,list_3_col,has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
+                is_stone_selected = False
            
                 if has_player_3_row == True:
                     stone_removed = False
