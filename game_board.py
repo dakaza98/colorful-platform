@@ -491,8 +491,6 @@ def check_both(matrix,list_3_row,list_3_col,player1_turn):
     """        
     list_3_row,is_three_row = check_row(matrix,player1_turn,list_3_row)
     list_3_col,is_three_col = check_col(matrix,player1_turn,list_3_col)
-    print(list_3_row)
-    print(list_3_col)
     if is_three_row == True or is_three_col == True:
         return list_3_row,list_3_row,True
     
@@ -645,8 +643,15 @@ def is_neighbour_a_plus(plus_list,current_row,neighbours):
 
 def remove_old_3(plus_list,current_row,list_3_row,list_3_col):
     current_stone_x = plus_list[current_row][1]
-    current_stone_x = plus_list[current_row][1]
-    
+    current_stone_y = plus_list[current_row][2]
+    for row in list_3_row:
+        if current_stone_x == row[0]:
+            list_3_row.remove(row)
+    for col in list_3_col:
+        if current_stone_y == col[0]:
+            list_3_col.remove(col)        
+
+    return list_3_row,list_3_col
         
 def print_player_move(screen,player1_turn,player1_name,player2_name):
     """ Prints the name of player who will be able to move a stone at the top of the screen
@@ -803,6 +808,7 @@ def main(screen,player1_name,player2_name):
                                     
                 plus_list,remaining_stones_player1,remaining_stones_player2= remove_stone_player( plus_list,current_row,player1_turn,remaining_stones_player1,remaining_stones_player2)
                 matrix = plus_list_to_matrix(plus_list,matrix)
+                list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
                 player1_turn = switch_player_turn(player1_turn)
                 stone_removed = True
         # 27 = Escape key
@@ -861,6 +867,7 @@ def main(screen,player1_name,player2_name):
             elif is_neighbour_a_plus(plus_list,current_row,neighbours) == True and is_stone_selected == True and stone_removed == True:
                 plus_list = move_stone(plus_list,current_row,player1_turn,selected_stone_index)
                 matrix = plus_list_to_matrix(plus_list,matrix)
+                list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
                 list_3_row,list_3_col,has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
                 is_stone_selected = False
                 neighbours = []
@@ -872,6 +879,7 @@ def main(screen,player1_name,player2_name):
             elif has_player_3_row == True  and stone_removed == False and is_stone_selected == False  and can_player_remove(plus_list,current_row ,player1_turn)  == True:
                 plus_list,remaining_stones_player1,remaining_stones_player2= remove_stone_player( plus_list,current_row,player1_turn,remaining_stones_player1,remaining_stones_player2)
                 matrix = plus_list_to_matrix(plus_list,matrix)
+                list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
                 player1_turn = switch_player_turn(player1_turn)
                 stone_removed = True
         # 27 = Escape key
