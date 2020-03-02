@@ -657,7 +657,7 @@ def print_player_move(screen,player1_turn,player1_name,player2_name):
     h,w = screen.getmaxyx()
 
     #position of text 
-    text_x = 3  + w//3 
+    text_x = 1  + w//3 
     text_y = 2
     
     if player1_turn == True:
