@@ -869,16 +869,19 @@ def main(screen,player1_name,player2_name):
                     player1_turn = switch_player_turn(player1_turn)
 
             elif  is_stone_selected == True and stone_removed == True:
+                #had to move this if statement inside because selected stone index
                 if is_neighbour_a_plus(plus_list,current_row,neighbours,selected_stone_index) == True:
                     plus_list = move_stone(plus_list,current_row,player1_turn,selected_stone_index)
                     matrix = plus_list_to_matrix(plus_list,matrix)
                     list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
                     list_3_row,list_3_col,has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
                     is_stone_selected = False
+           
                 if has_player_3_row == True:
                     stone_removed = False
                 elif is_stone_selected == False:
-                    player1_turn = switch_player_turn(player1_turn)  
+                    player1_turn = switch_player_turn(player1_turn)
+
                     
             elif has_player_3_row == True  and stone_removed == False and is_stone_selected == False  and can_player_remove(plus_list,current_row ,player1_turn)  == True:
                 plus_list,remaining_stones_player1,remaining_stones_player2= remove_stone_player( plus_list,current_row,player1_turn,remaining_stones_player1,remaining_stones_player2)
