@@ -6,6 +6,7 @@ The game requires python 3.X.
 
 If you are using windows you must also install [Curses for windows](https://pypi.org/project/windows-curses/)
 
+You will need to have the library "numpy" installed. [Numpy download instructions](https://pypi.org/project/numpy/) 
 ## Start the game
 
 Run the command `python3 startmenu.py` to start the game
