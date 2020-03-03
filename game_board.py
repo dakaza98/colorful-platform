@@ -622,7 +622,7 @@ def find_stone_neighbour_row(plus_list,matrix,current_row):
     row = matrix[current_stone_y]
     neighbours = []
 
-    # look a head for neighbour
+    # look a head and behind for neighbour
     for x in reversed(range(0,current_stone_x)):
         elem = matrix[current_stone_y][x]
         if elem == " ":
