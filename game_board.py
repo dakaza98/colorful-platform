@@ -696,6 +696,12 @@ def remove_old_3(plus_list,current_row,list_3_row,list_3_col):
             list_3_col.remove(col)        
 
     return list_3_row,list_3_col
+
+def check_looser(remaining_stones):
+    if remaining_stones == 0:
+        return True
+    else:
+        return False
         
 def print_player_move(screen,player1_turn,player1_name,player2_name):
     """ Prints the name of player who will be able to move a stone at the top of the screen
@@ -826,6 +832,12 @@ def main(screen,player1_name,player2_name):
         # switch phases should maybe be done is a different way    
         player1_phase,player2_phase = switch_to_phase(player1_phase,player2_phase,stone_pool_player1,stone_pool_player2,remaining_stones_player1,remaining_stones_player2)
         
+        if check_looser(remaining_stones_player1):
+            winner = player2_name
+            quit()             
+        elif check_looser(remaining_stones_player2):
+            winner = player1_name
+            quit()
     
         key = screen.getch()
         if key == curses.KEY_LEFT and current_row > 0:  
