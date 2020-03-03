@@ -150,14 +150,17 @@ def which_color_pair(stone_marker):
 
 def move_down(plus_list,current_location):
     """ Finds the "+" char that is above current_location. If the current "+" char is at a coordinate that
-        that violates the rules for movement, the positiono wont change.
+        that violates the rules for movement, the position wont change.
     Returns the new x position of the "+"  
 
 
     current_location -- the currently selected position in the plus_list
     plus_list -- the lists of all the "+" and their positions
+    middle -- middle of the map, the values of x range 4,8,12..,28 and the values of y range 0,2,4..,12.
     """
     new_location = current_location
+    middle = 16, 6
+    step = 4, 2
     
     while True:
         new_location += 1
@@ -171,7 +174,7 @@ def move_down(plus_list,current_location):
         new_y = plus_list[new_location][2]
         if current_x == new_x and current_y != new_y:
             #Check if allowed to move down
-            if (int(current_x) != 16 and int(current_y) <= 6) or (int(current_x) == 16 and int(current_y) != 4 and int(current_y) != 12):
+            if (int(current_x) != middle[0] and int(current_y) <= middle[1]) or (int(current_x) == middle[0] and int(current_y) != middle[1]-step[1] and int(current_y) != middle[1]+step[1]*3):
                 return new_location
             else:
                 return current_location
@@ -185,8 +188,11 @@ def move_up(plus_list,current_location):
 
     current_location -- the currently selected position in the plus_list
     plus_list -- the lists of all the "+" and their positions
+    middle -- middle of the map, the values of x range 4,8,12..,28 and the values of y range 0,2,4..,12.
     """
     new_location = current_location
+    middle = 16, 6
+    step = 4, 2
 
     while True:
         if new_location == 0:
@@ -199,7 +205,7 @@ def move_up(plus_list,current_location):
         current_y = plus_list[current_location][2]
         new_y = plus_list[new_location][2]
         if current_x == new_x and current_y != new_y:
-            if (int(current_x) != 16 and int(current_y) >= 6) or int(current_x) == 16 and int(current_y) != 0 and int(current_y) != 8:
+            if (int(current_x) != middle[0] and int(current_y) >= middle[1]) or int(current_x) == middle[0] and int(current_y) != middle[1]-step[1]*3 and int(current_y) != middle[1]+step[1]:
                return new_location
             else:
                 return current_location
@@ -212,8 +218,11 @@ def move_right(plus_list, current_location):
 
     current_location -- the currently selected position in the plus_list
     plus_list -- the lists of all the "+" and their positions
+    middle -- middle of the map, the values of x range 4,8,12..,28 and the values of y range 0,2,4..,12.
     """
     new_location = current_location
+    middle = 16, 6
+    step = 4, 2
     
     while True:
         new_location += 1
@@ -227,7 +236,7 @@ def move_right(plus_list, current_location):
         new_y = plus_list[new_location][2]
         if current_y == new_y and current_x != new_x:
             #Check if allowed to move left
-            if (int(current_y) != 6 and int(current_x) <= 16) or (int(current_y) == 6 and int(current_x) != 12 and int(current_x) != 28):
+            if (int(current_y) != middle[1] and int(current_x) <= middle[0]) or (int(current_y) == middle[1] and int(current_x) != middle[0]-step[0] and int(current_x) != middle[0]+step[0]*3):
                 return new_location
             else:
                 return current_location
@@ -241,8 +250,11 @@ def move_left(plus_list, current_location):
 
     current_location -- the currently selected position in the plus_list
     plus_list -- the lists of all the "+" and their positions
+    middle -- middle of the map, the values of x range 4,8,12..,28 and the values of y range 0,2,4..,12.
     """
     new_location = current_location
+    middle = 16, 6
+    step = 4, 2
     
     while True:
         new_location -= 1
@@ -256,7 +268,7 @@ def move_left(plus_list, current_location):
         new_y = plus_list[new_location][2]
         if current_y == new_y and current_x != new_x:
             #Check if allowed to move left
-            if (int(current_y) != 6 and int(current_x) >= 16) or (int(current_y) == 6 and int(current_x) != 4 and int(current_x) != 20):
+            if (int(current_y) != middle[1] and int(current_x) >= middle[0]) or (int(current_y) == middle[1] and int(current_x) != middle[0]-step[0]*3 and int(current_x) != middle[0]+step[0]):
                 return new_location
             else:
                 return current_location
@@ -424,11 +436,11 @@ def main(screen,player1_name,player2_name):
         print_choice(screen,current_row,plus_list,player1_turn)
         
         screen.refresh()   
-        #print(plus_list)
+
         key = screen.getch()
         if key == curses.KEY_LEFT:  
             current_row = move_left(plus_list, current_row)
-        elif key == curses.KEY_RIGHT: # and current_row < len(plus_list)-1:
+        elif key == curses.KEY_RIGHT: 
             current_row = move_right(plus_list, current_row)
         elif key == curses.KEY_DOWN:
             current_row = move_down(plus_list,current_row)
