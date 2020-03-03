@@ -440,6 +440,8 @@ def check_row(matrix,player1_turn,list_3_row):
             if item == player_stone:
                 found_player_stone = True
             if item == ' ' or item == opponent_stone or item == '|':
+                if item == ' ':
+                    id_row += 1
                 check_player = []
                 found_player_stone = False     
             elif found_player_stone == True and item != ' ':
@@ -479,6 +481,8 @@ def check_col(matrix,player1_turn,list_3_col):
             if item == player_stone:
                 found_player_stone = True
             if item == ' ' or item == opponent_stone or item == '-':
+                if item == ' ':
+                    id_col += 1
                 check_player = []
                 found_player_stone = False     
             elif found_player_stone == True and item != ' ':
@@ -487,6 +491,7 @@ def check_col(matrix,player1_turn,list_3_col):
             if check_player and all(elem ==player_stone or elem == '|' for elem in check_player ) and amount_player_stone == 3:
                 if ([id_col]+check_player) not in list_3_col:
                     is_three_col = True
+
                     list_3_col.append([id_col]+check_player)
  
     return list_3_col,is_three_col
