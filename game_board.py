@@ -768,8 +768,10 @@ def remove_old_3(plus_list,current_row,list_3_row,list_3_col):
 
     return list_3_row,list_3_col
 
-def check_looser(remaining_stones):
-    if remaining_stones == 0:
+def check_looser(remaining_stones, matrix, plus_list, player1_turn):
+    if can_player_move_any_stone(plus_list, matrix, player1_turn) == False:
+        return True
+    elif remaining_stones == 0:
         return True
     else:
         return False
@@ -798,6 +800,21 @@ def print_player_move(screen,player1_turn,player1_name,player2_name):
         if len(player2_name) ==0:
             player2_name = "Player2"        
         screen.addstr(text_y,text_x,player2_name.rstrip("\n")+" move a stone to a neighbour!",curses.color_pair(2))
+
+
+
+def can_player_move_any_stone(plus_list, matrix, player1_turn):
+    for row in matrix:
+        for cell in row:
+            if (player1_turn and cell == "X") or (player1_turn == False and cell == "O"):
+                neighbours = find_all_neighbours()
+                for neighbour in neighbours:
+                    if neighbour == "+":
+                        return True
+        
+    return False
+
+ # IS NEIGHBOUR +=!?
 
 def main(screen,player1_name,player2_name):
     """ The game loop used by curses.
@@ -878,6 +895,7 @@ def main(screen,player1_name,player2_name):
     while 1:
         
         screen.clear()
+
     
                 
         if print_once == 0: 
@@ -901,10 +919,10 @@ def main(screen,player1_name,player2_name):
         # switch phases should maybe be done is a different way    
         player1_phase,player2_phase = switch_to_phase(player1_phase,player2_phase,stone_pool_player1,stone_pool_player2,remaining_stones_player1,remaining_stones_player2)
         
-        if check_looser(remaining_stones_player1):
+        if check_looser(remaining_stones_player1, matrix, plus_list, player1_turn):
             winner = player2_name
             quit()             
-        elif check_looser(remaining_stones_player2):
+        elif check_looser(remaining_stones_player2, matrix, plus_list, player1_turn):
             winner = player1_name
             quit()
         
