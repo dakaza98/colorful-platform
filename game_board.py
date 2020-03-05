@@ -208,58 +208,129 @@ def which_color_pair(stone_marker):
         color = 3
     return color
 
-def move_down(plus_list,current_row):
-    """ Finds the "+" char that is below the current_row. If the current "+" char is at the bottom, 
-        it finds the "+" char at the top with the same x position
-    Returns the new y position of the "+" 
+def move_down(plus_list,current_location):
+    """ Finds the "+" char that is above current_location. If the current "+" char is at a coordinate that
+        that violates the rules for movement, the position wont change.
+    Returns the new x position of the "+"  
 
-    Keyword arguments:
-    current_row -- the currently selected row in the plus_list
+
+    current_location -- the currently selected position in the plus_list
     plus_list -- the lists of all the "+" and their positions
+    middle -- middle of the map, the values of x range 4,8,12..,28 and the values of y range 0,2,4..,12.
     """
-    
-    new_row = current_row
+    new_location = current_location
+    middle = 16, 6
+    step = 4, 2
     
     while True:
-        new_row += 1
-        if new_row == len(plus_list):
-            new_row = 0
+        new_location += 1
+        if new_location == len(plus_list):
+            new_location = 0
         
-        current_x = plus_list[current_row][1]
-        new_x = plus_list[new_row][1]
+        current_x = plus_list[current_location][1]
+        new_x = plus_list[new_location][1]
 
-        current_y = plus_list[current_row][2]
-        new_y = plus_list[new_row][2]
+        current_y = plus_list[current_location][2]
+        new_y = plus_list[new_location][2]
         if current_x == new_x and current_y != new_y:
-          return new_row 
+            #Check if allowed to move down
+            if (int(current_x) != middle[0] and int(current_y) <= middle[1]) or (int(current_x) == middle[0] and int(current_y) != middle[1]-step[1] and int(current_y) != middle[1]+step[1]*3):
+                return new_location
+            else:
+                return current_location
 
-def move_up(plus_list,current_row):
-    """ Finds the "+" char that is above the current_row. If the current "+" char is at the top, 
-        it finds the "+" char at the bottom with the same x position
-    Returns the new y position of the "+" 
+
+def move_up(plus_list,current_location):
+    """ Finds the "+" char that is above current_location. If the current "+" char is at a coordinate that
+        that violates the rules for movement, the positiono wont change.
+    Returns the new x position of the "+"  
 
 
-    current_row -- the currently selected row in the plus_list
+    current_location -- the currently selected position in the plus_list
     plus_list -- the lists of all the "+" and their positions
+    middle -- middle of the map, the values of x range 4,8,12..,28 and the values of y range 0,2,4..,12.
     """
-    
-    new_row = current_row
+    new_location = current_location
+    middle = 16, 6
+    step = 4, 2
+
+    while True:
+        if new_location == 0:
+            new_location = len(plus_list)
+
+        new_location -= 1
+        current_x = plus_list[current_location][1]
+        new_x = plus_list[new_location][1]
+
+        current_y = plus_list[current_location][2]
+        new_y = plus_list[new_location][2]
+        if current_x == new_x and current_y != new_y:
+            if (int(current_x) != middle[0] and int(current_y) >= middle[1]) or int(current_x) == middle[0] and int(current_y) != middle[1]-step[1]*3 and int(current_y) != middle[1]+step[1]:
+               return new_location
+            else:
+                return current_location
+
+def move_right(plus_list, current_location):
+    """ Finds the "+" char that is right of current_location. If the current "+" char is at a coordinate that
+        that violates the rules for movement, the positiono wont change.
+    Returns the new x position of the "+"  
+
+
+    current_location -- the currently selected position in the plus_list
+    plus_list -- the lists of all the "+" and their positions
+    middle -- middle of the map, the values of x range 4,8,12..,28 and the values of y range 0,2,4..,12.
+    """
+    new_location = current_location
+    middle = 16, 6
+    step = 4, 2
     
     while True:
-        if new_row == 0:
-            new_row = len(plus_list)
+        new_location += 1
+        if new_location == len(plus_list):
+            new_location = 0
         
-        new_row -= 1
-        current_x = plus_list[current_row][1]
-        new_x = plus_list[new_row][1]
+        current_x = plus_list[current_location][1]
+        new_x = plus_list[new_location][1]
 
-        current_y = plus_list[current_row][2]
-        new_y = plus_list[new_row][2]
-        if current_x == new_x and current_y != new_y:
-     
-          return new_row  
+        current_y = plus_list[current_location][2]
+        new_y = plus_list[new_location][2]
+        if current_y == new_y and current_x != new_x:
+            #Check if allowed to move left
+            if (int(current_y) != middle[1] and int(current_x) <= middle[0]) or (int(current_y) == middle[1] and int(current_x) != middle[0]-step[0] and int(current_x) != middle[0]+step[0]*3):
+                return new_location
+            else:
+                return current_location
 
 
+def move_left(plus_list, current_location):
+    """ Finds the "+" char that is left of current_location. If the current "+" char is at a coordinate that
+        that violates the rules for movement, the positiono wont change.
+    Returns the new x position of the "+"  
+
+    current_location -- the currently selected position in the plus_list
+    plus_list -- the lists of all the "+" and their positions
+    middle -- middle of the map, the values of x range 4,8,12..,28 and the values of y range 0,2,4..,12.
+    """
+    new_location = current_location
+    middle = 16, 6
+    step = 4, 2
+    
+    while True:
+        new_location -= 1
+        if new_location == len(plus_list):
+            new_location = 0
+        
+        current_x = plus_list[current_location][1]
+        new_x = plus_list[new_location][1]
+
+        current_y = plus_list[current_location][2]
+        new_y = plus_list[new_location][2]
+        if current_y == new_y and current_x != new_x:
+            #Check if allowed to move left
+            if (int(current_y) != middle[1] and int(current_x) >= middle[0]) or (int(current_y) == middle[1] and int(current_x) != middle[0]-step[0]*3 and int(current_x) != middle[0]+step[0]):
+                return new_location
+            else:
+                return current_location
 
 def place_stone(plus_list,current_row,stone_marker,stone_pool_player1,stone_pool_player2):
     """ Places a stone on the map by changing the "+" to "X" or "O"
@@ -622,7 +693,7 @@ def find_stone_neighbour_row(plus_list,matrix,current_row):
     row = matrix[current_stone_y]
     neighbours = []
 
-    # look a head for neighbour
+    # look a head and behind for neighbour
     for x in reversed(range(0,current_stone_x)):
         elem = matrix[current_stone_y][x]
         if elem == " ":
@@ -840,10 +911,10 @@ def main(screen,player1_name,player2_name):
             quit()
     
         key = screen.getch()
-        if key == curses.KEY_LEFT and current_row > 0:  
-            current_row -= 1
-        elif key == curses.KEY_RIGHT and current_row < len(plus_list)-1:
-            current_row += 1
+        if key == curses.KEY_LEFT:  
+            current_row = move_left(plus_list, current_row)
+        elif key == curses.KEY_RIGHT: 
+            current_row = move_right(plus_list, current_row)
         elif key == curses.KEY_DOWN:
             current_row = move_down(plus_list,current_row)
 
@@ -940,6 +1011,10 @@ def main(screen,player1_name,player2_name):
                     #list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
                     player1_turn = switch_player_turn(player1_turn)
                     stone_removed = True                     
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
         # 27 = Escape key
         elif key == 27:     
             quit()
