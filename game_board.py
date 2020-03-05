@@ -219,7 +219,7 @@ def move_down(plus_list,current_location):
     middle -- middle of the map, the values of x range 4,8,12..,28 and the values of y range 0,2,4..,12.
     """
     new_location = current_location
-    middle = 16, 6
+    middle = 12, 6
     step = 4, 2
     
     while True:
@@ -251,7 +251,7 @@ def move_up(plus_list,current_location):
     middle -- middle of the map, the values of x range 4,8,12..,28 and the values of y range 0,2,4..,12.
     """
     new_location = current_location
-    middle = 16, 6
+    middle = 12, 6
     step = 4, 2
 
     while True:
@@ -281,7 +281,7 @@ def move_right(plus_list, current_location):
     middle -- middle of the map, the values of x range 4,8,12..,28 and the values of y range 0,2,4..,12.
     """
     new_location = current_location
-    middle = 16, 6
+    middle = 12, 6
     step = 4, 2
     
     while True:
@@ -312,7 +312,7 @@ def move_left(plus_list, current_location):
     middle -- middle of the map, the values of x range 4,8,12..,28 and the values of y range 0,2,4..,12.
     """
     new_location = current_location
-    middle = 16, 6
+    middle = 12, 6
     step = 4, 2
     
     while True:
@@ -909,7 +909,7 @@ def main(screen,player1_name,player2_name):
         elif check_looser(remaining_stones_player2):
             winner = player1_name
             quit()
-    
+        
         key = screen.getch()
         if key == curses.KEY_LEFT:  
             current_row = move_left(plus_list, current_row)

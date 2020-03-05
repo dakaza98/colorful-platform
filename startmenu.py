@@ -131,6 +131,7 @@ def ask_for_player_names(screen):
     return player1_name, player2_name
 
 
+
 def main(screen):
     """The menu loop used by curses.
 
