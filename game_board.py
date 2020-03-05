@@ -1011,10 +1011,7 @@ def main(screen,player1_name,player2_name):
                     #list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
                     player1_turn = switch_player_turn(player1_turn)
                     stone_removed = True                     
-<<<<<<< HEAD
-=======
 
->>>>>>> master
         # 27 = Escape key
         elif key == 27:     
             quit()
