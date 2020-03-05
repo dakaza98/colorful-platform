@@ -344,12 +344,12 @@ def place_stone(plus_list,current_row,stone_marker,stone_pool_player1,stone_pool
     
     """
     if stone_marker == "X":
-        stone_pool_player1 = stone_pool_player1-1
+        stone_pool_player1 = stone_pool_player1 - 1
     elif stone_marker == "O":
-        stone_pool_player2 = stone_pool_player2 -1    
+        stone_pool_player2 = stone_pool_player2 - 1    
 
     plus_list[current_row][0] = stone_marker
-    return plus_list,stone_pool_player1,stone_pool_player2
+    return plus_list, stone_pool_player1, stone_pool_player2
 
 
 def which_stone(player1_turn):
@@ -488,7 +488,7 @@ def convert_map_matrix(str_board):
 
 
 
-def check_row(matrix,player1_turn,list_3_row):
+def check_row(matrix, player1_turn, list_3_row):
     """Checks if the game board has three of the same stones in a row vertically.
     
     Returns list_3_row and is_three_row -- bool, will be True if a new three in a row has been found  
@@ -501,29 +501,42 @@ def check_row(matrix,player1_turn,list_3_row):
     opponent_stone = 'O'
     pre_list_3_row = list_3_row
     is_three_row = False
+    
     if player1_turn == False:
         player_stone = 'O'
         opponent_stone = 'X'
-    for id_row,row in enumerate(matrix):
+    
+    for row in (matrix):
         check_player = []
         found_player_stone = False
-        for item in row:
-            if item == player_stone:
-                found_player_stone = True
-            if item == ' ' or item == opponent_stone or item == '|':
-                if item == ' ':
-                    id_row += 1
-                check_player = []
-                found_player_stone = False     
-            elif found_player_stone == True and item != ' ':
-                check_player.append(item)
-            amount_player_stone = check_player.count(player_stone) 
-            if check_player and all(elem ==player_stone or elem == '-' for elem in check_player ) and amount_player_stone == 3:
-                if ([id_row]+check_player) not in list_3_row:
-                    is_three_row = True
-                    list_3_row.append([id_row]+check_player)
+        count = 0
 
-    return list_3_row,is_three_row    
+        for item in row:
+            
+            if item[0] == player_stone:
+                found_player_stone = True
+                count += 1
+    
+            if item[0] == ' ' or item[0] == opponent_stone:# or item[0] == '|':
+                count = 0
+                #if item == ' ':
+                #    id_row += 1
+                
+                check_player = []
+                #found_player_stone = False     
+    
+            elif found_player_stone == True and item[0] == player_stone: #!= ' ':
+                check_player.append(item)
+    
+            amount_player_stone = check_player.count(player_stone) 
+    
+            if count == 3:
+    
+                if (check_player) not in list_3_row:
+                    is_three_row = True
+                    list_3_row.append(check_player)
+
+    return list_3_row, is_three_row    
     
     
 
@@ -542,29 +555,44 @@ def check_col(matrix,player1_turn,list_3_col):
     opponent_stone = 'O'
     is_three_col = False
     pre_list_3_col = list_3_col
+    
     if player1_turn == False:
         player_stone = 'O'
         opponent_stone = 'X'
-    for id_col,row in enumerate(transponse_matrix):
+    
+    for row in transponse_matrix:
         check_player = []
         found_player_stone = False
+        count = 0
         for item in row:
-            if item == player_stone:
+            
+            if item[0] == player_stone:
                 found_player_stone = True
-            if item == ' ' or item == opponent_stone or item == '-':
-                if item == ' ':
-                    id_col += 1
+                count += 1
+                
+    
+            if item[0] == ' ' or item[0] == opponent_stone:# or item == '-':
+    
+                #if item == ' ':
+                    #id_col += 1
+                count = 0
                 check_player = []
-                found_player_stone = False     
-            elif found_player_stone == True and item != ' ':
+                #found_player_stone = False     
+
+            elif found_player_stone == True and item[0] == player_stone:
                 check_player.append(item)
+            
+            
+    
             amount_player_stone = check_player.count(player_stone) 
-            if check_player and all(elem ==player_stone or elem == '|' for elem in check_player ) and amount_player_stone == 3:
-                if ([id_col]+check_player) not in list_3_col:
+            
+            if count == 3:
+    
+                if (check_player) not in list_3_col:
                     is_three_col = True
 
-                    list_3_col.append([id_col]+check_player)
- 
+                    list_3_col.append(check_player)
+    
     return list_3_col,is_three_col
                 
 def check_both(matrix,list_3_row,list_3_col,player1_turn):
@@ -577,9 +605,9 @@ def check_both(matrix,list_3_row,list_3_col,player1_turn):
     list_3_row -- list of all the three in a row that has been found
     list_3_col -- list of all the three in a row in a column that has been found
     """        
-    list_3_row,is_three_row = check_row(matrix,player1_turn,list_3_row)
-    list_3_col,is_three_col = check_col(matrix,player1_turn,list_3_col)
-
+    list_3_row, is_three_row = check_row(matrix, player1_turn, list_3_row)
+    list_3_col, is_three_col = check_col(matrix, player1_turn, list_3_col)
+    
 
     if is_three_row == True or is_three_col == True:
         return list_3_row,list_3_col,True
@@ -600,7 +628,7 @@ def plus_list_to_matrix(plus_list,matrix):
     for row in plus_list:
         x = int(row[1]) 
         y = int(row[2])
-        matrix[y][x]= row[0]
+        matrix[y][x]= row
     
     return matrix        
 
@@ -759,12 +787,15 @@ def is_neighbour_a_plus(plus_list,current_row,neighbours,selected_stone_index):
 def remove_old_3(plus_list,current_row,list_3_row,list_3_col):
     current_stone_x = plus_list[current_row][1]
     current_stone_y = plus_list[current_row][2]
-    for row in list_3_row:
-        if current_stone_x == row[0]:
-            list_3_row.remove(row)
-    for col in list_3_col:
-        if current_stone_y == col[0]:
-            list_3_col.remove(col)        
+
+    for r in list_3_row:
+        for row in r:
+            if current_stone_x == row[1] and current_stone_y == row[2] or row[0] == '+':
+                list_3_row.remove(r)
+    for c in list_3_col:
+        for col in c:
+            if current_stone_x == col[1] and current_stone_y == col[2] or col[0] == '+':
+                list_3_col.remove(c)      
 
     return list_3_row,list_3_col
 
@@ -920,7 +951,7 @@ def main(screen,player1_name,player2_name):
 
         elif key == curses.KEY_UP:
             current_row = move_up(plus_list,current_row)
-
+        
         elif key == curses.KEY_ENTER or key in [10, 13]:
             #phase1
             if ((player1_phase == 1 and player1_turn == True) or (player2_phase == 1 and player1_turn == False)) == True:
@@ -928,11 +959,13 @@ def main(screen,player1_name,player2_name):
                 
                 if player_can_act == True and stone_removed == True:
 
-                    stone_marker=which_stone(player1_turn)
-                    plus_list,stone_pool_player1,stone_pool_player2 = place_stone(plus_list,current_row,stone_marker,stone_pool_player1,stone_pool_player2)
+                    stone_marker = which_stone(player1_turn)
+                    plus_list, stone_pool_player1, stone_pool_player2 = place_stone(plus_list, current_row, stone_marker, stone_pool_player1, stone_pool_player2)
                     matrix = plus_list_to_matrix(plus_list,matrix)
                     
-                    list_3_row,list_3_col,has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
+
+                    
+                    list_3_row, list_3_col, has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
                     
                     if has_player_3_row == True:
                         stone_removed = False
@@ -942,9 +975,11 @@ def main(screen,player1_name,player2_name):
                 elif has_player_3_row == True  and stone_removed == False and can_player_remove(plus_list,current_row ,player1_turn)  == True:
                                         
                     plus_list,remaining_stones_player1,remaining_stones_player2= remove_stone_player( plus_list,current_row,player1_turn,remaining_stones_player1,remaining_stones_player2)
-                    #list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
-                    list_3_row = []
-                    list_3_col = []
+                    
+                    
+                    list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
+                    #list_3_row = []
+                    #list_3_col = []
 
                     matrix = plus_list_to_matrix(plus_list,matrix)
                     player1_turn = switch_player_turn(player1_turn)
@@ -959,15 +994,16 @@ def main(screen,player1_name,player2_name):
                     selected_stone_index = get_selected_stone_index(current_row)
                     is_stone_selected = True
                     matrix = plus_list_to_matrix(plus_list,matrix)
+                    list_3_row,list_3_col = remove_old_3(plus_list,selected_stone_index,list_3_row,list_3_col)
 
                 elif  is_stone_selected == True and stone_removed == True:
                     #had to move this if statement inside because selected stone index
                     if is_neighbour_a_plus(plus_list,current_row,neighbours,selected_stone_index) == True:
                         plus_list = move_stone(plus_list,current_row,player1_turn,selected_stone_index)
                         #this makes it too op to just move in and out from a three in a row 
-                        #list_3_row,list_3_col = remove_old_3(plus_list,selected_stone_index,list_3_row,list_3_col)
-                        list_3_row = []
-                        list_3_col = []
+                        list_3_row,list_3_col = remove_old_3(plus_list,selected_stone_index,list_3_row,list_3_col)
+                        #list_3_row = []
+                        #list_3_col = []
                         
                         matrix = plus_list_to_matrix(plus_list,matrix)
                         list_3_row,list_3_col,has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
@@ -981,9 +1017,9 @@ def main(screen,player1_name,player2_name):
                 elif has_player_3_row == True  and stone_removed == False and can_player_remove(plus_list,current_row ,player1_turn)  == True and is_stone_selected == False:
                     plus_list,remaining_stones_player1,remaining_stones_player2= remove_stone_player( plus_list,current_row,player1_turn,remaining_stones_player1,remaining_stones_player2)
                     matrix = plus_list_to_matrix(plus_list,matrix)
-                    #list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
-                    list_3_row = []
-                    list_3_col = []
+                    list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
+                    #list_3_row = []
+                    #list_3_col = []
                     
                     player1_turn = switch_player_turn(player1_turn)
                     stone_removed = True
@@ -1004,9 +1040,9 @@ def main(screen,player1_name,player2_name):
                     if plus_list[current_row][0] == "+":
                         plus_list = move_stone(plus_list,current_row,player1_turn,selected_stone_index)
                         #this makes it too op to just move in and out from a three in a row 
-                        #list_3_row,list_3_col = remove_old_3(plus_list,selected_stone_index,list_3_row,list_3_col)
-                        list_3_row = []
-                        list_3_col = []
+                        list_3_row,list_3_col = remove_old_3(plus_list,selected_stone_index,list_3_row,list_3_col)
+                        #list_3_row = []
+                        #list_3_col = []
                         
                         matrix = plus_list_to_matrix(plus_list,matrix)
 
@@ -1022,9 +1058,9 @@ def main(screen,player1_name,player2_name):
                 elif has_player_3_row == True  and stone_removed == False and can_player_remove(plus_list,current_row ,player1_turn)  == True and is_stone_selected == False:
                     plus_list,remaining_stones_player1,remaining_stones_player2= remove_stone_player( plus_list,current_row,player1_turn,remaining_stones_player1,remaining_stones_player2)
                     matrix = plus_list_to_matrix(plus_list,matrix)
-                    #list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
-                    list_3_row = []
-                    list_3_col = []
+                    list_3_row,list_3_col = remove_old_3(plus_list,current_row,list_3_row,list_3_col)
+                    #list_3_row = []
+                    #list_3_col = []
                     
                     player1_turn = switch_player_turn(player1_turn)
                     stone_removed = True                     
