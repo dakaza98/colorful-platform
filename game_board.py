@@ -769,7 +769,7 @@ def remove_old_3(plus_list,current_row,list_3_row,list_3_col):
     return list_3_row,list_3_col
 
 def check_looser(remaining_stones):
-    if remaining_stones == 0:
+    if remaining_stones <= 2:
         return True
     else:
         return False
@@ -800,6 +800,18 @@ def print_player_move(screen,player1_turn,player1_name,player2_name):
         screen.addstr(text_y,text_x,player2_name.rstrip("\n")+" move a stone to a neighbour!",curses.color_pair(2))
 
  # IS NEIGHBOUR +=!?
+def check_invalid_move(plus_list,matrix,player1_turn):
+    stone_marker = "X"
+    if player1_turn == False:
+        stone_marker = "O"
+    for index,elem in enumerate(plus_list):
+        char = elem[0]
+        if char == stone_marker:
+            neighbours = find_all_neighbours(plus_list,matrix,index)
+            for neighbour in neighbours:
+                if neighbour[0] == "+":
+                    return True 
+    return False
 
 def main(screen,player1_name,player2_name):
     """ The game loop used by curses.
@@ -907,6 +919,16 @@ def main(screen,player1_name,player2_name):
             winner = player1_name
             quit()
         
+
+        if player1_phase == 2 or player2_phase == 2:
+            if check_invalid_move(plus_list,matrix,player1_turn) == False:
+                if player1_turn == True: 
+                    print( player1_name+" lost")
+                else:
+                    print( player2_name+" lost")
+
+                quit()
+                
         key = screen.getch()
         
         if key == curses.KEY_LEFT:  
