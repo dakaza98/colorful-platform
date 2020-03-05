@@ -887,8 +887,9 @@ def main(screen,player1_name,player2_name):
         if stone_removed == False:
             print_player_remove(screen,player1_turn,player1_name,player2_name)
 
-        if is_stone_selected == False and stone_removed == True and (player1_phase == 2 or player2_phase ==2):
-            print_player_move(screen,player1_turn,player1_name,player2_name)
+        if is_stone_selected == False and stone_removed == True:
+            if (player1_phase == 2 and player1_turn == True) or (player2_phase == 2 and player1_turn == False):
+                print_player_move(screen,player1_turn,player1_name,player2_name)
 
         print_map(screen,map_coordinates,stone_pool_player1,stone_pool_player2)            
         print_player_names(screen,player1_name,player2_name)
