@@ -726,20 +726,21 @@ def find_stone_neighbour_row(plus_list,matrix,current_row):
         elem = matrix[current_stone_y][x]
         if elem == " ":
             break
-        elif (elem == "X" or elem == "O" or elem == "+") and x != current_stone_x:
-            neighbours.append([elem,x,current_stone_y])
-
+        elif (elem[0] == "X" or elem[0] == "O" or elem[0] == "+") and x != current_stone_x:
+            neighbours.append([elem[0],x,current_stone_y])
             break
+            
 
     for x in range(current_stone_x,len(row)):
         elem = matrix[current_stone_y][x]
         if elem == " ":
             break
-        elif (elem == "X" or elem == "O" or elem == "+") and x != current_stone_x:
-            neighbours.append([elem,x,current_stone_y])
             
+        elif(elem[0] == "X" or elem == "O" or elem[0] == "+") and x != current_stone_x:
+            neighbours.append([elem[0],x,current_stone_y])
             break
-   
+                
+
     return neighbours                    
 
 
@@ -754,20 +755,21 @@ def find_stone_neighbour_col(plus_list,matrix,current_row):
     for y in reversed(range(0,current_stone_y)):
         elem = matrix[current_stone_x][y]
         if elem == " ":
+            break   
+        
+        elif (elem[0] == "X" or elem[0] == "O" or elem[0] == "+") and y != current_stone_y :
+            neighbours.append([elem[0],current_stone_x,y])
             break
-        elif (elem == "X" or elem == "O" or elem == "+") and y != current_stone_y:
-            neighbours.append([elem,current_stone_x,y])
             
-            break
-
     for y in range(current_stone_y,len(col)):
         elem = matrix[current_stone_x][y]
         if elem == " ":
             break
-        elif (elem == "X" or elem == "O" or elem == "+") and y != current_stone_y:
-            neighbours.append([elem,current_stone_x,y])
 
+        elif (elem[0] == "X" or elem[0] == "O" or elem[0] == "+") and y != current_stone_y:
+            neighbours.append([elem[0],current_stone_x,y])
             break
+            
     return neighbours   
 
 def find_all_neighbours(plus_list,matrix,current_row):
@@ -779,7 +781,9 @@ def find_all_neighbours(plus_list,matrix,current_row):
 def is_neighbour_a_plus(plus_list,current_row,neighbours,selected_stone_index):
     elem = plus_list[current_row]
     selected_stone = plus_list[selected_stone_index]
-      
+    print(elem) 
+    print(selected_stone)
+    print(neighbours)
     if elem[0] == "+" and selected_stone in neighbours:
         return True
     return False    
@@ -1016,14 +1020,17 @@ def main(screen,player1_name,player2_name):
                     selected_stone_index = get_selected_stone_index(current_row)
                     is_stone_selected = True
                     matrix = plus_list_to_matrix(plus_list,matrix)
-                    list_3_row,list_3_col = remove_old_3(plus_list,selected_stone_index,list_3_row,list_3_col)
+                    #list_3_row,list_3_col = remove_old_3(plus_list,selected_stone_index,list_3_row,list_3_col)
 
                 elif  is_stone_selected == True and stone_removed == True:
                     #had to move this if statement inside because selected stone index
                     if is_neighbour_a_plus(plus_list,current_row,neighbours,selected_stone_index) == True:
+                        matrix = plus_list_to_matrix(plus_list,matrix)
+
                         plus_list = move_stone(plus_list,current_row,player1_turn,selected_stone_index)
                         #this makes it too op to just move in and out from a three in a row 
                         list_3_row,list_3_col = remove_old_3(plus_list,selected_stone_index,list_3_row,list_3_col)
+                        print("hej",)
                         #list_3_row = []
                         #list_3_col = []
                         
@@ -1062,6 +1069,7 @@ def main(screen,player1_name,player2_name):
                     if plus_list[current_row][0] == "+":
                         plus_list = move_stone(plus_list,current_row,player1_turn,selected_stone_index)
                         #this makes it too op to just move in and out from a three in a row 
+                            
                         list_3_row,list_3_col = remove_old_3(plus_list,selected_stone_index,list_3_row,list_3_col)
                         #list_3_row = []
                         #list_3_col = []
