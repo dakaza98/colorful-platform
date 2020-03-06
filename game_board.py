@@ -1030,7 +1030,6 @@ def main(screen,player1_name,player2_name):
                         plus_list = move_stone(plus_list,current_row,player1_turn,selected_stone_index)
                         #this makes it too op to just move in and out from a three in a row 
                         list_3_row,list_3_col = remove_old_3(plus_list,selected_stone_index,list_3_row,list_3_col)
-                        print("hej",)
                         #list_3_row = []
                         #list_3_col = []
                         
@@ -1038,11 +1037,11 @@ def main(screen,player1_name,player2_name):
                         list_3_row,list_3_col,has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
                         is_stone_selected = False
             
-                    if has_player_3_row == True:
-                        stone_removed = False
-                    elif is_stone_selected == False:
-                        player1_turn = switch_player_turn(player1_turn)
-                        
+                        if has_player_3_row == True:
+                            stone_removed = False
+                        elif is_stone_selected == False:
+                            player1_turn = switch_player_turn(player1_turn)
+                            
                 elif has_player_3_row == True  and stone_removed == False and can_player_remove(plus_list,current_row ,player1_turn)  == True and is_stone_selected == False:
                     plus_list,remaining_stones_player1,remaining_stones_player2= remove_stone_player( plus_list,current_row,player1_turn,remaining_stones_player1,remaining_stones_player2)
                     matrix = plus_list_to_matrix(plus_list,matrix)
@@ -1079,10 +1078,10 @@ def main(screen,player1_name,player2_name):
                         list_3_row,list_3_col,has_player_3_row = check_both(matrix,list_3_row,list_3_col,player1_turn)
                         is_stone_selected = False
             
-                    if has_player_3_row == True:
-                        stone_removed = False
-                    elif is_stone_selected == False:
-                        player1_turn = switch_player_turn(player1_turn)
+                        if has_player_3_row == True:
+                            stone_removed = False
+                        elif is_stone_selected == False:
+                            player1_turn = switch_player_turn(player1_turn)
 
                         
                 elif has_player_3_row == True  and stone_removed == False and can_player_remove(plus_list,current_row ,player1_turn)  == True and is_stone_selected == False:
