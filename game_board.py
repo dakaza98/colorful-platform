@@ -784,6 +784,7 @@ def is_neighbour_a_plus(plus_list,current_row,neighbours,selected_stone_index):
     print(elem) 
     print(selected_stone)
     print(neighbours)
+    print(plus_list)
     if elem[0] == "+" and selected_stone in neighbours:
         return True
     return False    
@@ -1020,7 +1021,7 @@ def main(screen,player1_name,player2_name):
                     selected_stone_index = get_selected_stone_index(current_row)
                     is_stone_selected = True
                     matrix = plus_list_to_matrix(plus_list,matrix)
-                    #list_3_row,list_3_col = remove_old_3(plus_list,selected_stone_index,list_3_row,list_3_col)
+                    list_3_row,list_3_col = remove_old_3(plus_list,selected_stone_index,list_3_row,list_3_col)
 
                 elif  is_stone_selected == True and stone_removed == True:
                     #had to move this if statement inside because selected stone index
