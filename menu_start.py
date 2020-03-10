@@ -152,9 +152,12 @@ def main(screen):
     start1 = startMenu(screen)
     curses.curs_set(0)
 
-    start1.current_row = 1
     #curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
     curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+
+    curses.init_pair(3,curses.COLOR_RED,curses.COLOR_BLACK)
+    # color scheme for player2
+    curses.init_pair(2,curses.COLOR_YELLOW,curses.COLOR_BLACK)  
 
     start1.print_menu(start1.current_row)
   
@@ -171,10 +174,10 @@ def main(screen):
                 start1.current_CHOICE = start1.CHOICE_START
                 start1.screen.clear()
                 start1.ask_for_player_names()
-            
+
                 #starts the game
-                game_board.main(start1.screen,start1.player1_name,start1.player2_name)
-                #board_map.board_map(self.screen).runMap()
+                #game_board.main(start1.screen,start1.player1_name,start1.player2_name)
+                Board_map.runMap(start1.screen)
                 break
             elif start1.menu[start1.current_row] == start1.CHOICE_QUIT:
                 start1.current_CHOICE = start1.CHOICE_QUIT
