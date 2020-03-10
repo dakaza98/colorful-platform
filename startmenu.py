@@ -1,7 +1,9 @@
 import curses
 import time
 
-import game_board
+#import game_board
+import Board_map
+from game_loop import * 
 from curses.textpad import Textbox
 
 
@@ -16,6 +18,7 @@ enter_keys = [curses.KEY_ENTER, 10, 13]
 title = open('title.txt', 'r')
 titletext = title.read()
 title.close()
+screen = curses.initscr()
 
 def print_menu_title(screen):
     """Reads the menu title from a text file and prints it to
@@ -24,7 +27,6 @@ def print_menu_title(screen):
     Keyword arguments:
     screen -- the curses screen
     """
-
     splitted_title = titletext.split("\n")
     first_line = splitted_title[0]
 
@@ -158,7 +160,8 @@ def main(screen):
                 player1_name, player2_name = ask_for_player_names(screen)
 
                 #starts the game
-                game_board.main(screen,player1_name,player2_name)
+                #game_board.main(screen,player1_name,player2_name)
+                Board_map.board_map(screen).runMap()
                 break
             elif menu[current_row] == CHOICE_QUIT:
                 break
