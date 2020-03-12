@@ -335,10 +335,10 @@ class player:
         #position of text 
         text_x = 1  + w//3 
         text_y = 2
-        
-        if len(  self.player_name) ==0:
-            self.player_name = "Player" + str(self.player_num) 
-        self.screen.addstr(text_y,text_x,self.player_name.rstrip("\n")+" move a stone to a neighbour!",curses.color_pair(3))
+        player_txt = self.player_name
+        if len(  player_txt) ==0:
+            player_txt = "Player" + str(self.player_num) 
+        self.screen.addstr(text_y,text_x,player_txt.rstrip("\n")+" move a stone to a neighbour!",curses.color_pair(3))
        
     def can_player_remove(self,plus_list):
         """Determines if a player can remove a stone
@@ -445,21 +445,4 @@ class player:
         if elem[0] == "+" and selected_stone in neighbours:
             return True
         return False    
-
-    def remove_old_3(self,plus_list,players):
-        current_stone_x = plus_list[self.move_index][1]
-        current_stone_y = plus_list[self.move_index][2]
-        OtherPlayer = players[1] # annars tar man bort sin egen 3 i rad list lol
-        if self.player_num == 2:
-            OtherPlayer = players[0]
-
-        for r in OtherPlayer.list_3_row:
-            for row in r:
-                if current_stone_x == row[1] and current_stone_y == row[2] or row[0] == '+':
-                    OtherPlayer.list_3_row.remove(r)
-                    
-        for c in self.list_3_col:
-            for col in c:
-                if current_stone_x == col[1] and current_stone_y == col[2] or col[0] == '+':
-                    OtherPlayer.list_3_col.remove(c)      
 

@@ -531,6 +531,7 @@ def check_row(matrix, player1_turn, list_3_row):
             amount_player_stone = check_player.count(player_stone) 
     
             if count == 3:
+                
     
                 if (check_player) not in list_3_row:
                     is_three_row = True

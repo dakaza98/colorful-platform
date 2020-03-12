@@ -98,6 +98,12 @@ def main(screen):
         if is_stone_selected == False and stone_removed == True and _player.phase == 2:
             _player.print_player_move()
 
+        _player.switch_to_phase()
+        _player.check_looser()            
+        if _player.lose:
+            winner = player2_name
+            print("hej")
+            quit()        
         map_board.print_map()
         map_board.print_player_names(player1,player2)
         map_board.print_choice(_player)
@@ -107,12 +113,7 @@ def main(screen):
         map_board.screen.refresh()    
         
         # switch phases should maybe be done is a different way    
-        _player.switch_to_phase()
-        _player.check_looser()            
-        if _player.lose:
-            winner = player2_name
-            print("hej")
-            quit()             
+     
     
         map_board.stone_list_to_matrix()
 
@@ -160,6 +161,8 @@ def main(screen):
                     _player,PlayerNumber = switch_turn(players,PlayerNumber)
 
                     stone_removed = True
+
+            
             #phase 2
             """
             elif ((player1_phase == 2 and player1_turn == True) or (player2_phase == 2 and player1_turn == False)) == True:
