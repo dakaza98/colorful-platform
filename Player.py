@@ -1,6 +1,8 @@
 import os
 import curses
 import numpy as np
+import itertools
+
 #color scheme for player1
 
 
@@ -20,7 +22,7 @@ class player:
         self.lose = False
         self.screen = screen
         self.turn = False
-     
+        self.neighbours = []
         self.has_3_in_row = False # if this is True player has 3 in a row
 
     
@@ -30,9 +32,16 @@ class player:
         
         self.turn = not (self.turn)
 
-    def set_selected_stone_index(self,selected_stone_index):
-        self.selected_stone_index = selected_stone_index
+    def set_selected_stone_index(self):
+        self.selected_stone_index = self.move_index
 
+    def get_selected_stone_index(self):
+        self.set_selected_stone_index()
+        return self.selected_stone_index    
+
+    def get_neighbours(self):
+        
+        return self.neighbours
 
     def print_player_stone_pool(self):
         h,w = self.screen.getmaxyx()
@@ -65,16 +74,18 @@ class player:
         else:
             self.lose = False 
 
-    def has_player_lost(self,plus_list,matrix,player1_turn):
+    def has_player_lost(self,plus_list,matrix):
         self.check_looser()
         for index,elem in enumerate(plus_list):
             char = elem[0]
             if char == self.stone_marker:
-                neighbours = find_all_neighbours(plus_list,matrix,index)
-                for neighbour in neighbours:
+                self.find_all_neighbours(plus_list,matrix)
+                for neighbour in self.neighbours:
                     if neighbour[0] == "+":
-                        self.lose = True 
-        self.lose = False
+                        self.lose = False
+                        return 
+        self.lose = True
+        return
 
     def move_down(self,plus_list):
         """ Finds the "+" char that is above self.move_index. If the current "+" char is at a coordinate that
@@ -338,7 +349,7 @@ class player:
         player_txt = self.player_name
         if len(  player_txt) ==0:
             player_txt = "Player" + str(self.player_num) 
-        self.screen.addstr(text_y,text_x,player_txt.rstrip("\n")+" move a stone to a neighbour!",curses.color_pair(3))
+        self.screen.addstr(text_y,text_x,player_txt.rstrip("\n")+" move a stone to a neighbour!",curses.color_pair(self.player_color))
        
     def can_player_remove(self,plus_list):
         """Determines if a player can remove a stone
@@ -357,15 +368,15 @@ class player:
             return True
         return False        
 
-    def can_player_move_stone(self,plus_list,neighbours):
+    def can_player_move_stone(self,plus_list):
         stone_marker = "X"
         if self.stone_marker == "O":
             stone_marker = "O"
         current_stone_y = plus_list[self.move_index][2]
         current_stone_x = plus_list[self.move_index][1]
-        if neighbours == None and plus_list[self.move_index][0] == stone_marker:
+        if self.phase == 3 and plus_list[self.move_index][0] == stone_marker:
             return True
-        elif plus_list[self.move_index][0] == stone_marker and "+" in itertools.chain( *neighbours):
+        elif plus_list[self.move_index][0] == stone_marker and "+" in itertools.chain( *self.neighbours):
                 return True
         return False
     
@@ -433,16 +444,17 @@ class player:
         return neighbours   
 
     def find_all_neighbours(self,plus_list,matrix):
-        neighbour_row  = self.find_stone_neighbour_row(plus_list,matrix,self.move_index)
-        neighbour_col = self.find_stone_neighbour_col(plus_list,matrix,self.move_index)
-        neighbours = neighbour_row + neighbour_col
-        self.neighbours 
+        neighbour_row  = self.find_stone_neighbour_row(plus_list,matrix)
+        neighbour_col = self.find_stone_neighbour_col(plus_list,matrix)
+        all_neighbours = neighbour_row + neighbour_col
+        self.neighbours = all_neighbours
 
-    def is_neighbour_a_plus(self,plus_list,neighbours):
+    def is_neighbour_a_plus(self,plus_list):
         elem = plus_list[self.move_index]
         selected_stone = plus_list[self.selected_stone_index]
-        
-        if elem[0] == "+" and selected_stone in neighbours:
+        if elem[0] == "+" and self.phase ==3:
+            return True
+        elif elem[0] == "+" and selected_stone in self.neighbours and self.phase == 2:
             return True
         return False    
 

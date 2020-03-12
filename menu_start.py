@@ -16,8 +16,10 @@ class startMenu:
     def __init__(self,screen):
         self.CHOICE_START = "start"
         self.CHOICE_QUIT = "quit"
+        self.CHOICE_SINGLE = "single player"
+        self.CHOICE_TOURNAMENT = "tournament"
         self.current_CHOICE = ""
-        self.menu = ["start", "quit"] 
+        self.menu = [self.CHOICE_START,self.CHOICE_SINGLE,self.CHOICE_TOURNAMENT,self.CHOICE_QUIT] 
         self.screen = screen
         self.title_txt = ""
         self.color = 1
