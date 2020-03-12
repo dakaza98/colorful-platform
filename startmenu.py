@@ -1,9 +1,8 @@
 import curses
 import time
 
-#import game_board
-import Board_map
-from game_loop import * 
+import game_board
+
 from curses.textpad import Textbox
 
 
@@ -160,8 +159,8 @@ def main(screen):
                 player1_name, player2_name = ask_for_player_names(screen)
 
                 #starts the game
-                #game_board.main(screen,player1_name,player2_name)
-                Board_map.board_map(screen).runMap()
+                game_board.main(screen,player1_name,player2_name)
+                #Board_map.board_map(screen).runMap()
                 break
             elif menu[current_row] == CHOICE_QUIT:
                 break

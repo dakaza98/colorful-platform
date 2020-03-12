@@ -4,7 +4,7 @@ import time
 import numpy as np 
 import itertools
 import Player
-
+import game_board #fking curses color pairs
 
 class board_map:
     def __init__(self,screen):
@@ -33,6 +33,14 @@ class board_map:
             
             raise Exception("Can not find the file at this path => "+ self.map_path)
 
+    def set_stone_pos_list(self,new_list):
+        self.stone_pos_list = new_list    
+
+    def get_stone_pos_list(self):
+        return self.stone_pos_list
+        
+    def get_matrix(self):
+        return self.matrix
     def convert_map_to_coordinates(self):
         """
         Converts the string version of the map to coordinates
@@ -43,7 +51,7 @@ class board_map:
         Keyword arguments:
         str_board -- the string version of the map
         """
-    
+        self.read_map()
         self.matrix = [[x for x in line] for line in self.board_txt.split('\n')]
 
         y = 0
@@ -65,7 +73,26 @@ class board_map:
             if cord[0] == "+":
                 self.stone_pos_list.append([cord[0],int(cord[1]),int(cord[2])])
 
+    def print_player_names(self,player1,player2):
+        """Prints the playernames in the self.screen 
+
+        Keyword arguments:
+        self.screen -- the curses self.screen
+        player1_name -- player1 name as string
+        player2_name -- player2 name as string
+        """
+        h,w = self.screen.getmaxyx()
         
+        player1_name_x = -10 + w//3   
+        player1_name_y = 4
+        self.screen.addstr(player1_name_y,player1_name_x,"Player"+str(player1.player_num ),curses.color_pair(player1.player_color))
+        self.screen.addstr(player1_name_y+1,player1_name_x,player1.player_name,curses.color_pair(player1.player_color))       
+        
+        player2_name_x = 29  + w//3 
+        player2_name_y = 4
+        self.screen.addstr(player2_name_y,player2_name_x,"Player"+str(player2.player_num),curses.color_pair(player2.player_color))
+        self.screen.addstr(player2_name_y+1,player2_name_x,player2.player_name,curses.color_pair(player2.player_color))
+      
     def which_color_pair(self,stone_marker):
         """Picks a which color that will be choosed for the stone,
         depening if its an "O" or "x" 
@@ -111,18 +138,19 @@ class board_map:
     
     def print_player_stone_pool(self,players):
         h,w = self.screen.getmaxyx()
-        stone_pool_player_x = -9 + w//3   
-        stone_pool_player_y = 9
-        if self.player_num == 2:
-            stone_pool_player_x = 30  + w//3 
-            stone_pool_player_y = 9
+    
         
         for player in players:
-            for i in range(self.stone_pool):
+            stone_pool_player_x = -9 + w//3   
+            stone_pool_player_y = 9
+            if player.player_num == 2:
+                stone_pool_player_x = 30  + w//3 
+                stone_pool_player_y = 9
+            for i in range(player.stone_pool):
 
-                self.screen.addstr(stone_pool_player_y+i,stone_pool_player_x,player.stone_marker,curses.color_pair(player.color))
+                self.screen.addstr(stone_pool_player_y+i,stone_pool_player_x,player.stone_marker,curses.color_pair(player.player_color))
     def print_phase(self,player):
-            h,w = screen.getmaxyx()
+            h,w = self.screen.getmaxyx()
 
             #To place the game board in the center of the window  
          
@@ -130,7 +158,7 @@ class board_map:
             #print phase
             phase_txt_y =  4
             phase_txt_x =  6 + w//3
-            self.screen.addstr(phase_txt_y,phase_txt_x,"Phase: "+str(player.phase),curses.color_pair(player.color))
+            self.screen.addstr(phase_txt_y,phase_txt_x,"Phase: "+str(player.phase),curses.color_pair(player.player_color))
 
     def print_remaining_stone(self,players):
         """Prints the amount of stones left for player1 and player2 at the left and right side of the board
@@ -140,20 +168,20 @@ class board_map:
         remaining_stones_player1 = the total amount of stones for player1
         remaining_stones_player2 = the total amount of stones for player2
         """
-        h,w = screen.getmaxyx()
+        h,w = self.screen.getmaxyx()
         for player in players:
         #Positions of the text showing the remaining stones for player1 ¨
             if player.player_num == 1:
                 remaining_stones_player1_x = -22 + w//3   
                 remaining_stones_player1_y = 7
-                screen.addstr(remaining_stones_player1_y,remaining_stones_player1_x,"Remaining stones: "+str(player.remaining_stones),curses.color_pair(player.color))
+                self.screen.addstr(remaining_stones_player1_y,remaining_stones_player1_x,"Remaining stones: "+str(player.remaining_stones),curses.color_pair(player.player_color))
 
             #Positions of the text showing the remaining stones for player2 
             remaining_stones_player2_x = 30 + w//3   
             remaining_stones_player2_y = 7
-            screen.addstr(remaining_stones_player2_y,remaining_stones_player2_x,"Remaining stones: "+str(player.remaining_stones),curses.color_pair(player.color))
+            self.screen.addstr(remaining_stones_player2_y,remaining_stones_player2_x,"Remaining stones: "+str(player.remaining_stones),curses.color_pair(player.player_color))
 
-    def print_choice(self,players):
+    def print_choice(self,player):
         """Prints all plusses in plus_list on the screen. The currently selected plus is colored.
 
         Keyword arguments:
@@ -162,29 +190,35 @@ class board_map:
         plus_list -- the lists of all the "+" and their positions
         player1_turn -- bool,True for player1  and False for player2
         """    
-        h, w = self.screen.getmaxyx()
-        for player in players:
-            for idx, row in enumerate(self.stone_pos_list):
+        curses.init_pair(4, curses.COLOR_BLACK, curses.COLOR_YELLOW)
 
-                # To have  the game board in the center, 5 is added y and w//3 is added to x
-                y = int(row[2])+ 9
-                x = int(row[1]) +  w//3      
-                color =self.which_color_pair(row[0])
-                if idx == player.move_index:
-                    color_cursor = 1
-                    #cursor will now have the player colors
-                    if player.player_num == 2:
-                        color_cursor = 4
-                    self.screen.attron(curses.color_pair(color_cursor))
-                    self.screen.addstr(y,x, row[0])
-                    self.screen.attroff(curses.color_pair(color_cursor))
-                else:
-                    self.screen.addstr(y, x, row[0],curses.color_pair(color))
-                    
-            
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_RED)
+
+
+        h, w = self.screen.getmaxyx()
+        for idx, row in enumerate(self.stone_pos_list):
+
+            # To have  the game board in the center, 5 is added y and w//3 is added to x
+            y = int(row[2])+ 9
+            x = int(row[1]) +  w//3      
+            color =self.which_color_pair(row[0])
+            if idx == player.move_index:
+                color_cursor = 1
+                #cursor will now have the player colors
+                if player.player_num == 2:
+                    print("hej")
+                    color_cursor = 4
+                print(color_cursor)    
+                self.screen.attron(curses.color_pair(color_cursor))
+                self.screen.addstr(y,x, row[0])
+                self.screen.attroff(curses.color_pair(color_cursor))
+            else:
+                self.screen.addstr(y, x, row[0],curses.color_pair(color))
+                
+        
     
     
-    def plus_list_to_matrix(self):
+    def stone_list_to_matrix(self):
         """Converts plus_list to a matrix
     
         Returns: matrix
@@ -213,12 +247,14 @@ class board_map:
         #position of text 
         text_x = 4  + w//3 
         text_y = 1
-        
-       
+        player_name_txt = player.player_name
+
+        if len(player.player_name) == 0:
+            player_name_txt = "Player" + str(player.player_num)     
   
-        self.screen.addstr(text_y,text_x,player.player_name.rstrip("\n")+" will start!",curses.color_pair(player.player_color))
+        self.screen.addstr(text_y,text_x,player_name_txt.rstrip("\n")+" will start!",curses.color_pair(player.player_color))
 
-
+"""
 def runMap(screen):
     
     board_map1 = board_map(screen)
@@ -250,3 +286,4 @@ def runMap(screen):
     time.sleep(3)
     quit()
 
+"""

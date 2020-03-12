@@ -25,6 +25,7 @@ class startMenu:
         self.player2_name = ""
         self.enter_keys = [curses.KEY_ENTER, 10, 13]
         self.current_row = 0
+        self.is_menu_finished = False
    
     def read_title(self):
         title = open('title.txt', 'r')
@@ -46,9 +47,13 @@ class startMenu:
 
         for index, line in enumerate(splitted_title):
             self.screen.addstr(index + top_margin, x, splitted_title[index])
-    
+   
+    def get_is_menu_finished(self):
+        return self.is_menu_finished
+   
     def get_menu_choice(self):
         return self.cu
+   
     def print_menu(self, selected_row_index):
         """Prints the menu to the self.screen.
 
@@ -137,54 +142,54 @@ class startMenu:
         self.screen.refresh()
 
 
-screen_1 = curses.initscr()
-curses.start_color()
 
-def main(screen):
+
+    def runMenu(self):
+        
+        """The menu loop used by curses.
+
+        Keyword arguments:
+        self.screen -- the curses self.screen
+        """
+        # Disable blinking cursor
+
+        curses.curs_set(0)
+
+        #curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+
+        curses.init_pair(3,curses.COLOR_RED,curses.COLOR_BLACK)
+        # color scheme for player2
+        curses.init_pair(2,curses.COLOR_YELLOW,curses.COLOR_BLACK)  
+
+        self.print_menu(self.current_row)
     
-    """The menu loop used by curses.
+    
 
-    Keyword arguments:
-    self.screen -- the curses self.screen
-    """
-    # Disable blinking cursor
+        while True:
+            pressed_key = self.screen.getch()
+            if pressed_key == curses.KEY_UP and self.current_row > 0:
+                self.current_row -= 1
+            elif pressed_key == curses.KEY_DOWN and self.current_row < len(self.menu) - 1:
+                self.current_row += 1
+            elif pressed_key in self.enter_keys:
+                if self.menu[self.current_row] == self.CHOICE_START:
+                    self.current_CHOICE = self.CHOICE_START
+                    self.screen.clear()
+                    self.ask_for_player_names()
 
-    start1 = startMenu(screen)
-    curses.curs_set(0)
+                    #starts the game
+                    #game_board.main(self.screen,self.player1_name,self.player2_name)
+                    self.is_menu_finished = True
+                    break
+                elif self.menu[self.current_row] == self.CHOICE_QUIT:
+                    self.current_CHOICE = self.CHOICE_QUIT
+                    quit() #just for now
+                    break
 
-    #curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
-    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+            self.print_menu(self.current_row)
 
-    curses.init_pair(3,curses.COLOR_RED,curses.COLOR_BLACK)
-    # color scheme for player2
-    curses.init_pair(2,curses.COLOR_YELLOW,curses.COLOR_BLACK)  
-
-    start1.print_menu(start1.current_row)
-  
-   
-
-    while True:
-        pressed_key = start1.screen.getch()
-        if pressed_key == curses.KEY_UP and start1.current_row > 0:
-            start1.current_row -= 1
-        elif pressed_key == curses.KEY_DOWN and start1.current_row < len(start1.menu) - 1:
-            start1.current_row += 1
-        elif pressed_key in start1.enter_keys:
-            if start1.menu[start1.current_row] == start1.CHOICE_START:
-                start1.current_CHOICE = start1.CHOICE_START
-                start1.screen.clear()
-                start1.ask_for_player_names()
-
-                #starts the game
-                #game_board.main(start1.screen,start1.player1_name,start1.player2_name)
-                Board_map.runMap(start1.screen)
-                break
-            elif start1.menu[start1.current_row] == start1.CHOICE_QUIT:
-                start1.current_CHOICE = start1.CHOICE_QUIT
-                break
-
-        start1.print_menu(start1.current_row)
-
-
+"""
 if __name__ == "__main__": 
     curses.wrapper(main)
+"""
