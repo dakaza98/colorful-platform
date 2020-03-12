@@ -14,6 +14,14 @@ class board_map:
         self.map_path = map_path = 'Ascii_board.txt'
         self.map_coordinates = []
         self.screen = screen
+        self.is_three_row = False # this check for row
+        self.is_three_col = False #this check for col
+
+        self.list_3_row = []
+        self.list_3_col = []
+
+    
+        self.neighbours = []
        
     def read_map(self):
         """
@@ -32,6 +40,145 @@ class board_map:
         except IOError:
             
             raise Exception("Can not find the file at this path => "+ self.map_path)
+    
+    def check_row(self,player):
+        """Checks if the game board has three of the same stones in a row vertically.
+        
+        Returns self.list_3_row and is_three_row -- bool, will be True if a new three in a row has been found  
+        Keyword arguments:
+        matrix -- the matrix of the board
+        player1_turn -- bool, True is player1 turn and False is player2 turn    
+        self.list_3_row -- list of all the three in a row that has been found
+        """
+        player_stone = player.stone_marker
+        opponent_stone = 'O'
+        is_three_row = False
+        
+        if player.stone_marker == 'O':
+            opponent_stone = 'X'
+        
+        for row in (self.matrix):
+            check_player = []
+            found_player_stone = False
+            count = 0
+
+            for item in row:
+                
+                if item[0] == player_stone:
+                    found_player_stone = True
+                    count += 1
+        
+                if item[0] == ' ' or item[0] == opponent_stone:# or item[0] == '|':
+                    count = 0
+                    #if item == ' ':
+                    #    id_row += 1
+                    
+                    check_player = []
+                    #found_player_stone = False     
+        
+                elif found_player_stone == True and item[0] == player_stone: #!= ' ':
+                    check_player.append(item)
+        
+                amount_player_stone = check_player.count(player_stone) 
+        
+                if count == 3:
+        
+                    if (check_player) not in self.list_3_row:
+                        self.is_three_row = True
+                        self.list_3_row.append(check_player)
+                        return
+        self.is_three_row = False
+    
+
+                 
+    def check_col(self,player):
+        """Checks if the game board has three of the same stones in a row horizontally.
+        
+        Returns self.list_3_col  and is_three_column -- bool, will be True if a new three in a row in a column has been found  
+        Keyword arguments:
+        matrix -- the matrix of the board
+        player1_turn -- bool, True is player1 turn and False is player2 turn    
+        self.list_3_col -- list of all the three in a row in a column that has been found
+        """    
+        transponse_matrix = np.transpose(self.matrix)
+        player_stone = player.stone_marker
+        opponent_stone = 'O'
+        
+        
+        
+        if player.stone_marker == 'O':
+            opponent_stone = 'X'
+        
+        for row in transponse_matrix:
+            check_player = []
+            found_player_stone = False
+            count = 0
+            for item in row:
+                
+                if item[0] == player_stone:
+                    found_player_stone = True
+                    count += 1
+                    
+        
+                if item[0] == ' ' or item[0] == opponent_stone:# or item == '-':
+        
+                    #if item == ' ':
+                        #id_col += 1
+                    count = 0
+                    check_player = []
+                    #found_player_stone = False     
+
+                elif found_player_stone == True and item[0] == player_stone:
+                    check_player.append(item)
+                
+                
+        
+                amount_player_stone = check_player.count(player_stone) 
+                
+                if count == 3:
+        
+                    if (check_player) not in self.list_3_col:
+                        self.is_three_col = True
+
+                        self.list_3_col.append(check_player)
+                        return
+        self.is_three_col = False
+
+
+    def check_both(self,player):
+        """Checks if the game board has three of the same stones in a row either vertically or horizontally.
+        
+        Returns  self.list_3_row ,self.list_3_col,bool which will be True if a new three in a row has been found  
+        Keyword arguments:
+        matrix -- the matrix of the board
+        player1_turn -- bool, True is player1 turn and False is player2 turn
+        self.list_3_row -- list of all the three in a row that has been found
+        self.list_3_col -- list of all the three in a row in a column that has been found
+        """        
+        self.check_row(player)
+        self.check_col(player)
+        
+
+        if self.is_three_row == True or self.is_three_col == True:
+            player.has_3_in_row = True
+        else:
+            player.has_3_in_row = False
+
+
+    def remove_old_3(self,player):
+        current_stone_x = self.stone_pos_list[player.move_index][1]
+        current_stone_y = self.stone_pos_list[player.move_index][2]
+     
+        for r in self.list_3_row:
+            for row in r:
+                if current_stone_x == row[1] and current_stone_y == row[2] or row[0] == '+':
+                    self.list_3_row.remove(r)
+                    
+        for c in self.list_3_col:
+            for col in c:
+                if current_stone_x == col[1] and current_stone_y == col[2] or col[0] == '+':
+                    self.list_3_col.remove(c)      
+
 
     def set_stone_pos_list(self,new_list):
         self.stone_pos_list = new_list    

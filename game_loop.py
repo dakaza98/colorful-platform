@@ -18,7 +18,8 @@ def switch_turn(players,playerNumber):
         return players[1],playerNumber
     elif playerNumber == 1:
         playerNumber =0
-        return players[0],playerNumber    
+        return players[0],playerNumber
+
 
 def main(screen):
     """ The game loop used by curses.
@@ -66,7 +67,6 @@ def main(screen):
     map_board.convert_map_to_coordinates()
     map_board.make_stone_list()
     map_board.stone_list_to_matrix()
-    print(map_board.stone_pos_list)
     
 
     #_player list
@@ -116,7 +116,6 @@ def main(screen):
     
         map_board.stone_list_to_matrix()
 
-        print(PlayerNumber)
                 
         key = screen.getch()
     
@@ -137,26 +136,25 @@ def main(screen):
             if (_player.phase == 1):
                 
                 if _player.can_player_act(map_board.stone_pos_list) == True and stone_removed == True:
-                    print(map_board.stone_pos_list)
                     new_stone_list = _player.place_stone(map_board.get_stone_pos_list())
                     map_board.set_stone_pos_list(new_stone_list)
                     map_board.stone_list_to_matrix()
-                    print(map_board.stone_pos_list)
                     
-                    _player.check_both(map_board.get_matrix())
+                    map_board.check_both(_player)
                     
-                    
+                    print(_player.has_3_in_row)
                     if _player.has_3_in_row  == True:
                         stone_removed = False
                     else:
-                        print("lol")
                         _player,PlayerNumber = switch_turn(players,PlayerNumber)
                 elif _player.has_3_in_row  == True  and stone_removed == False and _player.can_player_remove(map_board.stone_pos_list)  == True:
                                         
-                    map_board.set_stone_pos_list(_player.remove_stone_player(map_board.stone_pos_list))
                     
+                    new_stone_list = _player.remove_stone_player(map_board.get_stone_pos_list(),players)
+                    map_board.set_stone_pos_list(new_stone_list)
+                    map_board.stone_list_to_matrix()
                     
-                    _player.remove_old_3(map_board.stone_pos_list)
+                    map_board.remove_old_3(_player)
                     #list_3_row = []
                     #list_3_col = []
                     _player,PlayerNumber = switch_turn(players,PlayerNumber)

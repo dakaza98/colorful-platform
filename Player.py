@@ -20,13 +20,11 @@ class player:
         self.lose = False
         self.screen = screen
         self.turn = False
-        self.is_three_row = False # this check for row
-        self.is_three_col = False #this check for col
+     
         self.has_3_in_row = False # if this is True player has 3 in a row
 
-        self.list_3_row = []
-        self.list_3_col = []
-        self.neighbours = []
+    
+    
 
     def switch_player_turn(self):
         
@@ -228,144 +226,7 @@ class player:
 
 
 
-    def check_row(self,matrix):
-        """Checks if the game board has three of the same stones in a row vertically.
-        
-        Returns self.list_3_row and is_three_row -- bool, will be True if a new three in a row has been found  
-        Keyword arguments:
-        matrix -- the matrix of the board
-        player1_turn -- bool, True is player1 turn and False is player2 turn    
-        self.list_3_row -- list of all the three in a row that has been found
-        """
-        player_stone = self.stone_marker
-        opponent_stone = 'O'
-        is_three_row = False
-        
-        if self.stone_marker == 'O':
-            player_stone = self.stone_marker
-            opponent_stone = 'X'
-        
-        for row in (matrix):
-            check_player = []
-            found_player_stone = False
-            count = 0
 
-            for item in row:
-                
-                if item[0] == player_stone:
-                    found_player_stone = True
-                    count += 1
-        
-                if item[0] == ' ' or item[0] == opponent_stone:# or item[0] == '|':
-                    count = 0
-                    #if item == ' ':
-                    #    id_row += 1
-                    
-                    check_player = []
-                    #found_player_stone = False     
-        
-                elif found_player_stone == True and item[0] == player_stone: #!= ' ':
-                    check_player.append(item)
-        
-                amount_player_stone = check_player.count(player_stone) 
-        
-                if count == 3:
-        
-                    if (check_player) not in self.list_3_row:
-                        self.is_three_row = True
-                        self.list_3_row.append(check_player)
-
-       
-    
-
-                 
-    def check_col(self,matrix):
-        """Checks if the game board has three of the same stones in a row horizontally.
-        
-        Returns self.list_3_col  and is_three_column -- bool, will be True if a new three in a row in a column has been found  
-        Keyword arguments:
-        matrix -- the matrix of the board
-        player1_turn -- bool, True is player1 turn and False is player2 turn    
-        self.list_3_col -- list of all the three in a row in a column that has been found
-        """    
-        transponse_matrix = np.transpose(matrix)
-        player_stone = self.stone_marker
-        opponent_stone = 'O'
-        
-        
-        
-        if self.stone_marker == 'O':
-            player_stone = self.stone_marker
-            opponent_stone = 'X'
-        
-        for row in transponse_matrix:
-            check_player = []
-            found_player_stone = False
-            count = 0
-            for item in row:
-                
-                if item[0] == player_stone:
-                    found_player_stone = True
-                    count += 1
-                    
-        
-                if item[0] == ' ' or item[0] == opponent_stone:# or item == '-':
-        
-                    #if item == ' ':
-                        #id_col += 1
-                    count = 0
-                    check_player = []
-                    #found_player_stone = False     
-
-                elif found_player_stone == True and item[0] == player_stone:
-                    check_player.append(item)
-                
-                
-        
-                amount_player_stone = check_player.count(player_stone) 
-                
-                if count == 3:
-        
-                    if (check_player) not in self.list_3_col:
-                        self.is_three_col = True
-
-                        self.list_3_col.append(check_player)
-        
-        
-    def check_both(self,matrix):
-        """Checks if the game board has three of the same stones in a row either vertically or horizontally.
-        
-        Returns  self.list_3_row ,self.list_3_col,bool which will be True if a new three in a row has been found  
-        Keyword arguments:
-        matrix -- the matrix of the board
-        player1_turn -- bool, True is player1 turn and False is player2 turn
-        self.list_3_row -- list of all the three in a row that has been found
-        self.list_3_col -- list of all the three in a row in a column that has been found
-        """        
-        self.check_row(matrix)
-        self.check_col(matrix)
-        
-
-        if self.is_three_row == True or self.is_three_col == True:
-            self.has_3_in_row = True
-
-        self.has_3_in_row = False
-
-    def place_stone(self,plus_list):
-        """ Places a stone on the map by changing the "+" to "X" or "O"
-        Returns the changed plus_list list
-
-        self.move_index -- the currently selected row in the plus_list
-        plus_list -- the lists of all the "+" and their positions
-        stone_marker -- the char of the stone, should be either "X" or "O" 
-        stone_pool_player1 -- The amount of stone player1 has left to place
-        stone_pool_player2 -- The amount of stone player2 has left to place
-        
-        """
-        
-        self.stone_pool -= 1
-        plus_list[self.move_index][0] = self.stone_marker
-        return plus_list
 
     def  move_stone(self,plus_list):
         
@@ -373,7 +234,7 @@ class player:
         plus_list[self.move_index][0] = self.stone_marker
         return plus_list
 
-    def remove_stone_player(self,plus_list,OtherPlayer):
+    def remove_stone_player(self,plus_list,players):
         """ Places a removes on the map by changing the player stone to a "+"
         Returns the changed plus_list list
 
@@ -389,11 +250,33 @@ class player:
         elif self.stone_marker == "O":
 
             remove_stone_marker = "X" 
+        OtherPlayer = players[1]
+        if self.player_num == 2:
+            OtherPlayer = players[0]
+
         OtherPlayer.remaining_stones -= 1
+        
+
         if plus_list[self.move_index][0] == remove_stone_marker:    
             plus_list[self.move_index][0] = "+"
         
 
+        return plus_list
+    
+    def place_stone(self,plus_list):
+        """ Places a stone on the map by changing the "+" to "X" or "O"
+        Returns the changed plus_list list
+
+        self.move_index -- the currently selected row in the plus_list
+        plus_list -- the lists of all the "+" and their positions
+        stone_marker -- the char of the stone, should be either "X" or "O" 
+        stone_pool_player1 -- The amount of stone player1 has left to place
+        stone_pool_player2 -- The amount of stone player2 has left to place
+        
+        """
+        
+        self.stone_pool -= 1
+        plus_list[self.move_index][0] = self.stone_marker
         return plus_list
 
     def print_player_remove(self):
@@ -411,10 +294,10 @@ class player:
         #position of text 
         text_x = 3  + w//3 
         text_y = 2
-
+        player_txt = self.player_name
         if len(  self.player_name) ==0:
-            self.player_name = "Player" + str(self.player_num) 
-        self.screen.addstr(text_y,text_x,self.player_name.rstrip("\n")+" remove a stone!",curses.color_pair(self.player_color))
+            player_txt = "Player" + str(self.player_num) 
+        self.screen.addstr(text_y,text_x,player_txt.rstrip("\n")+" remove a stone!",curses.color_pair(self.player_color))
 
 
     def can_player_act(self,plus_list):
@@ -563,16 +446,20 @@ class player:
             return True
         return False    
 
-    def remove_old_3(self,plus_list):
+    def remove_old_3(self,plus_list,players):
         current_stone_x = plus_list[self.move_index][1]
         current_stone_y = plus_list[self.move_index][2]
+        OtherPlayer = players[1] # annars tar man bort sin egen 3 i rad list lol
+        if self.player_num == 2:
+            OtherPlayer = players[0]
 
-        for r in self.list_3_row:
+        for r in OtherPlayer.list_3_row:
             for row in r:
                 if current_stone_x == row[1] and current_stone_y == row[2] or row[0] == '+':
-                    self.list_3_row.remove(r)
+                    OtherPlayer.list_3_row.remove(r)
+                    
         for c in self.list_3_col:
             for col in c:
                 if current_stone_x == col[1] and current_stone_y == col[2] or col[0] == '+':
-                    self.list_3_col.remove(c)      
+                    OtherPlayer.list_3_col.remove(c)      
 
