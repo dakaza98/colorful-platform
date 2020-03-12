@@ -141,6 +141,7 @@ def main(screen):
                     new_stone_list = _player.place_stone(map_board.get_stone_pos_list())
                     map_board.set_stone_pos_list(new_stone_list)
                     map_board.stone_list_to_matrix()
+                    print(map_board.stone_pos_list)
                     
                     _player.check_both(map_board.get_matrix())
                     

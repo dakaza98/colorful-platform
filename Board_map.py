@@ -38,7 +38,7 @@ class board_map:
 
     def get_stone_pos_list(self):
         return self.stone_pos_list
-        
+
     def get_matrix(self):
         return self.matrix
     def convert_map_to_coordinates(self):
@@ -206,9 +206,7 @@ class board_map:
                 color_cursor = 1
                 #cursor will now have the player colors
                 if player.player_num == 2:
-                    print("hej")
                     color_cursor = 4
-                print(color_cursor)    
                 self.screen.attron(curses.color_pair(color_cursor))
                 self.screen.addstr(y,x, row[0])
                 self.screen.attroff(curses.color_pair(color_cursor))

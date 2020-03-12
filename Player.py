@@ -430,10 +430,8 @@ class player:
             
         """
         current_char = plus_list[self.move_index][0]
-        other_player_stone = "O"
-        if self.player_num == 2:
-            other_player_stone = "X"
-        can_not_act= self.stone_pool >= 0 or current_char != "+" or current_char != other_player_stone
+      
+        can_not_act= self.stone_pool <= 0 or current_char != "+" 
         if can_not_act == True:    
             return False
 
