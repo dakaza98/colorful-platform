@@ -12,14 +12,13 @@ from curses.textpad import Textbox
 
 
 class startMenu:
-    def __init__(self,screen):
-        self.CHOICE_START = "start"
-        self.CHOICE_QUIT = "quit"
-        self.CHOICE_SINGLE = "single player"
-        self.CHOICE_TOURNAMENT = "tournament"
+    def __init__(self):
+        self.screen = curses.initscr()
+        self.CHOICE_SINGLE = "Single"
+        self.CHOICE_TOURNAMENT = "Tournament"
+        self.CHOICE_QUIT = "Quit"
         self.current_CHOICE = ""
-        self.menu = [self.CHOICE_START,self.CHOICE_SINGLE,self.CHOICE_TOURNAMENT,self.CHOICE_QUIT] 
-        self.screen = screen
+        self.menu = [self.CHOICE_SINGLE, self.CHOICE_TOURNAMENT, self.CHOICE_QUIT]      
         self.title_txt = ""
         self.color = 1
         self.player1_name = ""
@@ -52,9 +51,6 @@ class startMenu:
     def get_is_menu_finished(self):
         return self.is_menu_finished
    
-    def get_menu_choice(self):
-        return self.cu
-   
     def print_menu(self, selected_row_index):
         """Prints the menu to the self.screen.
 
@@ -80,7 +76,8 @@ class startMenu:
                 self.screen.addstr(y, x, row.capitalize())
 
         self.screen.refresh()
-    
+
+     
 
     def validate_key_input(self,key_input):
         """
@@ -126,8 +123,6 @@ class startMenu:
         player_name = textbox.edit(self.validate_key_input)
 
         return player_name
-
-
   
     def ask_for_player_names(self):
         player1_text = "Insert player 1's name: "
@@ -141,12 +136,12 @@ class startMenu:
 
         curses.curs_set(0)
         self.screen.refresh()
+  
+    def get_menu_choice(self):
+        curses.wrapper(self.runMenu)
+        return self.current_CHOICE   
 
-
-
-
-    def runMenu(self):
-        
+    def runMenu(self, screen):
         """The menu loop used by curses.
 
         Keyword arguments:
@@ -164,8 +159,6 @@ class startMenu:
         curses.init_pair(2,curses.COLOR_YELLOW,curses.COLOR_BLACK)  
 
         self.print_menu(self.current_row)
-    
-    
 
         while True:
             pressed_key = self.screen.getch()
@@ -174,23 +167,17 @@ class startMenu:
             elif pressed_key == curses.KEY_DOWN and self.current_row < len(self.menu) - 1:
                 self.current_row += 1
             elif pressed_key in self.enter_keys:
-                if self.menu[self.current_row] == self.CHOICE_START:
-                    self.current_CHOICE = self.CHOICE_START
+                if self.menu[self.current_row] == self.CHOICE_SINGLE:
+                    self.current_CHOICE = self.CHOICE_SINGLE
                     self.screen.clear()
-                    self.ask_for_player_names()
-
-                    #starts the game
-                    #game_board.main(self.screen,self.player1_name,self.player2_name)
-                    self.is_menu_finished = True
+                    break
+                elif self.menu[self.current_row] == self.CHOICE_TOURNAMENT:
+                    self.current_CHOICE = self.CHOICE_TOURNAMENT
+                    self.screen.clear()
                     break
                 elif self.menu[self.current_row] == self.CHOICE_QUIT:
                     self.current_CHOICE = self.CHOICE_QUIT
-                    quit() #just for now
+                    self.screen.clear()
                     break
 
             self.print_menu(self.current_row)
-
-"""
-if __name__ == "__main__": 
-    curses.wrapper(main)
-"""
