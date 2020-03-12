@@ -15,11 +15,11 @@ curses.start_color()
 def switch_turn(players,playerNumber):
     if playerNumber == 0:
         playerNumber = 1
-        players[1].move_index = players[0].move_index
+        #players[1].move_index = players[0].move_index
         return players[1],playerNumber
     elif playerNumber == 1:
         playerNumber =0
-        players[0].move_index = players[1].move_index
+        #players[0].move_index = players[1].move_index gör så move_index för spelare är lika som i den gamla versionen av spelet
 
         return players[0],playerNumber
 
@@ -82,7 +82,7 @@ def main(screen):
     """
     player1= Player.player(map_board.screen,1,"kalle",9,9,"X",3,False)
     players.append(player1)
-    player2= Player.player(map_board.screen,2,"pelle",5,5,"O",2,False)
+    player2= Player.player(map_board.screen,2,"pelle",9,9,"O",2,False)
     players.append(player2)
     
     _player = players[0] #player1
@@ -103,14 +103,13 @@ def main(screen):
             _player.print_player_move()
 
         _player.switch_to_phase()
-        print(_player.player_name,_player.stone_marker,_player.phase)
         map_board.stone_list_to_matrix()
 
         _player.has_player_lost(map_board.get_stone_pos_list(),map_board.get_matrix())
         
         if _player.get_player_lose() == True: 
             print("Player_lost",_player.player_name)
-            time.sleep(3)
+            
             quit()        
         map_board.print_map()
         map_board.print_player_names(player1,player2)

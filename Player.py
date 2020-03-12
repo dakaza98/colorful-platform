@@ -74,26 +74,86 @@ class player:
             return True
         else:
             return False
+    ####
+    def lose_find_stone_neighbour_row(self,plus_list,matrix,current_row):
+        current_stone_y = int(plus_list[current_row][2])
+        current_stone_x = int(plus_list[current_row][1])
+        row = matrix[current_stone_y]
+        neighbours = []
+
+        # look a head and behind for neighbour
+        for x in reversed(range(0,current_stone_x)):
+            elem = matrix[current_stone_y][x]
+            if elem == " ":
+                break
+            elif (elem[0] == "X" or elem[0] == "O" or elem[0] == "+") and x != current_stone_x:
+                neighbours.append([elem[0],x,current_stone_y])
+                break
+                
+
+        for x in range(current_stone_x,len(row)):
+            elem = matrix[current_stone_y][x]
+            if elem == " ":
+                break
+                
+            elif(elem[0] == "X" or elem[0] == "O" or elem[0] == "+") and x != current_stone_x:
+                neighbours.append([elem[0],x,current_stone_y])
+                break
+                    
+
+        return neighbours                    
+
+
+    def lose_find_stone_neighbour_col(self,plus_list,matrix,current_row):
+        #flipps the matrix so row becomes the columns ande vice versa
+        matrix = np.transpose(matrix)
+        current_stone_y = int(plus_list[current_row][2])
+        current_stone_x = int(plus_list[current_row][1])
+        col = matrix[current_stone_x]
+        neighbours = []
+        # look a head for neighbor
+        for y in reversed(range(0,current_stone_y)):
+            elem = matrix[current_stone_x][y]
+            if elem == " ":
+                break   
+            
+            elif (elem[0] == "X" or elem[0] == "O" or elem[0] == "+") and y != current_stone_y :
+                neighbours.append([elem[0],current_stone_x,y])
+                break
+                
+        for y in range(current_stone_y,len(col)):
+            elem = matrix[current_stone_x][y]
+            if elem == " ":
+                break
+
+            elif (elem[0] == "X" or elem[0] == "O" or elem[0] == "+") and y != current_stone_y:
+                neighbours.append([elem[0],current_stone_x,y])
+                break
+                
+        return neighbours   
+
+    #den andra find all neighbours funkar inte för att hitta om en spelare förlorat,då andra inte tar in index som input
+    def lose_find_all_neighbours(self,plus_list,matrix,current_row):
+        neighbour_row  = self.lose_find_stone_neighbour_row(plus_list,matrix,current_row)
+        neighbour_col = self.lose_find_stone_neighbour_col(plus_list,matrix,current_row)
+        neighbours = neighbour_row + neighbour_col
+        return neighbours 
 
     def check_player_stuck(self,plus_list,matrix):
 
         if self.phase == 2:
-            print("mongo")
             for index,elem in enumerate(plus_list):
                 char = elem[0]
                 if char == self.stone_marker:
-                    self.find_all_neighbours(plus_list,matrix)
-                    for neighbour in self.neighbours:
-                        print(neighbour,self.stone_marker)
+                    neighbours = self.lose_find_all_neighbours(plus_list,matrix,index)
+
+                    for neighbour in neighbours:
                         if neighbour[0] == "+":
-                            print("wtf")
                             return False
             return True                
         return False
     def has_player_lost(self,plus_list,matrix):
-        print(self.check_player_remaining_stones() , self.check_player_stuck(plus_list,matrix) )
         if(self.check_player_remaining_stones()== True or self.check_player_stuck(plus_list,matrix) == True):
-            print("hej")
             self.lose = True
             
         
