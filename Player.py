@@ -26,7 +26,8 @@ class player:
         self.has_3_in_row = False # if this is True player has 3 in a row
 
     
-    
+    def get_player_lose(self):
+        return self.lose
 
     def switch_player_turn(self):
         
@@ -68,25 +69,35 @@ class player:
         elif self.remaining_stones <= 3:
             self.phase = 3   
 
-    def check_looser(self):
+    def check_player_remaining_stones(self):
         if self.remaining_stones <= 2:
-            self.lose = True
+            return True
         else:
-            self.lose = False 
+            return False
 
+    def check_player_stuck(self,plus_list,matrix):
+
+        if self.phase == 2:
+            print("mongo")
+            for index,elem in enumerate(plus_list):
+                char = elem[0]
+                if char == self.stone_marker:
+                    self.find_all_neighbours(plus_list,matrix)
+                    for neighbour in self.neighbours:
+                        print(neighbour,self.stone_marker)
+                        if neighbour[0] == "+":
+                            print("wtf")
+                            return False
+            return True                
+        return False
     def has_player_lost(self,plus_list,matrix):
-        self.check_looser()
-        for index,elem in enumerate(plus_list):
-            char = elem[0]
-            if char == self.stone_marker:
-                self.find_all_neighbours(plus_list,matrix)
-                for neighbour in self.neighbours:
-                    if neighbour[0] == "+":
-                        self.lose = False
-                        return 
-        self.lose = True
-        return
-
+        print(self.check_player_remaining_stones() , self.check_player_stuck(plus_list,matrix) )
+        if(self.check_player_remaining_stones()== True or self.check_player_stuck(plus_list,matrix) == True):
+            print("hej")
+            self.lose = True
+            
+        
+        
     def move_down(self,plus_list):
         """ Finds the "+" char that is above self.move_index. If the current "+" char is at a coordinate that
             that violates the rules for move_indexment, the position wont change.
