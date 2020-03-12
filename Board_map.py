@@ -4,7 +4,6 @@ import time
 import numpy as np 
 import itertools
 import Player
-import game_board #fking curses color pairs
 
 class board_map:
     def __init__(self,screen):

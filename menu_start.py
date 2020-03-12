@@ -2,7 +2,6 @@ import curses
 import time 
 import Player
 import Board_map
-import game_board
 import os
 from curses.textpad import Textbox
 #self.screen = curses.initscr()
