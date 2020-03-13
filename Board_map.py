@@ -4,6 +4,7 @@ import time
 import numpy as np 
 import itertools
 import Player
+import json
 
 class board_map:
     def __init__(self,screen):
@@ -21,7 +22,31 @@ class board_map:
 
     
         self.neighbours = []
-       
+
+    def convert_stone_list_to_json(self):
+        data = {}
+        data['Board'] =  {}
+        for i,stone  in enumerate( self.stone_pos_list,0):
+            stone_marker = stone[0]
+            if stone_marker == "+":
+                data['Board'][str(i)] = -1
+            elif stone_marker == "X":
+                data['Board'][str(i)] = 0
+            elif stone_marker == "O":
+                data['Board'][str(i)] = 1
+        return data
+    def convert_json_to_stone_list(self,json_obj):
+        data = json_obj
+        board = data['Board']
+        for i,stone in enumerate(self.stone_pos_list):
+            if board.get(str(i)) == -1:
+                self.stone_pos_list[i][0] = "+"
+            elif board.get(str(i)) == 0:
+                self.stone_pos_list[i][0] = "X"
+            elif board.get(str(i)) == 1:
+                self.stone_pos_list[i][0] = "O"         
+    
+
     def read_map(self):
         """
         Reads a text file and returns it as a string

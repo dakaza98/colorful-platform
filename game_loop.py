@@ -106,7 +106,11 @@ def main(screen):
         map_board.stone_list_to_matrix()
 
         _player.has_player_lost(map_board.get_stone_pos_list(),map_board.get_matrix())
-        
+        json = map_board.convert_stone_list_to_json()
+        print(json,"\n")
+        map_board.convert_json_to_stone_list(json)
+        print(map_board.get_stone_pos_list(),"\n")
+
         if _player.get_player_lose() == True: 
             print("Player_lost",_player.player_name)
             
