@@ -7,14 +7,14 @@ import itertools
 
 
 class player:
-    def __init__(self,screen,player_number,player_name,stone_pool,stone_remaining,stone_marker,color,isBot):
+    def __init__(self,screen,player_number,player_name,stone_pool,stone_remaining,stone_marker,color,isAi):
         self.player_name = player_name
         self.stone_pool = stone_pool
         self.remaining_stones = stone_remaining
         self.stone_marker = stone_marker
         self.player_color = color
         #self.player1_turn = player1_turn
-        self.is_bot = isBot
+        self.is_Ai = isAi
         self.player_num = player_number
         self.phase = 1
         self.move_index = 0
