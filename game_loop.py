@@ -158,11 +158,13 @@ class Game:
                     self.current_player.stone_pool -= 1
                 #test 
                 json['Board'][str(self.amount_turns)] = 1
-                #remove 
+                #test remove 
                 if self.amount_turns == 5:
                     json['Board']['0'] = -1
+                    self.current_player.set_move_index(0)
+                    map_board.remove_old_3(self.current_player)
 
-                #
+                #¤ test
                 map_board.convert_json_to_stone_list(json)
                 map_board.stone_list_to_matrix()
                 time.sleep(0.5)

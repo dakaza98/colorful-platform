@@ -32,6 +32,9 @@ class player:
         
         self.turn = not (self.turn)
 
+    def set_move_index(self,index):
+        self.move_index = index
+
     def set_selected_stone_index(self):
         self.selected_stone_index = self.move_index
 
