@@ -35,6 +35,7 @@ class board_map:
             elif stone_marker == "O":
                 data['Board'][str(i)] = 1
         return data
+    
     def convert_json_to_stone_list(self,json_obj):
         data = json_obj
         board = data['Board']
@@ -222,7 +223,6 @@ class board_map:
         Keyword arguments:
         str_board -- the string version of the map
         """
-        self.read_map()
         self.matrix = [[x for x in line] for line in self.board_txt.split('\n')]
 
         y = 0

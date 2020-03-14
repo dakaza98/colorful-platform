@@ -7,10 +7,10 @@ import itertools
 
 
 class player:
-    def __init__(self,screen,player_number,player_name,stone_pool,stone_remaining,stone_marker,color,isAi):
+    def __init__(self,screen,player_number,player_name,stone_marker,color,isAi):
         self.player_name = player_name
-        self.stone_pool = stone_pool
-        self.remaining_stones = stone_remaining
+        self.stone_pool = 9
+        self.remaining_stones = 9
         self.stone_marker = stone_marker
         self.player_color = color
         #self.player1_turn = player1_turn
@@ -21,7 +21,6 @@ class player:
         self.selected_stone_index = 0
         self.lose = False
         self.screen = screen
-        self.turn = False
         self.neighbours = []
         self.has_3_in_row = False # if this is True player has 3 in a row
 
