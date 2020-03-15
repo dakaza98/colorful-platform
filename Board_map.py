@@ -58,9 +58,9 @@ class board_map:
 
         """
         try:        
-            board = open( self.map_path,'r')
-            self.board_txt = board.read()
-            board.close() 
+           with open( self.map_path,'r') as board:
+                self.board_txt = board.read()
+                board.close() 
             
         except IOError:
             

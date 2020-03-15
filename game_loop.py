@@ -158,7 +158,10 @@ class Game:
                     self.current_player.stone_pool -= 1
                 #test 
                 json['Board'][str(self.amount_turns)] = 1
+                self.current_player.set_move_index(self.amount_turns)
+
                 #test remove 
+
                 if self.amount_turns == 5:
                     json['Board']['0'] = -1
                     self.current_player.set_move_index(0)
