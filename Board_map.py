@@ -39,7 +39,7 @@ class board_map:
     def convert_json_to_stone_list(self,json_obj):
         data = json_obj
         board = data['Board']
-        for i,stone in enumerate(self.stone_pos_list):
+        for i in range(len(self.stone_pos_list)):
             if board.get(str(i)) == -1:
                 self.stone_pos_list[i][0] = "+"
             elif board.get(str(i)) == 0:
