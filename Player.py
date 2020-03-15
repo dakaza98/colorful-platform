@@ -42,6 +42,8 @@ class player:
         self.set_selected_stone_index()
         return self.selected_stone_index    
 
+    def get_is_AI(self):
+        return self.is_Ai
     def get_neighbours(self):
         
         return self.neighbours

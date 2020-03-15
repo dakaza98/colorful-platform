@@ -36,16 +36,28 @@ class board_map:
                 data['Board'][str(i)] = 1
         return data
     
-    def convert_json_to_stone_list(self,json_obj):
+    #converts to json and also sets the new move_index of AIplayer
+    def convert_json_to_stone_list(self,json_obj,player):
         data = json_obj
         board = data['Board']
-        for i in range(len(self.stone_pos_list)):
+        new_list = [[] for i in range(len(self.stone_pos_list))] 
+        
+        for i in range(len(new_list)):
             if board.get(str(i)) == -1:
-                self.stone_pos_list[i][0] = "+"
+                new_list[i] = "+"
             elif board.get(str(i)) == 0:
-                self.stone_pos_list[i][0] = "X"
+                new_list[i] = "X"
             elif board.get(str(i)) == 1:
-                self.stone_pos_list[i][0] = "O"         
+                new_list[i] = "O"         
+        # sets the new move_index for AIplayer
+        for i ,stone in enumerate(self.stone_pos_list):
+            if new_list[i] != stone[0]:
+                if player.get_is_AI() == True:
+                    player.set_move_index(i)
+                    #AI has moved or removed a stone
+                    if new_list[i] == "+" and stone[0] != "+" :
+                        self.remove_old_3(player)
+                self.stone_pos_list[i][0] =  new_list[i]
     
 
     def read_map(self):
