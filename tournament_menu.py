@@ -4,7 +4,7 @@ from curses.textpad import Textbox
 class tournament_menu():
     def __init__(self):
         self.screen = curses.initscr()
-        self.player1_name = ""
+        self.player_names = []
         self.enter_keys = [curses.KEY_ENTER, 10, 13]
         self.player_amount = 0
         self.AI_amount = 99
@@ -12,7 +12,7 @@ class tournament_menu():
     
     def get_tournament_info(self):
         curses.wrapper(self.run_tournament_menu)
-        return self.player1_name.rstrip("\n") ,self.player_amount,self.AI_amount,self.AI_difficulty
+        return self.player_names ,self.player_amount,self.AI_amount,self.AI_difficulty
 
          
 
@@ -132,21 +132,24 @@ class tournament_menu():
     
 
     def ask_for_player_names(self):
-        self.screen.clear()
+        amount_human_players = self.player_amount-self.AI_amount
+        for player_num in range(1,amount_human_players+1):
+            self.screen.clear()
 
-        player1_text = "Insert player 1's name: "
+            player1_text = "Insert player " +str(player_num)+ "'s name: "
 
-        # Enable blinking cursor when typing in names
-        curses.curs_set(1)
+            # Enable blinking cursor when typing in names
+            curses.curs_set(1)
 
-        self.player1_name = self.get_user_input(player1_text)
-
-        curses.curs_set(0)
-        self.screen.refresh()
+            player_name = self.get_user_input(player1_text)
+            self.player_names.append(player_name.rstrip("\n").rstrip(" "))
+            curses.curs_set(0)
+            self.screen.refresh()
 
     def run_tournament_menu(self,screen):
-        self.ask_for_player_names()
         self.ask_for_player_amount()
         self.ask_for_ai_amount()
         self.ask_for_AI_difficulty()
+        self.ask_for_player_names()
+
                 
