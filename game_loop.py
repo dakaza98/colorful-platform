@@ -23,10 +23,21 @@ class Game:
         self.current_player = self.list_players[self.which_player]
 
         self.stone_removed = True
-
+        self.is_game_over = False
+        self.is_game_draw = False
         self.is_stone_selected = False
         
-
+    def check_has_player_won(self,player):
+        if (player.get_player_lose() == True):
+            print(player.player_name," Won!")
+            self.is_game_over = True
+            quit() #temp
+            
+    def check_game_draw(self):
+        if(self.amount_turns >= 500):
+            self.is_game_draw = True
+            self.is_game_over = True
+            quit()#temp
     def switch_turn(self):
         self.amount_turns +=1
         if self.which_player == 0:
@@ -113,16 +124,9 @@ class Game:
             map_board.stone_list_to_matrix()
 
             self.current_player.has_player_lost(map_board.get_stone_pos_list(),map_board.get_matrix())
-            json = map_board.convert_stone_list_to_json()
-            print(json,"\n")
-            map_board.convert_json_to_stone_list(json,self.current_player)
-            print(map_board.get_stone_pos_list(),"\n")
-            print("amount of turns",self.amount_turns)
-            if self.current_player.get_player_lose() == True: 
-                print("Player_lost",self.current_player.player_name)
-                time.sleep(1)
-                
-                quit()        
+            self.check_game_draw()
+            self.check_has_player_won(self.current_player)
+     
             map_board.print_map()
             map_board.print_player_names(self.player1,self.player2)
             map_board.print_choice(self.current_player)
@@ -153,12 +157,14 @@ class Game:
                self.current_player.move_up(map_board.stone_pos_list)
             
             elif(self.current_player.is_Ai == True):
- 
+                # -1 => "+" , 0 => "X", 1 = > "O"
                 if self.current_player.phase == 1:
                     self.current_player.stone_pool -= 1
+                json = map_board.convert_stone_list_to_json()
                 #test 
                 json['Board'][str(self.amount_turns)] = 1
-
+                print(json,"\n")
+                print(map_board.get_stone_pos_list(),"\n")
                 #test remove 
                 if self.amount_turns == 5:
                     json['Board']['0'] = -1
@@ -196,8 +202,8 @@ class Game:
                         map_board.stone_list_to_matrix()
                         
                         map_board.remove_old_3(self.current_player)
-                        #list_3_row = []
-                        #list_3_col = []
+                        
+                        
                         self.switch_turn()
 
                         self.stone_removed = True
@@ -224,8 +230,8 @@ class Game:
                             #this makes it too op to just move in and out from a three in a row 
                             map_board.remove_old_3(self.current_player)
 
-                            #list_3_row = []
-                            #list_3_col = []
+                            
+                            
                             map_board.stone_list_to_matrix()
                             
                             map_board.check_both(self.current_player)
@@ -244,8 +250,8 @@ class Game:
                         map_board.stone_list_to_matrix()
                         
                         map_board.remove_old_3(self.current_player)
-                        #list_3_row = []
-                        #list_3_col = []
+                        
+                        
                         self.switch_turn()
 
                         self.stone_removed = True
@@ -271,8 +277,8 @@ class Game:
                             #this makes it too op to just move in and out from a three in a row 
                             map_board.remove_old_3(self.current_player)
 
-                            #list_3_row = []
-                            #list_3_col = []
+                            
+                            
                             map_board.stone_list_to_matrix()
                             
                             map_board.check_both(self.current_player)
@@ -291,8 +297,8 @@ class Game:
                         map_board.stone_list_to_matrix()
                         
                         map_board.remove_old_3(self.current_player)
-                        #list_3_row = []
-                        #list_3_col = []
+                        
+                        
                         self.switch_turn()
 
                         self.stone_removed = True

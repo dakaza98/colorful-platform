@@ -8,8 +8,9 @@ from curses.textpad import Textbox
 
 #curses.start_color()
 #curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
-
-
+#test
+import tournament_menu
+import single_menu
 
 class startMenu:
     def __init__(self):
@@ -79,64 +80,8 @@ class startMenu:
 
      
 
-    def validate_key_input(self,key_input):
-        """
-        Callback function used by curses when a user types input.
-        The function checks if the pressed key is one of the enter keys and
-        signals curses to stop asking for input. Otherwise it lets the character through
-        """
-        if key_input in self.enter_keys:
-            # 7 is a magic number that tells curses to stop asking for input
-            return 7
-        else:
-            return key_input
 
-    def get_player_name(self, text):
-        """
-        Prints and centers text on screen.
-        Creates a new text input where the user enters the player name and returns it.
 
-        Keyword arguments:
-        self.screen             -- the curses self.screen.
-        text               -- Text that appears before the input.
-
-        Example:
-        text = "Insert player 1's name" => Insert player 1's name: (user types here)
-
-        Returns:
-        The name of the player that the user entered.
-        """
-
-        # Centers the text
-        num_rows, num_cols = self.screen.getmaxyx()
-
-        x = int(num_cols / 2) - int(len(text) / 2)
-        y = int(num_rows / 2)
-
-        self.screen.addstr(y, x, text)
-        self.screen.refresh()
-
-        # We must create a new window becuase the edit function will return
-        # everything that has been printed on the self.screen and not just the entered name
-        win = curses.newwin(5, 10, y, x + len(text))
-        textbox = Textbox(win)
-        player_name = textbox.edit(self.validate_key_input)
-
-        return player_name
-  
-    def ask_for_player_names(self):
-        player1_text = "Insert player 1's name: "
-        player2_text = "Insert player 2's name: "
-
-        # Enable blinking cursor when typing in names
-        curses.curs_set(1)
-
-        self.player1_name = self.get_player_name(player1_text)
-        self.player2_name = self.get_player_name(player2_text)
-
-        curses.curs_set(0)
-        self.screen.refresh()
-  
     def get_menu_choice(self):
         curses.wrapper(self.runMenu)
         return self.current_CHOICE   
@@ -181,3 +126,16 @@ class startMenu:
                     break
 
             self.print_menu(self.current_row)
+#test
+start = startMenu()
+s = start.get_menu_choice()
+if s == "Single":
+    print(s)
+    menu_single = single_menu.single_menu()
+    player1_name ,player2_name = menu_single.get_player_names()
+    print(player1_name,player2_name)
+elif s == "Tournament":
+    menu_tournament = tournament_menu.tournament_menu()
+    player1_name,player_amount,AI_amount,AI_difficulty = menu_tournament.get_tournament_info()
+    print(player1_name,player_amount,AI_amount,AI_difficulty)
+
