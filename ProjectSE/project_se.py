@@ -138,7 +138,7 @@ class ProjectSE:
             else:
                 board_state = self.platform.play(board_state)
         # We have either a winner or a tie now
-        if board_state.is_draw():
+        if board_state.is_draw:
             return None
         else:
             winner = match.get_player_by_color(board_state.get_player_color())
