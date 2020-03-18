@@ -311,8 +311,8 @@ class Game:
             # Prevent the screen from repainting to often
             time.sleep(0.01)
         
-def runGame(player1_name,player2_name,is_Ai):
-    game = Game(player1_name,player2_name,is_Ai)
+def runGame(player1_name,player2_name,is_player2_AI):
+    game = Game(player1_name,player2_name,is_player2_AI)
 
     curses.wrapper(game.game_loop)
     
