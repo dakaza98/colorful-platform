@@ -315,8 +315,3 @@ def runGame(player1_name,player2_name,is_player2_AI):
     game = Game(player1_name,player2_name,is_player2_AI)
 
     curses.wrapper(game.game_loop)
-    
-#test ai        
-#runGame("kalle","AI_PELLE",True)
-# run normal game
-#runGame("kalle","pelle",False)
