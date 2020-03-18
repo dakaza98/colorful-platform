@@ -105,7 +105,7 @@ class Game:
         #test 
         json = map_board.convert_stone_list_to_json()
         
-        while 1:
+        while self.is_game_over == False:
             self.screen.clear()
 
         
