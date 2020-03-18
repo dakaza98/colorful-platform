@@ -47,7 +47,7 @@ class Game:
             return
         elif self.which_player == 1:
             self.which_player =0
-            #self.list_players [0].move_index = self.list_players [1].move_index gör så move_index för spelare är lika som i den gamla versionen av spelet
+            #self.list_players[0].move_index = self.list_players[1].move_index gör så move_index för spelare är lika som i den gamla versionen av spelet
 
             self.current_player= self.list_players[0]
             return
