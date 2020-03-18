@@ -85,23 +85,19 @@ class ProjectSE:
         choice = menu.get_menu_choice()
 
         if choice == "Tournament":
-            # tournament_info = 
-            players_cfg = self.cb.query_settings()
+            tournament_menu = TournamentMenu()
+            player_names, amount_of_players, amount_of_ai, ai_difficulties = tournament_menu.get_tournament_info()
+
+            players_cfg = self.cb.set_tournament_settings(player_names, amount_of_ai, ai_difficulties)
             retry = True
             while retry:
                 tournament = Tournament(players_cfg)
                 self.play_tournament(tournament)
                 retry = tournament.ask_retry()
         elif choice == "Single":
-            """
-            black_tup = self.platform.get_player("white")
-            white_tup = self.platform.get_player("black")
-            match = self.cb.create_match(black_tup,white_tup)
-            self.play_match(match)
-            """
             single_menu = SingleMenu()
             player1_name,player2_name = single_menu.get_player_names()
-            game_loop.runGame(player1_name,player2_name, is_Ai=False)
+            game_loop.runGame(player1_name,player2_name, is_player2_AI=False)
         elif choice == "Quit":
             quit()
         else:
