@@ -1,7 +1,7 @@
 import curses
 import time 
-import Player
-import Board_map
+import colorfulplatform.Player
+import colorfulplatform.Board_map
 import os
 from curses.textpad import Textbox
 #self.screen = curses.initscr()

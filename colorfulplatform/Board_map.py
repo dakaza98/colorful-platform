@@ -3,7 +3,7 @@ import curses
 import time
 import numpy as np 
 import itertools
-import Player
+from colorfulplatform.Player import *
 import json
 
 class board_map:

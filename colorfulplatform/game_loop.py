@@ -1,5 +1,5 @@
-import Board_map
-import Player
+import colorfulplatform.Board_map 
+import colorfulplatform.Player
 import curses
 import os
 import time
