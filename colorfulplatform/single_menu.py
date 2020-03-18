@@ -1,7 +1,7 @@
 import curses
 from curses.textpad import Textbox
 
-class single_menu():
+class SingleMenu():
     def __init__(self):
         self.screen = curses.initscr()
         self.player1_name = ""

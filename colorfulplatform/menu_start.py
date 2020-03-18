@@ -1,16 +1,7 @@
 import curses
 import time 
-import colorfulplatform.Player
-import colorfulplatform.Board_map
 import os
 from curses.textpad import Textbox
-#self.screen = curses.initscr()
-
-#curses.start_color()
-#curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
-#test
-import tournament_menu
-import single_menu
 
 class startMenu:
     def __init__(self):
@@ -29,7 +20,8 @@ class startMenu:
         self.is_menu_finished = False
    
     def read_title(self):
-        title = open('title.txt', 'r')
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        title = open(dir_path + '/title.txt', 'r')
         self.title_txt = title.read()
         title.close()  
 
@@ -78,13 +70,9 @@ class startMenu:
 
         self.screen.refresh()
 
-     
-
-
-
     def get_menu_choice(self):
         curses.wrapper(self.runMenu)
-        return self.current_CHOICE   
+        return self.current_CHOICE
 
     def runMenu(self, screen):
         """The menu loop used by curses.
@@ -126,16 +114,3 @@ class startMenu:
                     break
 
             self.print_menu(self.current_row)
-#test
-start = startMenu()
-s = start.get_menu_choice()
-if s == "Single":
-    print(s)
-    menu_single = single_menu.single_menu()
-    player1_name ,player2_name = menu_single.get_player_names()
-    print(player1_name,player2_name)
-elif s == "Tournament":
-    menu_tournament = tournament_menu.tournament_menu()
-    player1_name,player_amount,AI_amount,AI_difficulty = menu_tournament.get_tournament_info()
-    print(player1_name,player_amount,AI_amount,AI_difficulty)
-
