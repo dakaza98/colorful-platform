@@ -6,7 +6,6 @@ from projectse.configuration import *
 from projectse.game_manager import *
 from projectse.tournament import *
 
-
 class MockPlatform:
 
     def initialize(self):
@@ -79,9 +78,10 @@ class ProjectSE:
         print("Application started")
         #choice = self.platform.get_menu_choice()
         choice = self.intro_menu_choice()
-
+        choice = menu.start.get_menu_choice()
         while choice != "Quit":
             if choice == "Tournament":
+                tournament_info 
                 players_cfg = self.cb.query_settings()
                 retry = True
                 while retry:
@@ -89,10 +89,14 @@ class ProjectSE:
                     self.play_tournament(tournament)
                     retry = tournament.ask_retry()
             elif choice == "Single":
+                """
                 black_tup = self.platform.get_player("white")
                 white_tup = self.platform.get_player("black")
                 match = self.cb.create_match(black_tup,white_tup)
                 self.play_match(match)
+                """
+                player1_name,player2_name = single_menu.get_player_names()
+                game_loop.runGame("kalle","pelle",False)
             else:
                 raise NotImplementedError("No such choice")
             # choice = self.platform.get_menu_choice()

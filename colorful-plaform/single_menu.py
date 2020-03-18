@@ -9,7 +9,7 @@ class single_menu():
         self.enter_keys = [curses.KEY_ENTER, 10, 13]
     def get_player_names(self):
         curses.wrapper(self.run_single_menu)
-        return self.player1_name.rstrip("\n") ,self.player2_name.rstrip("\n")
+        return self.player1_name.rstrip("\n").rstrip(" ") ,self.player2_name.rstrip("\n").rstrip(" ")
 
          
 
