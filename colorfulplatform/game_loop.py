@@ -25,20 +25,28 @@ class Game:
         self.stone_removed = True
         self.is_game_over = False
         self.is_game_draw = False
+        self.winner_name = None
         self.is_stone_selected = False
+        self.json = {}
+        
         
     def check_has_player_won(self,player):
         if (player.get_player_lose() == True):
-            print(player.player_name," Won!")
+            print(player.player_name,"bajs")
+            self.winner_name = player.player_name
             self.is_game_over = True
-            quit() #temp
-            
+
+    def update_json(self,new_json):
+        self.json = new_json
+         
     def check_game_draw(self):
         if(self.amount_turns >= 500):
             self.is_game_draw = True
             self.is_game_over = True
-            quit()#temp
+    def get_game_info(self):
+        return self.winner_name,self.is_game_over
     def switch_turn(self):
+
         self.amount_turns +=1
         if self.which_player == 0:
             self.which_player = 1
@@ -103,7 +111,7 @@ class Game:
 
         
         #test 
-        json = map_board.convert_stone_list_to_json()
+        self.json = map_board.convert_stone_list_to_json()
         
         while self.is_game_over == False:
             self.screen.clear()
@@ -310,11 +318,9 @@ class Game:
             
             # Prevent the screen from repainting to often
             time.sleep(0.01)
-        
-        # TODO Return the winner
-        # return winner
+        #return self.winner_name,self.is_game_draw
         
 def runGame(player1_name,player2_name,is_player2_AI):
     game = Game(player1_name,player2_name,is_player2_AI)
-
     curses.wrapper(game.game_loop)
+    return game.get_game_info()

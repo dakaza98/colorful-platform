@@ -107,6 +107,14 @@ class ProjectSE:
         """ Interface to Platform to set type of players and names """
         return self.platform.setup(match.get_black_player_name(),match.get_white_player_name())
 
+    def which_player_won(self,match,is_game_draw,winner_name) -> Player:
+        if match.get_black_player_name == winner_name and is_game_draw == False:
+            return match.get_black_player()
+        elif is_game_draw == False and match.get_white_player == winner_name:
+            return match.get_white_player()    
+        #game is_draw
+        return  None    
+
     def play_tournament(self, tournament):
         """ Decides and makes call to start the matches inside all rounds of the tournament sequentially
         Starting with the first rounds matches. AIvsAI matches are determined by chance """
@@ -120,8 +128,9 @@ class ProjectSE:
                 if match.only_ai():
                     winner = tournament.aiplay(match)
                 else:
-                    winner = game_loop.runGame(match.get_black_player_name(), match.get_white_player_name(), match.is_player2_ai())
-
+                    winner_name,is_game_draw = game_loop.runGame(match.get_black_player_name(), match.get_white_player_name(), match.is_player2_ai())
+                    print(winner_name,is_game_draw)
+                    winner = self.which_player_won(match,is_game_draw,winner_name)
                 tournament.set_result(winner)
                 match = tournament.get_next_match()
             tournament.tournamentdrawer.drawResultTable()
