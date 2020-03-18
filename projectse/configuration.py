@@ -118,6 +118,25 @@ class ConfigurationBuilder:
 
         return self.cfg
 
+    def set_tournament_settings(self, player_names, amount_of_AI, AI_difficulties):
+        player_list = []
+
+        for ai_player in range(amount_of_AI):
+            diff = AI_difficulties[ai_player]
+            ai_name = "AIPlayer" + str(ai_player+1) + diff
+            ai_difficulty = self.parse_difficulty(diff)
+
+            player_list.append(AIPlayer(ai_name, ai_difficulty))
+
+        for player_name in player_names:
+            player_list.append(Player(player_name))
+
+        self.configure_players(player_list)
+
+        return self.cfg
+
+        
+
     def configure_players(self,player_list):
         self.cfg.set_players(player_list)
 
