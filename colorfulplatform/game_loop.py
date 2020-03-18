@@ -311,6 +311,9 @@ class Game:
             # Prevent the screen from repainting to often
             time.sleep(0.01)
         
+        # TODO Return the winner
+        # return winner
+        
 def runGame(player1_name,player2_name,is_player2_AI):
     game = Game(player1_name,player2_name,is_player2_AI)
 
