@@ -1,7 +1,7 @@
 import curses
 from curses.textpad import Textbox
 
-class tournament_menu():
+class TournamentMenu():
     def __init__(self):
         self.screen = curses.initscr()
         self.player_names = []
@@ -13,8 +13,6 @@ class tournament_menu():
     def get_tournament_info(self):
         curses.wrapper(self.run_tournament_menu)
         return self.player_names ,self.player_amount,self.AI_amount,self.AI_difficulty
-
-         
 
     def validate_key_input(self,key_input):
         """

@@ -9,7 +9,7 @@ from projectse.tournament import *
 from colorfulplatform.menu_start import startMenu
 import colorfulplatform.game_loop as game_loop
 from colorfulplatform.single_menu import SingleMenu
-import colorfulplatform.tournament_menu
+from colorfulplatform.tournament_menu import TournamentMenu
 
 
 class MockPlatform:
