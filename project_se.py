@@ -120,7 +120,7 @@ class ProjectSE:
                 if match.only_ai():
                     winner = tournament.aiplay(match)
                 else:
-                    winner = game_loop.runGame(player1_name, player2_name, match.is_player2_AI())
+                    winner = game_loop.runGame(player1_name, player2_name, match.is_player2_ai())
 
                 tournament.set_result(winner)
                 match = tournament.get_next_match()
