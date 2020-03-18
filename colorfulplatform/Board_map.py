@@ -3,7 +3,6 @@ import curses
 import time
 import numpy as np 
 import itertools
-from colorfulplatform.Player import *
 import json
 
 class board_map:
@@ -11,7 +10,10 @@ class board_map:
         self.matrix = []
         self.stone_pos_list = []
         self.board_txt = ""
-        self.map_path = map_path = 'Ascii_board.txt'
+
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        self.map_path = map_path = dir_path + '/Ascii_board.txt'
+
         self.map_coordinates = []
         self.screen = screen
         self.is_three_row = False # this check for row
