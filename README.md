@@ -23,3 +23,6 @@ In single you play against another human player on your computer
 
 In tournament you are 3-8 players and you can have AI's playing against you. You will play against everyone and the winner is announced at the end
 
+## Known bugs
+
+- Placeing a stone in the top left corner when playing against an AI causes the game to crash on the first turn
