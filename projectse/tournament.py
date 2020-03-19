@@ -49,11 +49,6 @@ class Tournament:
             return None
 
     def get_next_match(self):
-        print("Press enter to play game, press 'Q' to quit")
-        inp = input()
-        if (inp.upper() ==  'Q'):
-            print("Game quit.")
-            exit()
         next_match = self.get_current_round().get_next_match()
         return next_match
 

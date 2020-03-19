@@ -126,6 +126,7 @@ class ProjectSE:
             while match is not None:
                 # AI vs AI is determined by tournament and not actually played.
                 match.print_playing()
+                match.print_play_match()
                 if match.only_ai():
                     winner = tournament.aiplay(match)
                 else:

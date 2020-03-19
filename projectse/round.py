@@ -63,6 +63,13 @@ class Match:
     def print_playing(self):
         print(self.get_playing_string())
 
+    def print_play_match(self):
+        print("Press enter to play game, press 'Q' to quit")
+        inp = input()
+        if (inp.upper() ==  'Q'):
+            print("Game quit.")
+            exit()
+
     def get_winner_name(self):
         if self.played:
             if self.winner is not None:
