@@ -107,10 +107,10 @@ class ProjectSE:
         """ Interface to Platform to set type of players and names """
         return self.platform.setup(match.get_black_player_name(),match.get_white_player_name())
 
-    def which_player_won(self,match,is_game_draw,winner_name) :
-        if match.get_black_player_name() == winner_name and is_game_draw == False:
+    def which_player_won(self,match,is_game_draw,winner_name):
+        if match.get_black_player_name() == winner_name or is_game_draw:
             return match.get_black_player(),match.get_white_player()
-        elif is_game_draw == False and match.get_white_player_name() == winner_name:
+        elif match.get_white_player_name() == winner_name:
             return match.get_white_player(),match.get_black_player()
         #game is_draw
         print(is_game_draw)
