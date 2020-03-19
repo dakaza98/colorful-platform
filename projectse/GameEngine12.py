@@ -475,7 +475,6 @@ def findNextMove(board,player,turn,depth,difficulty):
         return board
     elif turn==1:
         for i in range(24):
-            print(board[i])
             if board[i]==0:
                 for pos in adjacentLocations(i):
                     if 7<pos and pos<16:
