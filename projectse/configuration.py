@@ -89,6 +89,11 @@ class ConfigurationBuilder:
         #print("diff str key:{} value:{}".format(diff_str,value))
 
         return value
+    def parse_difficulty_to_number(self,diff_str):
+        diffmap = {AIDifficulty.hi: 2, AIDifficulty.med: 1 ,AIDifficulty.low : 0}
+        value = diffmap.get(diff_str)
+
+        return value
 
     def query_settings(self):
         """ menu for dealing with adding all the players to the configuration """
