@@ -80,7 +80,7 @@ class GameManager:
         print("init")
         self.socket = socket.socket()           # Allocating a socket 
 
-    def connect(self,ip_adress='192.168.2.41', port=3000):
+    def connect(self,ip_adress=ip_address, port=3000):
         self.socket.connect((ip_adress, port))  # Connecting the socket to a server, given an ip and port
         print("Connection to server established")
 
