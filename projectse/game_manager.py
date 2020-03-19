@@ -2,7 +2,6 @@ import socket
 import json
 from projectse.configuration import *
 
-#ip_address = '192.168.2.41'
 
 def get_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
