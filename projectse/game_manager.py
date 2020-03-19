@@ -77,7 +77,6 @@ class GameManager:
         Sets up the connection, if the creation of the game manager doesn't work
         make sure you are on the same networ, have the same ip and port on server and manager
         """
-        print("init")
         self.socket = socket.socket()           # Allocating a socket 
 
     def connect(self,ip_adress=ip_address, port=3000):
@@ -93,9 +92,7 @@ class GameManager:
             message_b = bytes(message)            # Convert the message to bytes
         if dtype == "string":
             message_b = bytes(message, 'utf-8')
-        print(message_b)
         self.socket.send(message_b)           # Send the game state/move
-        print("Message sent!")
         
     def recv(self, dtype = "list"):
         """
