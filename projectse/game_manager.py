@@ -16,7 +16,6 @@ def get_ip():
     return IP
 
 ip_address = get_ip()
-
 class BoardState:
     def __init__(self):
         self.finished = False
@@ -93,8 +92,14 @@ class GameManager:
         self.socket = socket.socket()           # Allocating a socket 
 
     def connect(self,ip_adress=ip_address, port=3000):
-        self.socket.connect((ip_adress, port))  # Connecting the socket to a server, given an ip and port
-        print("Connection to server established")
+        try:
+            self.socket.connect((ip_adress, port))  # Connecting the socket to a server, given an ip and port
+            print("Connection to server established")
+        except:
+            print("Type in the ip address of the server: ")
+            server_ip_address = input()
+            self.socket.connect((server_ip_address, port))  # Connecting the socket to a server, given an ip and port
+            print("Connection to server established")
 
     def send(self, message, dtype="list"):
         """
