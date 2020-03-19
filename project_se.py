@@ -135,8 +135,8 @@ class ProjectSE:
                     match.set_winner(winner)
                     match.set_loser(loser)
                 tournament.set_result(winner,is_game_draw)
+                tournament.tournamentdrawer.drawResultTable()
                 match = tournament.get_next_match()
-            tournament.tournamentdrawer.drawResultTable()
             round = tournament.get_next_round()
         return tournament.stop_tournament()
 
