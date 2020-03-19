@@ -171,7 +171,7 @@ class Game:
                 self.json = map_board.convert_stone_list_to_json()
                 self.json = self.game_manager.make_move_test(self.json['Board'], self.current_player.player_num - 1, self.amount_turns, self.AI_difficulty)
 
-                map_board.convert_json_to_stone_list(self.json ,self.current_player)
+                map_board.convert_json_to_stone_list(self.json ,self.current_player,self.list_players[0])
                 map_board.stone_list_to_matrix()
 
                 self.switch_turn()

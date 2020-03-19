@@ -475,7 +475,6 @@ def findNextMove(board,player,turn,depth,difficulty):
         return board
     elif turn==1:
         for i in range(24):
-            print(board[i])
             if board[i]==0:
                 for pos in adjacentLocations(i):
                     if 7<pos and pos<16:
@@ -484,10 +483,14 @@ def findNextMove(board,player,turn,depth,difficulty):
                         return board
     elif turn<18:
         moves=move_1(board,1)
+        print("numof stone",numOfStones(board,1))
     elif numOfStones(board,1)==3 and turn>18:
+        print("phase3 i gameen")
+        print(numOfStones(board,1))
         moves=move_3(board,1)
     else:
         moves=move_2(board,1)
+        print("phase2,i gameen")
     for newVec in moves:
          currentMove=minmaxstart(newVec,depth,turn+1,0,-10000000,1000000000,difficulty)
          if(bestMoveVal<=currentMove):

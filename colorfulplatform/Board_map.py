@@ -39,7 +39,7 @@ class board_map:
         return data
     
     #converts to json and also sets the new move_index of AIplayer
-    def convert_json_to_stone_list(self,json_obj,player):
+    def convert_json_to_stone_list(self,json_obj,player,opponent):
         data = json_obj
         board = data['Board']
         new_list = [[] for i in range(len(self.stone_pos_list))] 
@@ -59,6 +59,9 @@ class board_map:
                     #AI has moved or removed a stone
                     if new_list[i] == "+" and stone[0] != "+" :
                         self.remove_old_3(player)
+                        if stone[0]=="X":
+                            opponent.remaining_stones -= 1
+
                 self.stone_pos_list[i][0] =  new_list[i]
     
 
