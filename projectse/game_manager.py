@@ -184,7 +184,7 @@ class GameManager:
         board_tuples = board_raw.items()
         board = [position[1] for position in board_tuples]
         print(message["Visual"])
-        return board
+        return message
     
     def make_move(self, board):
         """
