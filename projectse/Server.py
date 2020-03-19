@@ -54,16 +54,17 @@ class Server():
 
 if __name__ == "__main__":
     print("hello")
-    serv = Server('192.168.0.101')
+    serv = Server('192.168.2.41')
+    serv.accept()
     msg = None
     
     while (True):
         print("new loop")
-        serv.accept()
         
         byte_msg = serv.recv()
         msg = json.loads(byte_msg.decode('utf-8'))
-        msg["Board"] = {x:y for x,y in enumerate(msg["Board"],0)}
+        # msg["Board"] = {x:y for x,y in enumerate(msg["Board"],0)}
+            
         #msg = byte_msg.decode('utf8').replace("'", '"')
         
         print(msg)
