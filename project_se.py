@@ -96,7 +96,8 @@ class ProjectSE:
         elif choice == "Single":
             single_menu = SingleMenu()
             player1_name,player2_name = single_menu.get_player_names()
-            game_loop.runGame(player1_name,player2_name, is_player2_AI=False)
+            
+            game_loop.runGame(None,player1_name,player2_name, is_player2_AI=False,AI_difficulty=None)
         elif choice == "Quit":
             quit()
         else:
