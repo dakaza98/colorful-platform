@@ -51,22 +51,22 @@ class Tournament:
     def get_next_match(self):
         print("Press enter to play game, press 'Q' to quit")
         inp = input()
-        if (inp ==  'Q'):
+        if (inp.upper() ==  'Q'):
             print("Game quit.")
             exit()
         next_match = self.get_current_round().get_next_match()
         return next_match
 
-    def set_result(self, current_winner):
+    def set_result(self, current_winner,is_draw):
         #TODO: Most of this should be done in Match class for cohesions sake
-        is_draw = False
+        
         white = self.get_current_match().get_white_player()
         white.played_white()
         black = self.get_current_match().get_black_player()
-        if current_winner == white:
+        if current_winner == white and is_draw == False:
             current_winner.won_game_white()
             self.get_current_match().loser = black
-        elif current_winner == black:
+        elif current_winner == black and is_draw == False:
             current_winner.won_game()
             self.get_current_match().loser = white
         else:
@@ -75,7 +75,7 @@ class Tournament:
             black.tie_game()
             
         self.get_current_match().winner = current_winner
-        print(self.get_current_match().winner.name, "won the game. \n \n")
+        #print(self.get_current_match().winner.name, "won the game. \n \n")
         self.tournamentdrawer.updateTable(self.get_current_match().winner,
                                           self.get_current_match().loser,
                                           is_draw)

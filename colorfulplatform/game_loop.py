@@ -25,7 +25,7 @@ class Game:
         self.stone_removed = True
         self.is_game_over = False
         self.is_game_draw = False
-        self.winner_name = None
+        self.winner_name = str
         self.is_stone_selected = False
         self.json = {}
         
@@ -44,7 +44,7 @@ class Game:
             self.is_game_draw = True
             self.is_game_over = True
     def get_game_info(self):
-        return self.winner_name,self.is_game_over
+        return self.winner_name,self.is_game_draw
     def switch_turn(self):
 
         self.amount_turns +=1
@@ -323,4 +323,5 @@ class Game:
 def runGame(player1_name,player2_name,is_player2_AI):
     game = Game(player1_name,player2_name,is_player2_AI)
     curses.wrapper(game.game_loop)
+    print(game.get_game_info(),"tjo")
     return game.get_game_info()

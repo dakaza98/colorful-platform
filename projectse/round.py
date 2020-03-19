@@ -39,6 +39,7 @@ class Match:
         self.white_player = white
         self.black_player = black
         self.winner = None
+        self.loser = None
         self.played = False
 
     def only_ai(self):
@@ -77,6 +78,10 @@ class Match:
         self.played = True
         self.winner = player
 
+    def set_loser(self,player):
+        #self.played = True
+        self.loser = player
+        
     def get_white_player(self):
         return self.white_player
 
