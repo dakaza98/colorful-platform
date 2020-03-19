@@ -4,6 +4,8 @@ import json
 import GameEngine12   
 import ast          
 
+ip_address = '192.168.2.41'
+
 class Server():
     def __init__(self, address, port=3000):
         # Create a socket object 
@@ -54,7 +56,7 @@ class Server():
 
 if __name__ == "__main__":
     print("hello")
-    serv = Server('192.168.2.41')
+    serv = Server(ip_address)
     serv.accept()
     msg = None
     

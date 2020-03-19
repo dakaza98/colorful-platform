@@ -2,6 +2,8 @@ import socket
 import json
 from projectse.configuration import *
 
+ip_address = '192.168.2.41'
+
 class BoardState:
     def __init__(self):
         self.finished = False
