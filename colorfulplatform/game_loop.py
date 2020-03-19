@@ -32,7 +32,6 @@ class Game:
         
     def check_has_player_won(self,player):
         if (player.get_player_lose() == True):
-            print(player.player_name,"bajs")
             self.winner_name = player.player_name
             self.is_game_over = True
 
@@ -112,7 +111,6 @@ class Game:
         
         #test 
         self.json = map_board.convert_stone_list_to_json()
-        
         while self.is_game_over == False:
             self.screen.clear()
 
@@ -323,5 +321,4 @@ class Game:
 def runGame(player1_name,player2_name,is_player2_AI):
     game = Game(player1_name,player2_name,is_player2_AI)
     curses.wrapper(game.game_loop)
-    print(game.get_game_info(),"tjo")
     return game.get_game_info()
