@@ -112,9 +112,6 @@ class ProjectSE:
             return match.get_black_player(),match.get_white_player()
         elif match.get_white_player_name() == winner_name:
             return match.get_white_player(),match.get_black_player()
-        #game is_draw
-        print(is_game_draw)
-        
 
     def play_tournament(self, tournament):
         """ Decides and makes call to start the matches inside all rounds of the tournament sequentially
@@ -131,7 +128,6 @@ class ProjectSE:
                     winner = tournament.aiplay(match)
                 else:
                     winner_name,is_game_draw = game_loop.runGame(match.get_black_player_name(), match.get_white_player_name(), match.is_player2_ai())
-                    print(winner_name,is_game_draw)
                     winner,loser= self.which_player_won(match,is_game_draw,winner_name)
                     match.set_winner(winner)
                     match.set_loser(loser)
