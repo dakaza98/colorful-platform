@@ -2,10 +2,8 @@
 
 ## Instructions
 
-1. Find out your local ip adress (192.168.X.X). On linux use `ip adress`, on windows use `ifconfig`.
-2. Paste your ip adress in the `ip_adress` variables in the top of the files `projectse/Server.py` and `projectse/game_manager.py`
-3. Open a terminal and change directory to `projectse` and run `python3 Server.py`
-4. Open another terminal and run `python3 project_se.py`
+1. Open a terminal and change directory to `projectse` and run `python3 Server.py`
+2. Open another terminal and run `python3 project_se.py`
 
 You can now play the game
 
