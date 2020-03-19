@@ -1,5 +1,5 @@
-import Board_map
-import Player
+import colorfulplatform.Board_map as Board_map
+import colorfulplatform.Player as Player
 import curses
 import os
 import time
@@ -10,35 +10,43 @@ import itertools
 #screen = curses.initscr()
 #curses.start_color()
 class Game:
-    def __init__(self,player1_name,player2_name,is_player2_AI):
+    def __init__(self,game_manager,player1_name,player2_name,is_player2_AI, AI_difficulty):
         self.screen = curses.initscr()
 
         self.start_color = curses.start_color()
         self.amount_turns = 0
-
+        self.game_manager = game_manager
         self.player1= Player.player(self.screen,1,player1_name,"X",3,False)
         self.player2= Player.player(self.screen,2,player2_name,"O",2,is_player2_AI)
         self.list_players  = [self.player1,self.player2]
         self.which_player = 0
         self.current_player = self.list_players[self.which_player]
+        self.AI_difficulty = AI_difficulty
 
         self.stone_removed = True
         self.is_game_over = False
         self.is_game_draw = False
+        self.winner_name = str
         self.is_stone_selected = False
+        self.json = {}
+        
         
     def check_has_player_won(self,player):
         if (player.get_player_lose() == True):
-            print(player.player_name," Won!")
+            self.winner_name = player.player_name
             self.is_game_over = True
-            quit() #temp
-            
+
+    def update_json(self,new_json):
+        self.json = new_json
+         
     def check_game_draw(self):
         if(self.amount_turns >= 500):
             self.is_game_draw = True
             self.is_game_over = True
-            quit()#temp
+    def get_game_info(self):
+        return self.winner_name,self.is_game_draw
     def switch_turn(self):
+
         self.amount_turns +=1
         if self.which_player == 0:
             self.which_player = 1
@@ -103,8 +111,7 @@ class Game:
 
         
         #test 
-        json = map_board.convert_stone_list_to_json()
-        
+        self.json = map_board.convert_stone_list_to_json()
         while self.is_game_over == False:
             self.screen.clear()
 
@@ -137,6 +144,7 @@ class Game:
             
             # switch phases should maybe be done is a different way    
 
+            self.json = map_board.convert_stone_list_to_json()
             
         
 
@@ -160,22 +168,14 @@ class Game:
                 # -1 => "+" , 0 => "X", 1 = > "O"
                 if self.current_player.phase == 1:
                     self.current_player.stone_pool -= 1
-                json = map_board.convert_stone_list_to_json()
-                #test 
-                json['Board'][str(self.amount_turns)] = 1
-                print(json,"\n")
-                print(map_board.get_stone_pos_list(),"\n")
-                #test remove 
-                if self.amount_turns == 5:
-                    json['Board']['0'] = -1
-                    map_board.convert_json_to_stone_list(json,self.current_player)
+                self.json = map_board.convert_stone_list_to_json()
+                self.json = self.game_manager.make_move_test(self.json['Board'], self.current_player.player_num - 1, self.amount_turns, self.AI_difficulty)
 
-
-                #¤ test
-                map_board.convert_json_to_stone_list(json,self.current_player)
-                map_board.stone_list_to_matrix()
                 time.sleep(0.5)
                 print("move index: ",self.current_player.move_index,"Amount of turns:",self.amount_turns)
+                map_board.convert_json_to_stone_list(self.json ,self.current_player)
+                map_board.stone_list_to_matrix()
+
                 self.switch_turn()
             
             elif (key == curses.KEY_ENTER or key in [10, 13] and self.current_player.is_Ai == False):
@@ -310,13 +310,9 @@ class Game:
             
             # Prevent the screen from repainting to often
             time.sleep(0.01)
+        #return self.winner_name,self.is_game_draw
         
-def runGame(player1_name,player2_name,is_Ai):
-    game = Game(player1_name,player2_name,is_Ai)
-
+def runGame(game_manager, player1_name,player2_name,is_player2_AI, AI_difficulty):
+    game = Game(game_manager, player1_name,player2_name,is_player2_AI,AI_difficulty)
     curses.wrapper(game.game_loop)
-    
-#test ai        
-runGame("kalle","AI_PELLE",True)
-# run normal game
-#runGame("kalle","pelle",False)
+    return game.get_game_info()
