@@ -10,17 +10,18 @@ import itertools
 #screen = curses.initscr()
 #curses.start_color()
 class Game:
-    def __init__(self,player1_name,player2_name,is_player2_AI):
+    def __init__(self,game_manager,player1_name,player2_name,is_player2_AI, AI_difficulty):
         self.screen = curses.initscr()
 
         self.start_color = curses.start_color()
         self.amount_turns = 0
-
+        self.game_manager = game_manager
         self.player1= Player.player(self.screen,1,player1_name,"X",3,False)
         self.player2= Player.player(self.screen,2,player2_name,"O",2,is_player2_AI)
         self.list_players  = [self.player1,self.player2]
         self.which_player = 0
         self.current_player = self.list_players[self.which_player]
+        self.AI_difficulty = AI_difficulty
 
         self.stone_removed = True
         self.is_game_over = False
@@ -318,7 +319,7 @@ class Game:
             time.sleep(0.01)
         #return self.winner_name,self.is_game_draw
         
-def runGame(player1_name,player2_name,is_player2_AI):
-    game = Game(player1_name,player2_name,is_player2_AI)
+def runGame(game_manager, player1_name,player2_name,is_player2_AI, AI_difficulty):
+    game = Game(game_manager, player1_name,player2_name,is_player2_AI,AI_difficulty)
     curses.wrapper(game.game_loop)
     return game.get_game_info()

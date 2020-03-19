@@ -127,7 +127,19 @@ class ProjectSE:
                 if match.only_ai():
                     winner = tournament.aiplay(match)
                 else:
-                    winner_name,is_game_draw = game_loop.runGame(match.get_black_player_name(), match.get_white_player_name(), match.is_player2_ai())
+                    difficulty = None
+                    if match.is_player2_ai():
+                        difficulty = match.get_white_player().difficulty
+                        difficulty = self.cb.parse_difficulty_to_number(difficulty)
+
+                    winner_name,is_game_draw = game_loop.runGame(
+                        self.game_mgr,
+                        match.get_black_player_name(), 
+                        match.get_white_player_name(), 
+                        match.is_player2_ai(),
+                        difficulty
+                    )
+
                     winner,loser= self.which_player_won(match,is_game_draw,winner_name)
                     match.set_winner(winner)
                     match.set_loser(loser)
