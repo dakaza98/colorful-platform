@@ -11,7 +11,6 @@ import colorfulplatform.game_loop as game_loop
 from colorfulplatform.single_menu import SingleMenu
 from colorfulplatform.tournament_menu import TournamentMenu
 
-
 class MockPlatform:
 
     def initialize(self):
@@ -60,7 +59,7 @@ class ProjectSE:
         self.platform = pltfrm
         self.game_mgr = gm
         #TODO: wait with this, if no connection we cant play
-        # self.game_mgr.connect()
+        self.game_mgr.connect()
 
     def intro_menu_choice(self):
         """ Get user input to determine if to start
