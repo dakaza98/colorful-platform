@@ -617,7 +617,7 @@ def runUUGame(filename):
     if not (difficulty == 0 or difficulty == 1 or difficulty == 2):
         raise ValueError('Difficulty must be 0, 1 or 2')
     board = findNextMove(board, player, turn, difficulty + 2,3)
-    writeOutputFile(filename, board, player, turn + 1, difficulty)  #### ???  writeOutputFile(filename, board,??? 1 - player???, turn + 1, difficulty)
+    writeOutputFile(filename, board, 1-player, turn +1 , difficulty)  
 
 
 '''

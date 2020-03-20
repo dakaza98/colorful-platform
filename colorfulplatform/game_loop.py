@@ -16,8 +16,8 @@ class Game:
         self.start_color = curses.start_color()
         self.amount_turns = 0
         self.game_manager = game_manager
-        self.player1= Player.player(self.screen,0,player1_name,"X",3,is_player1_AI)
-        self.player2= Player.player(self.screen,1,player2_name,"O",2,is_player2_AI)
+        self.player1= Player.player(self.screen,1,player1_name,"X",3,is_player1_AI)
+        self.player2= Player.player(self.screen,2,player2_name,"O",2,is_player2_AI)
         self.list_players  = [self.player1,self.player2]
         self.which_player = 0
         self.current_player = self.list_players[self.which_player]
@@ -48,7 +48,7 @@ class Game:
     def get_game_info(self):
         return self.winner_name,self.is_game_draw
     def switch_turn(self):
-
+       
         self.amount_turns +=1
         if self.which_player == 0:
             self.which_player = 1
@@ -172,9 +172,8 @@ class Game:
 
                 if self.current_player.phase == 1:
                     self.current_player.stone_pool -= 1
-                print(self.current_player.player_num,self.json['Board'])
-                self.json = self.game_manager.make_move_test(self.json['Board'], self.current_player.player_num , self.amount_turns, self.AI_difficulty)
-
+                self.json = self.game_manager.make_move_test(self.json['Board'], self.current_player.player_num -1 , self.amount_turns, self.AI_difficulty)
+                #self.json = self.game_manager.espen_make_move(self.json['Board'],self.current_player,self.AI_difficulty)
                 map_board.convert_json_to_stone_list(self.json ,self.current_player,self.not_current_player)
                 map_board.stone_list_to_matrix()
 
