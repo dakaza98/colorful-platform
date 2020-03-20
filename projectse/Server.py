@@ -80,7 +80,7 @@ if __name__ == "__main__":
             
         #msg = byte_msg.decode('utf8').replace("'", '"')
         
-        print(msg)
+        print("pre",msg)
         # msg = {int(k):v for k,v in msg["Board"].items()}
         
         if msg == "end":

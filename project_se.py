@@ -97,7 +97,7 @@ class ProjectSE:
             single_menu = SingleMenu()
             player1_name,player2_name = single_menu.get_player_names()
             
-            game_loop.runGame(None,player1_name,player2_name, is_player2_AI=False,AI_difficulty=None)
+            game_loop.runGame(None,player1_name,player2_name, is_player1_AI= False,is_player2_AI=False,AI_difficulty=None)
         elif choice == "Quit":
             quit()
         else:
@@ -138,8 +138,8 @@ class ProjectSE:
                     winner_name,is_game_draw = game_loop.runGame(
                         self.game_mgr,
                         match.get_black_player_name(),
-                        match.is_player1_ai(), 
                         match.get_white_player_name(), 
+                        match.is_player1_ai(), 
                         match.is_player2_ai(),
                         difficulty
                     )

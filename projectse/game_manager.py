@@ -58,8 +58,8 @@ class BoardState:
         self.player = 0
         self.turn = 0
         self.board = {}
-        for i in range(24):
-            self.board.update({str(i): -1})
+    #  for i in range(24):?
+        #self.board.update({str(i): -1})?
 
     def is_finished(self):
         return self.finished
@@ -198,6 +198,8 @@ class GameManager:
         message = self.recv_json()
         message = self.decode(message)
         board_raw = message["Board"]
+        message["Player"] = player
+        print(player,"jas")
         board_tuples = board_raw.items()
         board = [position[1] for position in board_tuples]
         print(message["Visual"])

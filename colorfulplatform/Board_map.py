@@ -28,7 +28,7 @@ class board_map:
     def convert_stone_list_to_json(self):
         data = {}
         data['Board'] =  {}
-        for i,stone  in enumerate( self.stone_pos_list,0):
+        for i,stone  in enumerate( self.stone_pos_list):
             stone_marker = stone[0]
             if stone_marker == "+":
                 data['Board'][str(i)] = -1
@@ -59,7 +59,7 @@ class board_map:
                     #AI has moved or removed a stone
                     if new_list[i] == "+" and stone[0] != "+" :
                         self.remove_old_3(player)
-                        if stone[0]=="X":
+                        if stone[0]== opponent.stone_marker:
                             opponent.remaining_stones -= 1
 
                 self.stone_pos_list[i][0] =  new_list[i]
@@ -331,7 +331,7 @@ class board_map:
         for player in players:
             stone_pool_player_x = -9 + w//3   
             stone_pool_player_y = 9
-            if player.player_num == 2:
+            if player.player_num == 1:
                 stone_pool_player_x = 30  + w//3 
                 stone_pool_player_y = 9
             for i in range(player.stone_pool):
@@ -359,7 +359,7 @@ class board_map:
         h,w = self.screen.getmaxyx()
         for player in players:
         #Positions of the text showing the remaining stones for player1 ¨
-            if player.player_num == 1:
+            if player.player_num == 0:
                 remaining_stones_player1_x = -22 + w//3   
                 remaining_stones_player1_y = 7
                 self.screen.addstr(remaining_stones_player1_y,remaining_stones_player1_x,"Remaining stones: "+str(player.remaining_stones),curses.color_pair(player.player_color))
@@ -393,7 +393,7 @@ class board_map:
             if idx == player.move_index:
                 color_cursor = 1
                 #cursor will now have the player colors
-                if player.player_num == 2:
+                if player.player_num == 1:
                     color_cursor = 4
                 self.screen.attron(curses.color_pair(color_cursor))
                 self.screen.addstr(y,x, row[0])

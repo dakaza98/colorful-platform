@@ -10,17 +10,18 @@ import itertools
 #screen = curses.initscr()
 #curses.start_color()
 class Game:
-    def __init__(self,game_manager,player1_name,is_player1_AI,player2_name,is_player2_AI, AI_difficulty):
+    def __init__(self,game_manager,player1_name,player2_name,is_player1_AI,is_player2_AI, AI_difficulty):
         self.screen = curses.initscr()
 
         self.start_color = curses.start_color()
         self.amount_turns = 0
         self.game_manager = game_manager
-        self.player1= Player.player(self.screen,1,player1_name,"X",3,is_player1_AI)
-        self.player2= Player.player(self.screen,2,player2_name,"O",2,is_player2_AI)
+        self.player1= Player.player(self.screen,0,player1_name,"X",3,is_player1_AI)
+        self.player2= Player.player(self.screen,1,player2_name,"O",2,is_player2_AI)
         self.list_players  = [self.player1,self.player2]
         self.which_player = 0
         self.current_player = self.list_players[self.which_player]
+        self.not_current_player = self.list_players[1]
         self.AI_difficulty = AI_difficulty
 
         self.stone_removed = True
@@ -52,12 +53,13 @@ class Game:
         if self.which_player == 0:
             self.which_player = 1
             #self.list_players [1].move_index = self.list_players [0].move_index
+            self.not_current_player = self.list_players[0]
             self.current_player= self.list_players[1]
             return
         elif self.which_player == 1:
             self.which_player =0
             #self.list_players[0].move_index = self.list_players[1].move_index gör så move_index för spelare är lika som i den gamla versionen av spelet
-
+            self.not_current_player = self.list_players[1]
             self.current_player= self.list_players[0]
             return
 
@@ -170,9 +172,10 @@ class Game:
 
                 if self.current_player.phase == 1:
                     self.current_player.stone_pool -= 1
-                self.json = self.game_manager.make_move_test(self.json['Board'], self.current_player.player_num - 1, self.amount_turns, self.AI_difficulty)
+                print(self.current_player.player_num,self.json['Board'])
+                self.json = self.game_manager.make_move_test(self.json['Board'], self.current_player.player_num , self.amount_turns, self.AI_difficulty)
 
-                map_board.convert_json_to_stone_list(self.json ,self.current_player,self.list_players[0])
+                map_board.convert_json_to_stone_list(self.json ,self.current_player,self.not_current_player)
                 map_board.stone_list_to_matrix()
 
                 self.switch_turn()
@@ -311,7 +314,7 @@ class Game:
             time.sleep(0.01)
         #return self.winner_name,self.is_game_draw
         
-def runGame(game_manager, player1_name,is_player1_AI,player2_name,is_player2_AI, AI_difficulty):
-    game = Game(game_manager, player1_name,is_player1_AI,player2_name,is_player2_AI,AI_difficulty)
+def runGame(game_manager, player1_name,player2_name,is_player1_AI,is_player2_AI, AI_difficulty):
+    game = Game(game_manager, player1_name,player2_name,is_player1_AI,is_player2_AI,AI_difficulty)
     curses.wrapper(game.game_loop)
     return game.get_game_info()
