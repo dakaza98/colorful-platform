@@ -10,13 +10,13 @@ import itertools
 #screen = curses.initscr()
 #curses.start_color()
 class Game:
-    def __init__(self,game_manager,player1_name,player2_name,is_player2_AI, AI_difficulty):
+    def __init__(self,game_manager,player1_name,is_player1_AI,player2_name,is_player2_AI, AI_difficulty):
         self.screen = curses.initscr()
 
         self.start_color = curses.start_color()
         self.amount_turns = 0
         self.game_manager = game_manager
-        self.player1= Player.player(self.screen,1,player1_name,"X",3,False)
+        self.player1= Player.player(self.screen,1,player1_name,"X",3,is_player1_AI)
         self.player2= Player.player(self.screen,2,player2_name,"O",2,is_player2_AI)
         self.list_players  = [self.player1,self.player2]
         self.which_player = 0
@@ -31,9 +31,10 @@ class Game:
         self.json = {}
         
         
-    def check_has_player_won(self,player):
-        if (player.get_player_lose() == True):
-            self.winner_name = player.player_name
+    def check_has_player_won(self):
+        if (self.current_player.get_player_lose() == True):
+            self.switch_turn()
+            self.winner_name = self.current_player.player_name 
             self.is_game_over = True
 
     def update_json(self,new_json):
@@ -132,7 +133,7 @@ class Game:
 
             self.current_player.has_player_lost(map_board.get_stone_pos_list(),map_board.get_matrix())
             self.check_game_draw()
-            self.check_has_player_won(self.current_player)
+            self.check_has_player_won()
      
             map_board.print_map()
             map_board.print_player_names(self.player1,self.player2)
@@ -147,7 +148,7 @@ class Game:
             
         
 
-            
+            key = int
             if self.current_player.is_Ai == False:        
                 key = screen.getch()
         
@@ -310,7 +311,7 @@ class Game:
             time.sleep(0.01)
         #return self.winner_name,self.is_game_draw
         
-def runGame(game_manager, player1_name,player2_name,is_player2_AI, AI_difficulty):
-    game = Game(game_manager, player1_name,player2_name,is_player2_AI,AI_difficulty)
+def runGame(game_manager, player1_name,is_player1_AI,player2_name,is_player2_AI, AI_difficulty):
+    game = Game(game_manager, player1_name,is_player1_AI,player2_name,is_player2_AI,AI_difficulty)
     curses.wrapper(game.game_loop)
     return game.get_game_info()
