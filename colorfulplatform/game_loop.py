@@ -173,7 +173,6 @@ class Game:
                 if self.current_player.phase == 1:
                     self.current_player.stone_pool -= 1
                 self.json = self.game_manager.make_move_test(self.json['Board'], self.current_player.player_num -1 , self.amount_turns, self.AI_difficulty)
-                #self.json = self.game_manager.espen_make_move(self.json['Board'],self.current_player,self.AI_difficulty)
                 map_board.convert_json_to_stone_list(self.json ,self.current_player,self.not_current_player)
                 map_board.stone_list_to_matrix()
 
