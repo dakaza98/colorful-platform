@@ -58,8 +58,6 @@ class ProjectSE:
         self.cb = cb
         self.platform = pltfrm
         self.game_mgr = gm
-        #TODO: wait with this, if no connection we cant play
-        self.game_mgr.connect()
 
     def intro_menu_choice(self):
         """ Get user input to determine if to start
@@ -84,6 +82,8 @@ class ProjectSE:
         choice = menu.get_menu_choice()
 
         if choice == "Tournament":
+            self.game_mgr.connect()
+
             tournament_menu = TournamentMenu()
             player_names, amount_of_players, amount_of_ai, ai_difficulties = tournament_menu.get_tournament_info()
 
@@ -97,7 +97,15 @@ class ProjectSE:
             single_menu = SingleMenu()
             player1_name,player2_name = single_menu.get_player_names()
             
-            game_loop.runGame(None,player1_name,player2_name, is_player2_AI=False,AI_difficulty=None)
+            winner_name,is_game_draw =  game_loop.runGame(None,player1_name,player2_name, is_player1_AI= False,is_player2_AI=False,AI_difficulty=None)
+            print("The winner is "+winner_name + "!! \n")
+            print("Press [P] to get back to the menu or press any key to exit")
+            p = input()
+            if p.capitalize() == "P":
+                self.init()
+            else:
+                quit()
+            
         elif choice == "Quit":
             quit()
         else:
@@ -128,14 +136,18 @@ class ProjectSE:
                     winner = tournament.aiplay(match)
                 else:
                     difficulty = None
-                    if match.is_player2_ai():
-                        difficulty = match.get_white_player().difficulty
+                    if match.is_player2_ai() or match.is_player1_ai():
+                        if match.is_player1_ai():
+                            difficulty = match.get_black_player().difficulty
+                        elif match.is_player2_ai():
+                            difficulty = match.get_white_player().difficulty
                         difficulty = self.cb.parse_difficulty_to_number(difficulty)
 
                     winner_name,is_game_draw = game_loop.runGame(
                         self.game_mgr,
-                        match.get_black_player_name(), 
+                        match.get_black_player_name(),
                         match.get_white_player_name(), 
+                        match.is_player1_ai(), 
                         match.is_player2_ai(),
                         difficulty
                     )

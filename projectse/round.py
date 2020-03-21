@@ -46,6 +46,9 @@ class Match:
         return self.black_player.is_ai() and self.white_player.is_ai()
     def is_player2_ai(self):
         return self.white_player.is_ai()
+
+    def is_player1_ai(self):
+        return self.black_player.is_ai()    
     def get_playing_string(self):
         return "Now playing, {0} as white, versus {1} as black\n".format(self.get_white_player_name(), self.get_black_player_name())
         pass

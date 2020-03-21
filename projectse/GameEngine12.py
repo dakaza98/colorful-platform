@@ -477,7 +477,7 @@ def findNextMove(board,player,turn,depth,difficulty):
         for i in range(24):
             if board[i]==0:
                 for pos in adjacentLocations(i):
-                    if 7<pos and pos<16:
+                    if 7<pos or pos<16:  # was if 7<pos and pos<16:
                        
                         board[pos]=1
                         return board
@@ -616,7 +616,7 @@ def runUUGame(filename):
     if not (difficulty == 0 or difficulty == 1 or difficulty == 2):
         raise ValueError('Difficulty must be 0, 1 or 2')
     board = findNextMove(board, player, turn, difficulty + 2,3)
-    writeOutputFile(filename, board, 1 - player, turn + 1, difficulty)
+    writeOutputFile(filename, board, 1-player, turn +1 , difficulty)  
 
 
 '''

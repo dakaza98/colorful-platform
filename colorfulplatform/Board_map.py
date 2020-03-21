@@ -28,7 +28,7 @@ class board_map:
     def convert_stone_list_to_json(self):
         data = {}
         data['Board'] =  {}
-        for i,stone  in enumerate( self.stone_pos_list,0):
+        for i,stone  in enumerate( self.stone_pos_list):
             stone_marker = stone[0]
             if stone_marker == "+":
                 data['Board'][str(i)] = -1
@@ -59,7 +59,7 @@ class board_map:
                     #AI has moved or removed a stone
                     if new_list[i] == "+" and stone[0] != "+" :
                         self.remove_old_3(player)
-                        if stone[0]=="X":
+                        if stone[0]== opponent.stone_marker:
                             opponent.remaining_stones -= 1
 
                 self.stone_pos_list[i][0] =  new_list[i]

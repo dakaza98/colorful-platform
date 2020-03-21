@@ -198,6 +198,7 @@ class GameManager:
         message = self.recv_json()
         message = self.decode(message)
         board_raw = message["Board"]
+        message["Player"] = player
         board_tuples = board_raw.items()
         board = [position[1] for position in board_tuples]
         print(message["Visual"])
@@ -216,7 +217,7 @@ class GameManager:
         board = [position[1] for position in board_tuples]
         print(message["Visual"])
         return board
-
+    
 
 
     def decode(self, byte_msg):
