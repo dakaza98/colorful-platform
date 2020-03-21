@@ -218,19 +218,7 @@ class GameManager:
         print(message["Visual"])
         return board
     
-    def espen_make_move(self, board,player,difficulty):
-        """
-        Function to be called when playing a Player vs AI game
-        """
-        print("move initiated")
-        self.send_json(board, difficulty, turn=board.turn, player=player)
-        message = self.recv_json()
-        message = self.decode(message)
-        board_raw = message["Board"]
-        board_tuples = board_raw.items()
-        board = [position[1] for position in board_tuples]
-        print(message["Visual"])
-        return message
+
 
     def decode(self, byte_msg):
         """

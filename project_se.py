@@ -58,8 +58,6 @@ class ProjectSE:
         self.cb = cb
         self.platform = pltfrm
         self.game_mgr = gm
-        #TODO: wait with this, if no connection we cant play
-        #self.game_mgr.connect() moved to line 87 if menu choice is Tournament
 
     def intro_menu_choice(self):
         """ Get user input to determine if to start
