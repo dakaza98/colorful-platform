@@ -560,7 +560,6 @@ def writeOutputFile(filename, board, player, turn, difficulty):
         board = invert_board(board)
     data = {}
     data['Board'] = {x:y for x,y in enumerate(board,0)}
-    print("post",data['Board'])
     data['Player'] = player
     data['Turn'] = turn
     data['Difficulty'] = difficulty
