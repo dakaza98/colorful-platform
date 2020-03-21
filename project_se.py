@@ -100,7 +100,7 @@ class ProjectSE:
             player1_name,player2_name = single_menu.get_player_names()
             
             winner_name,is_game_draw =  game_loop.runGame(None,player1_name,player2_name, is_player1_AI= False,is_player2_AI=False,AI_difficulty=None)
-            print("The winner is "+winner_name + "!!")
+            print("The winner is "+winner_name + "!! \n")
             print("Press [P] to get back to the menu or press any key to exit")
             p = input()
             if p.capitalize() == "P":
@@ -108,7 +108,6 @@ class ProjectSE:
             else:
                 quit()
             
-            self.init()
         elif choice == "Quit":
             quit()
         else:
